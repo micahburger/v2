@@ -52,11 +52,28 @@ a plain link gets the defaults.
 | Section | Takes (default first) | File |
 |---|---|---|
 | Colour | paper, graphite, forest, clay, harbor | palette blocks at the top of `global.css` |
-| Clients | static, wave, assemble, flap | `components/ClientQuilt.tsx` |
-| History | logo, static, fill, focus, timeline | `components/WorkHistory.tsx` |
+| Shift | off, deepen, saturate | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
+| History | timeline, static, logo, fill, focus | `components/WorkHistory.tsx` |
+| Footer | classic, signoff, index, card | `components/SiteFooter.tsx` |
 
-The quilt is one image (`logoquilt2024.png`) cut into twelve tiles with
-background-position, so the build-ins move logos individually.
+Settled and out of the lab: the client quilt is the **wave** build-in (the
+quilt is one image, `logoquilt2024.png`, cut into twelve tiles with
+background-position so each logo moves on its own).
+
+Shift: the page is split into stages by `data-stage` (0 intro + clients,
+1 work history, 2 featured, 3 contact + footer). A scroll listener writes
+the stage to `<html data-stage>`; CSS derives `--page` from the palette's
+`--paper` with relative OKLCH colour, a small fixed step per stage.
+Deliberately subtle: stage 3 is about 8% darker at most.
+
+Timeline: the ruler runs from the first job's start to this month, so the
+first bar lines up with the section title and the last with the content
+edge. Section titles are 22px (the live site's are 18px).
+
+Featured order: Rental application, Lattice, 2026 folio, Opendoor,
+Lincoln, Infinity, then an Archive row grouping WWE, BBC, ABA and Rockwell
+(a placeholder until they get a proper home). Corner Bodega is parked in
+`parked` in `data/site.ts`.
 
 "Logo" (Micah's ask): hovering a job floats that company's logo, flattened
 to black by CSS, on a white card beside the pointer. Every row links to the

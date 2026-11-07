@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { featured, type Featured, type Media } from "../data/site";
+import { featured, type Featured, type Media, type Slide } from "../data/site";
 import { useOnScreen } from "../hooks";
 import { relativeOffset, useCarousel } from "../carousel";
 
@@ -27,8 +27,13 @@ function Row({ project }: { project: Featured }) {
   return (
     <li className="featured__row grid">
       <p className="featured__text">
-        <a href={project.href}>{project.name}</a>
+        {project.href ? (
+          <a href={project.href}>{project.name}</a>
+        ) : (
+          <span className="featured__name">{project.name}</span>
+        )}
         {project.rest}
+        {project.group && <GroupLinks links={project.group} />}
       </p>
       <div className="featured__side">
         <MediaView media={project.media} href={project.href} label={project.name} />
@@ -37,7 +42,22 @@ function Row({ project }: { project: Featured }) {
   );
 }
 
-function MediaView({ media, href, label }: { media: Media; href: string; label: string }) {
+/** "A, B, C and D." with each name linked, for a row that gathers several
+ *  projects (Archive). */
+function GroupLinks({ links }: { links: { label: string; href: string }[] }) {
+  return (
+    <>
+      {links.map((link, i) => (
+        <span key={link.href}>
+          <a href={link.href}>{link.label}</a>
+          {i < links.length - 2 ? ", " : i === links.length - 2 ? " and " : "."}
+        </span>
+      ))}
+    </>
+  );
+}
+
+function MediaView({ media, href, label }: { media: Media; href?: string; label: string }) {
   if (media.kind === "carousel" && media.images.length > 1) {
     return <Carousel images={media.images} href={href} label={label} />;
   }
@@ -56,8 +76,9 @@ function Carousel({
   href,
   label,
 }: {
-  images: { src: string; alt: string }[];
-  href: string;
+  images: Slide[];
+  /** The row's link; a slide's own href wins (Archive). */
+  href?: string;
   label: string;
 }) {
   // The seamless loop needs a slide parked past both edges, which two
@@ -79,7 +100,13 @@ function Carousel({
       aria-roledescription="carousel"
       aria-label={`${label}, image ${shown + 1} of ${real}`}
     >
-      <a className="featured__media" href={href} tabIndex={-1} aria-hidden="true" draggable={false}>
+      <a
+        className="featured__media"
+        href={images[shown].href ?? href}
+        tabIndex={-1}
+        aria-hidden="true"
+        draggable={false}
+      >
         <div
           className="carousel__stage"
           data-phase={c.phase}

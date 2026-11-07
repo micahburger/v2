@@ -110,6 +110,48 @@
   --quilt-blend: lighten;
 }
 
+/* ================= section shift =================
+   Optional (lab "Shift"): as the visitor scrolls from the intro into Work
+   History, Featured and the footer, the page colour steps a little further
+   from the palette's base each time. App.tsx writes the stage (0 to 3) to
+   <html data-stage>; everything here works from the palette's own --paper,
+   so the shift belongs to whichever palette is on.
+
+   The steps are small and fixed in OKLCH, which moves lightness and chroma
+   evenly across hues: Deepen loses ~2.8% lightness per stage with a touch
+   of chroma; Saturate mostly adds chroma. Stage 3 is the furthest it ever
+   gets, about 8% darker, so it reads as the page settling, not changing.
+
+   --page is what paints the background; it's --paper itself when the shift
+   is off. Guarded by @supports: without relative colour the expression is
+   invalid, and an invalid --page would leave the page transparent. */
+
+:root {
+  --page: var(--paper);
+  --step: 0;
+}
+
+:root[data-stage="1"] {
+  --step: 1;
+}
+
+:root[data-stage="2"] {
+  --step: 2;
+}
+
+:root[data-stage="3"] {
+  --step: 3;
+}
+
+@supports (color: oklch(from red l c h)) {
+  :root[data-shift="deepen"] {
+    --page: oklch(from var(--paper) calc(l - 0.028 * var(--step)) calc(c + 0.007 * var(--step)) h);
+  }
+  :root[data-shift="saturate"] {
+    --page: oklch(from var(--paper) calc(l - 0.01 * var(--step)) calc(c + 0.016 * var(--step)) h);
+  }
+}
+
 *,
 *::before,
 *::after {
@@ -120,13 +162,15 @@ html {
   -webkit-text-size-adjust: 100%;
   /* Overscroll (the rubber band past the top and bottom) shows html, not
      body, so it carries the palette too. */
-  background: var(--paper);
-  transition: background-color 0.4s ease;
+  background: var(--page);
+  /* Slow and in-out (the ds "large move" curve): a section shift should
+     arrive like a change of light, not a cut. Also carries palette swaps. */
+  transition: background-color 0.9s cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 body {
   margin: 0;
-  background: var(--paper);
+  background: var(--page);
   color: var(--ink);
   font-family: var(--font);
   font-weight: 400;
@@ -135,8 +179,8 @@ body {
   letter-spacing: 0.2px;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  /* A palette switch washes over rather than snapping. */
-  transition: background-color 0.4s ease, color 0.4s ease;
+  /* Mirrors html above; colour on its own shorter clock. */
+  transition: background-color 0.9s cubic-bezier(0.65, 0, 0.35, 1), color 0.4s ease;
 }
 
 h1,
@@ -268,10 +312,12 @@ button {
   padding-top: 80px;
 }
 
+/* 22px, up from the live site's 18px, so each section announces itself;
+   with the timeline under "Work History" an 18px title read as a caption. */
 .section__label {
   margin-bottom: 20px;
-  font-size: 18px;
-  line-height: 27px;
+  font-size: 22px;
+  line-height: 30px;
 }
 
 /* The hairline the live page draws between the logos and the history. */
@@ -312,44 +358,23 @@ button {
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .quilt:not(.quilt--static) .quilt__tile:hover {
+  .quilt__tile:hover {
     scale: var(--hover-grow-scale-card);
   }
 }
 
-/* WAVE: rise along diagonals; --d is set per tile. */
-.quilt--wave .quilt__tile {
+/* The wave: tiles rise along the diagonals, --d per tile (ClientQuilt). */
+.quilt__tile {
   opacity: 0;
   transform: translateY(24px);
 }
 
-.quilt--wave.is-seen .quilt__tile {
+.quilt.is-seen .quilt__tile {
   opacity: 1;
   transform: none;
   transition:
     opacity 0.5s ease var(--d),
     transform 0.7s var(--ease-enter) var(--d),
-    scale var(--hover-grow-duration) var(--hover-grow-easing);
-}
-
-/* ASSEMBLE: transform and opacity are written per frame by useAssemble. */
-.quilt--assemble .quilt__tile {
-  will-change: transform, opacity;
-}
-
-/* FLAP: each tile hangs from its top edge and swings down into place. */
-.quilt--flap .quilt__tile {
-  opacity: 0;
-  transform: perspective(700px) rotateX(88deg);
-  transform-origin: 50% 0;
-}
-
-.quilt--flap.is-seen .quilt__tile {
-  opacity: 1;
-  transform: perspective(700px) rotateX(0);
-  transition:
-    opacity 0.12s ease var(--d),
-    transform 0.55s var(--ease-enter) var(--d),
     scale var(--hover-grow-duration) var(--hover-grow-easing);
 }
 
@@ -611,17 +636,20 @@ button {
   user-select: none;
 }
 
+/* Tall enough for a hovered span (34px) plus its label above it; the
+   resting bars sit on the bottom edge. */
 .timeline__track {
   position: relative;
-  height: 64px;
+  height: 54px;
 }
 
 .timeline__span {
   position: absolute;
   bottom: 0;
   height: 10px;
-  /* A paper-coloured left edge keeps back-to-back jobs readable as two. */
-  border-left: 2px solid var(--paper);
+  /* A paper-coloured edge keeps back-to-back jobs readable as two. On the
+     right, so the first bar's left edge lines up with the title above. */
+  border-right: 2px solid var(--page);
   border-radius: 4px;
   background: var(--dot);
   transition:
@@ -631,7 +659,7 @@ button {
 }
 
 .timeline__span.is-active {
-  height: 40px;
+  height: 34px;
   background: var(--brand);
 }
 
@@ -655,11 +683,12 @@ button {
   transform: none;
 }
 
+/* Year labels only: no rule under the bars, which read as a section
+   divider and made the timeline look like it belonged to the next thing. */
 .timeline__ticks {
   position: relative;
   height: 22px;
-  margin-top: 8px;
-  border-top: 1px solid var(--rule);
+  margin-top: 6px;
 }
 
 .timeline__ticks span {
@@ -687,6 +716,11 @@ button {
 
 .featured__row {
   align-items: start;
+}
+
+/* A row that isn't one project (Archive) names itself without a link. */
+.featured__name {
+  font-weight: 500;
 }
 
 /* The live paragraph is 410px wide inside a 490px, five-column cell. */
@@ -882,6 +916,206 @@ button {
   font-size: 70px;
   line-height: 70px;
   margin-bottom: 4px;
+}
+
+/* ---- footer explorations (SiteFooter.tsx) ----
+   Same content in each; only the arrangement changes. All four sit on the
+   12-column grid and use palette tokens only, so they hold in every
+   palette. */
+
+.footer-muted {
+  opacity: 0.65;
+}
+
+/* SIGN-OFF: quiet columns, then one enormous word. */
+.footer-signoff {
+  padding-top: 160px;
+  padding-bottom: 48px;
+}
+
+.footer-signoff__cols {
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.footer-signoff__who {
+  grid-column: 1 / span 4;
+}
+
+.footer-signoff__list {
+  grid-column: span 4;
+}
+
+.footer-signoff__ciao {
+  /* Display line-height under 1 and negative tracking, per the ds; sized
+     so the word spans most of the content width at any window. */
+  margin: 72px 0 0 -0.04em;
+  font-weight: 500;
+  font-size: clamp(120px, 24vw, 330px);
+  line-height: 0.8;
+  letter-spacing: -0.06em;
+  color: var(--black);
+}
+
+.footer-signoff__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-top: 40px;
+  font-size: 13px;
+}
+
+.footer-signoff__base a {
+  color: inherit;
+}
+
+/* INDEX: a four-column table, each column under its own hairline. */
+.footer-index {
+  padding-top: 160px;
+  padding-bottom: 48px;
+}
+
+.footer-index__col {
+  grid-column: span 3;
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink);
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.footer-index__name {
+  font-size: 22px;
+  line-height: 30px;
+}
+
+.footer-index__label {
+  margin-bottom: 12px;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+.footer-index__bar {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 96px;
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+}
+
+/* CARD: an inverted panel. --ink on --paper flips with every palette, so
+   it's dark on the light palettes and light on the dark ones. */
+.footer-card {
+  padding-top: 160px;
+  padding-bottom: 30px;
+}
+
+.footer-card__panel {
+  display: grid;
+  gap: 72px;
+  padding: 48px 56px 40px;
+  border-radius: 28px;
+  background: var(--ink);
+  color: var(--paper);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+.footer-card__panel a {
+  color: inherit;
+}
+
+.footer-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 32px;
+}
+
+.footer-card__ciao {
+  font-size: 70px;
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+}
+
+.footer-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px 24px;
+  font-size: 15px;
+}
+
+.footer-card__label {
+  margin-bottom: 8px;
+  font-size: 13px;
+  opacity: 0.65;
+}
+
+.footer-card__email {
+  font-size: clamp(26px, 3.6vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  word-break: break-all;
+}
+
+/* Three fixed columns rather than a wrapping row, which dropped the credit
+   under the disciplines at desktop widths. */
+.footer-card__bottom {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 8px 40px;
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+@media (max-width: 900px) {
+  .footer-signoff,
+  .footer-index,
+  .footer-card {
+    padding-top: 120px;
+  }
+  .footer-signoff__who,
+  .footer-signoff__list,
+  .footer-index__col {
+    grid-column: 1;
+  }
+  .footer-signoff__cols,
+  .footer-index__cols {
+    row-gap: 28px;
+  }
+  .footer-signoff__ciao {
+    margin-top: 48px;
+  }
+  .footer-index__bar {
+    margin-top: 56px;
+  }
+  .footer-card {
+    padding-inline: 16px;
+  }
+  .footer-card__panel {
+    gap: 48px;
+    padding: 32px 24px 28px;
+    border-radius: 22px;
+  }
+  .footer-card__top {
+    flex-direction: column;
+  }
+  .footer-card__links {
+    justify-content: flex-start;
+  }
+  .footer-card__bottom {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ================= phone / tablet ================= */

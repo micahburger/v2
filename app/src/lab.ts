@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 // The "lab" is how the explorations live side by side: a colour palette for
-// the whole page, plus a few takes each on the client quilt and the work
-// history, switched from a small panel. "Paper" and "Static" are the live
-// site as it is today; the
-// history defaults to "Logo", which Micah asked for directly. (The
-// featured-project carousels were parked in app/_archive.)
-// The choice rides in the query string only, so a link to "the flap quilt
-// with the timeline history" is shareable and a plain link always gets the
+// the whole page, an optional section-by-section colour shift on scroll, a
+// few takes on the work history and four footers, switched from a small
+// panel. "Paper" is the live site's colour; the history defaults to
+// "Timeline", Micah's pick so far. (The client quilt was settled on its
+// wave build-in and left the lab; the first featured-project carousels are
+// parked in app/_archive.)
+// The choice rides in the query string only, so a link to "graphite with the
+// focus history" is shareable and a plain link always gets the
 // defaults. (It used to also remember the last pick in localStorage; that
 // kept serving stale picks after the defaults changed, so it went.) Once a take wins, delete the others and this file.
 
@@ -19,11 +20,10 @@ export const LAB = {
     { id: "clay", label: "Clay" },
     { id: "harbor", label: "Harbor" },
   ],
-  quilt: [
-    { id: "static", label: "Static" },
-    { id: "wave", label: "Wave" },
-    { id: "assemble", label: "Assemble" },
-    { id: "flap", label: "Flap" },
+  shift: [
+    { id: "off", label: "Off" },
+    { id: "deepen", label: "Deepen" },
+    { id: "saturate", label: "Saturate" },
   ],
   history: [
     { id: "static", label: "Static" },
@@ -31,6 +31,12 @@ export const LAB = {
     { id: "fill", label: "Fill" },
     { id: "focus", label: "Focus" },
     { id: "timeline", label: "Timeline" },
+  ],
+  footer: [
+    { id: "classic", label: "Classic" },
+    { id: "signoff", label: "Sign-off" },
+    { id: "index", label: "Index" },
+    { id: "card", label: "Card" },
   ],
 } as const;
 
@@ -42,7 +48,7 @@ function isValid<K extends LabKey>(key: K, value: unknown): value is LabState[K]
 }
 
 export function readLab(): LabState {
-  const state: LabState = { palette: "paper", quilt: "static", history: "logo" };
+  const state: LabState = { palette: "paper", shift: "off", history: "timeline", footer: "classic" };
   const params = new URLSearchParams(window.location.search);
   (Object.keys(LAB) as LabKey[]).forEach((key) => {
     const value = params.get(key);

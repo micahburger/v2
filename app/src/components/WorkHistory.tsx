@@ -210,12 +210,20 @@ function FollowCard({ job, kind }: { job: Job | null; kind: "logo" | "fill" }) {
   );
 }
 
-const T0 = 2010;
-const T1 = new Date().getFullYear() + 1;
+/** Year as a decimal, from "YYYY-MM" (null = this month). */
+function toYear(value: string | null) {
+  const [y, m] = value ? value.split("-").map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1];
+  return y + (m - 1) / 12;
+}
+
+// The ruler runs from the first job's start to this month, not from round
+// years: that's what puts Hanson's bar flush with the "Work History" title
+// on the left and RentSpree's flush with the content edge on the right.
+const T0 = Math.min(...jobs.map((j) => toYear(j.start)));
+const T1 = toYear(null);
 
 function at(value: string | null) {
-  const d = value ? value.split("-").map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1];
-  return ((d[0] + (d[1] - 1) / 12 - T0) / (T1 - T0)) * 100;
+  return ((toYear(value) - T0) / (T1 - T0)) * 100;
 }
 
 function Timeline({
@@ -225,8 +233,11 @@ function Timeline({
   hover: number | null;
   setHover: (i: number | null) => void;
 }) {
+  // Every four years, from the first even year inside the range. 2012 to
+  // 2024 keeps every label clear of both ends, where a centred label would
+  // otherwise hang past the content edge.
   const ticks: number[] = [];
-  for (let y = T0; y <= T1; y += 4) ticks.push(y);
+  for (let y = Math.ceil(T0 / 2) * 2; y < T1 - 1; y += 4) ticks.push(y);
   return (
     <div className="timeline" aria-hidden="true" onPointerLeave={() => setHover(null)}>
       <div className="timeline__track">

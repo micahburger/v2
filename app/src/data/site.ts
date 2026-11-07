@@ -32,9 +32,15 @@
 //                        then artist pages / case-study sections / folio
 //                        chapters), until real exports exist
 
-export type Media =
-  | { kind: "image"; src: string; alt: string }
-  | { kind: "carousel"; images: { src: string; alt: string }[] };
+export type Slide = {
+  src: string;
+  alt: string;
+  /** Where clicking this slide goes, when it isn't the row's own link (the
+   *  Archive row, whose slides are each a different project). */
+  href?: string;
+};
+
+export type Media = { kind: "image"; src: string; alt: string } | { kind: "carousel"; images: Slide[] };
 
 export type Featured = {
   id: string;
@@ -43,7 +49,11 @@ export type Featured = {
   /** Everything after the name. Leading space included where the live copy
    *  runs straight on ("Lattice is…"), omitted where it doesn't. */
   rest: string;
-  href: string;
+  /** Omitted for a row that isn't one project (Archive): the name is then
+   *  plain text and the links live in `group`. */
+  href?: string;
+  /** Projects gathered into this row, linked inline after `rest`. */
+  group?: { label: string; href: string }[];
   media: Media;
 };
 
@@ -55,14 +65,11 @@ const slides = (prefix: string, count: number, alt: string): Media => ({
   })),
 });
 
+// Order (Micah, 2026-11-07): the three newest first, then Opendoor and the
+// rest as before, with the oldest four grouped into Archive. Corner Bodega
+// is out for now; its entry and images (bodega-1..3) are kept below / in
+// public/img for when it comes back.
 export const featured: Featured[] = [
-  {
-    id: "corner-bodega",
-    name: "Corner Bodega",
-    rest: " is a zine and print publisher founded in New York and LA in 2019. A rebuild of its shop and artist pages as a fast, static site.",
-    href: "https://cornerbodega.micahburger.com",
-    media: slides("bodega", 3, "Corner Bodega"),
-  },
   {
     id: "rental-application",
     name: "Rental application",
@@ -106,32 +113,39 @@ export const featured: Featured[] = [
     media: slides("infinity", 2, "Infinity thermostat and app"),
   },
   {
-    id: "bbc",
-    name: "BBC News Stream",
-    rest: " Collaborating with the BBC News digital team, we designed a video-led news experience to engage and expand their user base, focusing on an intuitive platform that prioritized video content to capture and retain attention.",
-    href: "https://micahburger.com/project/bbc",
-    media: slides("bbc", 3, "BBC News Stream"),
+    // Placeholder grouping for the older case studies until they get a home
+    // of their own (Micah, 2026-11-07: "time to figure out how to group"
+    // them). One slide per project, each linking to its case study; their
+    // fuller image sets (wwe-2..6 etc.) are still in public/img for later.
+    id: "archive",
+    name: "Archive",
+    rest: " Earlier work for ",
+    group: [
+      { label: "WWE", href: "https://micahburger.com/project/wwe" },
+      { label: "BBC News", href: "https://micahburger.com/project/bbc" },
+      { label: "the American Bar Association", href: "https://micahburger.com/project/aba" },
+      { label: "Rockwell Group", href: "https://micahburger.com/project/rockwell" },
+    ],
+    media: {
+      kind: "carousel",
+      images: [
+        { src: "/img/wwe-1.jpg", alt: "WWE.com redesign", href: "https://micahburger.com/project/wwe" },
+        { src: "/img/bbc-1.jpg", alt: "BBC News Stream", href: "https://micahburger.com/project/bbc" },
+        { src: "/img/aba-1.jpg", alt: "American Bar Association design language", href: "https://micahburger.com/project/aba" },
+        { src: "/img/rockwell-1.jpg", alt: "Rockwell Group hospitality portfolio", href: "https://micahburger.com/project/rockwell" },
+      ],
+    },
   },
+];
+
+/** Off the page for now (see the order note above). */
+export const parked: Featured[] = [
   {
-    id: "rockwell",
-    name: "Rockwell Group",
-    rest: " A leading interior design firm, sought to reinvent how they showcased their hospitality projects. The objective was to craft an engaging and dynamic experience that would drive exploration across their diverse hotel portfolio.",
-    href: "https://micahburger.com/project/rockwell",
-    media: slides("rockwell", 4, "Rockwell Group hospitality portfolio"),
-  },
-  {
-    id: "aba",
-    name: "American Bar Association",
-    rest: " A collaborative discovery process with the American Bar digital team led to the creation of a new design language that would seamlessly extend across multiple platforms, balancing appeal to both younger and older audiences.",
-    href: "https://micahburger.com/project/aba",
-    media: slides("aba", 6, "American Bar Association design language"),
-  },
-  {
-    id: "wwe",
-    name: "WWE",
-    rest: " sought to reinvent WWE.com to reflect the future of wrestling entertainment. We designed a bold, dynamic experience that matched the brand’s powerful image.",
-    href: "https://micahburger.com/project/wwe",
-    media: slides("wwe", 6, "WWE.com redesign"),
+    id: "corner-bodega",
+    name: "Corner Bodega",
+    rest: " is a zine and print publisher founded in New York and LA in 2019. A rebuild of its shop and artist pages as a fast, static site.",
+    href: "https://cornerbodega.micahburger.com",
+    media: slides("bodega", 3, "Corner Bodega"),
   },
 ];
 
