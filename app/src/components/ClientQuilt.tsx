@@ -2,21 +2,25 @@ import { useRef } from "react";
 import { clients } from "../data/site";
 import { useReducedMotion, useSeen } from "../hooks";
 
+/** Tiles per row. Also the shape of logoquilt2024.png (four across, three
+ *  down), which is what makes a slice of it line up with a tile. */
 const COLS = 4;
-const ROWS = 3;
+const QUILT_ROWS = 3;
 
 /**
- * The client logos, from the one image the live site uses
- * (logoquilt2024.png: four across, three down, on the page colour).
+ * The client logos, four to a row.
  *
- * Rather than one <img>, the image is cut into twelve tiles with
- * background-position, so each logo can move on its own; with no gap
- * between tiles they add back up to exactly the original image.
+ * Most tiles are a slice of logoquilt2024.png, the single image the live
+ * site uses, cut out with background-position so each logo can move on its
+ * own. Logos added since (RentSpree, Carrier) are their own files in the
+ * same box, flattened to the quilt's one colour by CSS, so they sit in the
+ * set as if they'd always been in the picture. Every tile is independent,
+ * so the order is free: see `clients` in data/site.ts.
  *
- * The build-in is the "wave" Micah picked out of the lab (2026-11-07, over
- * a static image, a scroll-linked assemble and a split-flap): the tiles
- * rise in a diagonal sweep from the top-left, once, when the quilt first
- * comes on screen.
+ * The build-in is the "wave" Micah picked out of the lab: tiles rise in a
+ * diagonal sweep from the top-left, once, when the quilt first comes on
+ * screen. A last, short row is centred (flex, not grid) so it reads as a
+ * finished row rather than a gap.
  */
 export default function ClientQuilt() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -28,23 +32,32 @@ export default function ClientQuilt() {
       ref={gridRef}
       className={`quilt ${seen || reduced ? "is-seen" : ""}`}
       role="img"
-      aria-label={`Client logos: ${clients.join(", ")}`}
+      aria-label={`Client logos: ${clients.map((c) => c.name).join(", ")}`}
     >
-      {clients.map((name, i) => {
-        const col = i % COLS;
+      {clients.map((client, i) => {
         const row = Math.floor(i / COLS);
+        const col = i % COLS;
+        // One diagonal (row + col) every 70ms.
+        const delay = { "--d": `${(row + col) * 70}ms` } as React.CSSProperties;
+
+        if ("src" in client) {
+          return (
+            <span key={client.name} className="quilt__tile quilt__tile--file" aria-hidden="true" style={delay}>
+              <img className="quilt__logo" src={client.src} alt="" draggable={false} />
+            </span>
+          );
+        }
+        const qCol = client.quilt % COLS;
+        const qRow = Math.floor(client.quilt / COLS);
         return (
           <span
-            key={name}
-            className="quilt__tile"
+            key={client.name}
+            className="quilt__tile quilt__tile--slice"
             aria-hidden="true"
-            style={
-              {
-                // One diagonal (row + col) every 70ms.
-                "--d": `${(row + col) * 70}ms`,
-                backgroundPosition: `${(col / (COLS - 1)) * 100}% ${(row / (ROWS - 1)) * 100}%`,
-              } as React.CSSProperties
-            }
+            style={{
+              ...delay,
+              backgroundPosition: `${(qCol / (COLS - 1)) * 100}% ${(qRow / (QUILT_ROWS - 1)) * 100}%`,
+            }}
           />
         );
       })}

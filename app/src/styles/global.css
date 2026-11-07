@@ -31,6 +31,9 @@
      "lighten" does the same job the other way round. */
   --quilt-filter: none;
   --quilt-blend: darken;
+  /* Separate logo files in the quilt: any colours to solid black (needs a
+     transparent background), and to white on the dark palettes. */
+  --logo-filter: brightness(0);
 
   --font: "Poppins", "Helvetica Neue", Arial, sans-serif;
   --font-name: "Satoshi", "Poppins", Arial, sans-serif;
@@ -75,6 +78,7 @@
   --dot-active: #f4f1ec;
   --quilt-filter: invert(1);
   --quilt-blend: lighten;
+  --logo-filter: brightness(0) invert(1);
 }
 
 :root[data-palette="forest"] {
@@ -89,6 +93,7 @@
   --dot-active: #f5f2ec;
   --quilt-filter: invert(1);
   --quilt-blend: lighten;
+  --logo-filter: brightness(0) invert(1);
 }
 
 :root[data-palette="clay"] {
@@ -334,21 +339,56 @@ button {
 
 /* ================= client quilt ================= */
 
-/* One image, cut into twelve tiles with background-position. No gap, so
-   at rest the tiles add back up to exactly logoquilt2024.png. */
+/* Four to a row, the last short row centred (flex rather than grid, which
+   can't centre a partial row). Every tile is a quarter of the width and
+   the quilt image's cell shape, so a slice of logoquilt2024.png fills one
+   exactly. */
 .quilt {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .quilt__tile {
+  flex: 0 0 25%;
   aspect-ratio: 480 / 217.67;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+/* A slice of the quilt image. */
+.quilt__tile--slice {
   background-image: url("/img/logoquilt2024.png");
   background-size: 400% 300%;
   background-repeat: no-repeat;
   filter: var(--quilt-filter);
   mix-blend-mode: var(--quilt-blend);
-  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+/* A logo with its own file, sized to sit like the ones in the image
+   (about half the cell's width at most, a little under half its height)
+   and flattened to the same one colour: black, or white on dark palettes,
+   via --logo-filter. */
+.quilt__tile--file {
+  display: grid;
+  place-items: center;
+}
+
+.quilt__logo {
+  width: 48%;
+  height: 42%;
+  /* The quilt image's top row sits a little below centre in its cells
+     (more margin above it in the original artwork); this lines the file
+     logos, which currently all sit in that row, up with their neighbours.
+     The image's top-row logos centre at about 62% of the cell's height
+     (measured off logoquilt2024.png), so these drop 12% from centre.
+     `top` rather than a margin: in a centred grid a margin only moves the
+     item by half of itself, and `top` on a relative box is a % of the
+     cell's height, which is the unit wanted. */
+  position: relative;
+  top: 12%;
+  object-fit: contain;
+  filter: var(--logo-filter);
+  -webkit-user-drag: none;
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {

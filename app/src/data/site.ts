@@ -148,22 +148,32 @@ export const parked: Featured[] = [
   },
 ];
 
-/** The twelve logos in logoquilt2024.png, left to right, top to bottom.
- *  The quilt is one image; these names are its alt text, and they let the
- *  build-in variants cut it into per-logo tiles. */
-export const clients = [
-  "Opendoor",
-  "Comcast",
-  "American Bar Association",
-  "BBC News",
-  "Vanity Fair",
-  "WWE",
-  "Lincoln",
-  "New York State",
-  "MIT Sloan School of Management",
-  "Tory Burch",
-  "Collins Aerospace",
-  "American Express",
+/**
+ * The Select Clients logos, in display order (four to a row). Most are cut
+ * out of logoquilt2024.png, the single image the live site uses: `quilt`
+ * is the logo's position in that image, left to right, top to bottom
+ * (0 Opendoor … 11 American Express). Logos added since have their own
+ * file instead (`src`), flattened to the quilt's one colour by CSS.
+ */
+export type ClientLogo = { name: string } & ({ quilt: number } | { src: string });
+
+export const clients: ClientLogo[] = [
+  { name: "RentSpree", src: "/img/logos/rentspree.svg" },
+  { name: "Opendoor", quilt: 0 },
+  // Carrier: one-colour version of Wikimedia Commons' "Logo of the Carrier
+  // Corporation.svg", the script cut out of the oval (see the file).
+  { name: "Carrier", src: "/img/logos/carrier.svg" },
+  { name: "Comcast", quilt: 1 },
+  { name: "American Bar Association", quilt: 2 },
+  { name: "BBC News", quilt: 3 },
+  { name: "Vanity Fair", quilt: 4 },
+  { name: "WWE", quilt: 5 },
+  { name: "Lincoln", quilt: 6 },
+  { name: "New York State", quilt: 7 },
+  { name: "MIT Sloan School of Management", quilt: 8 },
+  { name: "Tory Burch", quilt: 9 },
+  { name: "Collins Aerospace", quilt: 10 },
+  { name: "American Express", quilt: 11 },
 ];
 
 export type Job = {

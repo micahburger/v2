@@ -56,9 +56,13 @@ a plain link gets the defaults.
 | History | timeline, logo, fill, focus | `components/WorkHistory.tsx` |
 | Footer | signoff, classic, index, card | `components/SiteFooter.tsx` |
 
-Settled and out of the lab: the client quilt is the **wave** build-in (the
-quilt is one image, `logoquilt2024.png`, cut into twelve tiles with
-background-position so each logo moves on its own).
+Settled and out of the lab: the client quilt is the **wave** build-in.
+Tiles are either a slice of `logoquilt2024.png` (the live site's single
+image, cut with background-position) or their own logo file in the same
+box, flattened to one colour by `--logo-filter`. `clients` in
+`data/site.ts` sets the order (four to a row, last row centred). RentSpree
+and Carrier were added as files; `carrier.svg` is a one-colour rebuild of
+the Commons logo with the script cut out of the oval by a mask.
 
 Shift: the page is split into stages by `data-stage` (0 intro + clients,
 1 work history, 2 featured, 3 contact + footer). A scroll listener writes
