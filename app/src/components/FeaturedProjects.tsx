@@ -5,8 +5,14 @@ import { relativeOffset, useCarousel } from "../carousel";
 
 /**
  * Featured projects as the live site lays them out: one row per project,
- * the paragraph (project name linked inline) in the left five columns and
- * the media in the right seven, 16:9 with 28px corners.
+ * the paragraph in the left five columns and the media in the right seven,
+ * 16:9 with 28px corners.
+ *
+ * The whole paragraph is the link (Micah, 2026-11-07), not just the
+ * project's name: the name stays in the text colour, and a round arrow
+ * under the paragraph says the block is clickable. Hovering the block, or
+ * the project's media, fills that arrow. Archive has no single destination,
+ * so it keeps its inline links and no arrow.
  *
  * Where a project has more than one image, the media is the folio's
  * grab-and-swipe carousel (carousel.ts): it drifts on its own every 4.2s
@@ -26,15 +32,32 @@ export default function FeaturedProjects() {
 function Row({ project }: { project: Featured }) {
   return (
     <li className="featured__row grid">
-      <p className="featured__text">
-        {project.href ? (
-          <a href={project.href}>{project.name}</a>
-        ) : (
+      {project.href ? (
+        <a className="featured__text featured__block" href={project.href}>
+          <p>
+            <span className="featured__name">{project.name}</span>
+            {project.rest}
+          </p>
+          <span className="featured__arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18">
+              <path
+                d="M5 12h14M12.5 5.5 19 12l-6.5 6.5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </a>
+      ) : (
+        <p className="featured__text">
           <span className="featured__name">{project.name}</span>
-        )}
-        {project.rest}
-        {project.group && <GroupLinks links={project.group} />}
-      </p>
+          {project.rest}
+          {project.group && <GroupLinks links={project.group} />}
+        </p>
+      )}
       <div className="featured__side">
         <MediaView media={project.media} href={project.href} label={project.name} />
       </div>

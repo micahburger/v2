@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLab } from "./lab";
-import { contact, nav } from "./data/site";
+import { contact } from "./data/site";
 import LabPanel from "./components/LabPanel";
 import FeaturedProjects from "./components/FeaturedProjects";
 import ClientQuilt from "./components/ClientQuilt";
 import WorkHistory from "./components/WorkHistory";
 import SiteFooter from "./components/SiteFooter";
+import BackToTop from "./components/BackToTop";
 
 /**
  * The homepage, in the live site's order: hero, select clients, work
@@ -32,35 +33,17 @@ export default function App() {
 
   return (
     <>
-      {/* Not fixed: it sits at the top of the page and scrolls away. */}
-      <header className="site-header wrap">
-        <div className="site-header__bar">
-          <a className="site-header__name" href="/">
-            M Lindenberger
-          </a>
-          <nav className="site-header__nav" aria-label="Projects">
-            {nav.map((item) => (
-              <a key={item.label} href={item.href}>
-                {item.label}
-              </a>
-            ))}
-          </nav>
-        </div>
-      </header>
-
       <main>
-        <section className="hero wrap grid" data-stage="0">
-          <img
-            className="hero__media"
-            src="/img/hero-palm.jpg"
-            alt="Palm fronds against a pale sky"
-            width={800}
-            height={533}
-          />
-          <h1 className="hero__statement">
+        {/* No header bar: the name sits over the statement as an eyebrow,
+            and is the page's h1, so the page is titled by who it's about. */}
+        <section className="hero wrap" data-stage="0">
+          <h1 className="hero__name" tabIndex={-1}>
+            Micah Lindenberger
+          </h1>
+          <p className="hero__statement">
             Dedicated to transforming platforms and products into intuitive, engaging experiences
             that put customers at the center.
-          </h1>
+          </p>
         </section>
 
         <section className="section wrap" aria-labelledby="clients-title" data-stage="0">
@@ -101,6 +84,7 @@ export default function App() {
         <SiteFooter variant={lab.footer} />
       </div>
 
+      <BackToTop />
       <LabPanel lab={lab} setLab={setLab} onReplay={() => setReplay((n) => n + 1)} />
     </>
   );

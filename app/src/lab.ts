@@ -18,23 +18,22 @@ export const LAB = {
     { id: "graphite", label: "Graphite" },
     { id: "forest", label: "Forest" },
     { id: "clay", label: "Clay" },
-    { id: "harbor", label: "Harbor" },
   ],
   shift: [
     { id: "off", label: "Off" },
-    { id: "deepen", label: "Deepen" },
     { id: "saturate", label: "Saturate" },
+    { id: "drift", label: "Drift" },
+    { id: "dusk", label: "Dusk" },
   ],
   history: [
-    { id: "static", label: "Static" },
     { id: "logo", label: "Logo" },
     { id: "fill", label: "Fill" },
     { id: "focus", label: "Focus" },
     { id: "timeline", label: "Timeline" },
   ],
   footer: [
-    { id: "classic", label: "Classic" },
     { id: "signoff", label: "Sign-off" },
+    { id: "classic", label: "Classic" },
     { id: "index", label: "Index" },
     { id: "card", label: "Card" },
   ],
@@ -48,7 +47,7 @@ function isValid<K extends LabKey>(key: K, value: unknown): value is LabState[K]
 }
 
 export function readLab(): LabState {
-  const state: LabState = { palette: "paper", shift: "off", history: "timeline", footer: "classic" };
+  const state: LabState = { palette: "paper", shift: "off", history: "timeline", footer: "signoff" };
   const params = new URLSearchParams(window.location.search);
   (Object.keys(LAB) as LabKey[]).forEach((key) => {
     const value = params.get(key);

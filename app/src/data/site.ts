@@ -15,7 +15,6 @@
 //   gone (hansondigital.com today is an unrelated SF print studio).
 //
 // Images live in public/img. Their sources, for when they need re-exporting:
-//   hero-palm.jpg        ds-assets/photo.jpg (live uses a palm video loop)
 //   logoquilt2024.png    ds-assets/logoquilt2024.png
 // Carousel sets, all 16:9, resized to 1400px wide. Each starts on the frame
 // the live page opens on (the -Gallery still), then the case-study screens:
@@ -147,15 +146,6 @@ export const parked: Featured[] = [
     href: "https://cornerbodega.micahburger.com",
     media: slides("bodega", 3, "Corner Bodega"),
   },
-];
-
-/** The header links, as on the live site. */
-export const nav = [
-  { label: "Opendoor", href: "https://micahburger.com/project/opendoor" },
-  { label: "Carrier", href: "https://micahburger.com/project/infinity" },
-  { label: "Lincoln", href: "https://micahburger.com/project/lincoln" },
-  { label: "Rockwell", href: "https://micahburger.com/project/rockwell" },
-  { label: "BBC", href: "https://micahburger.com/project/bbc" },
 ];
 
 /** The twelve logos in logoquilt2024.png, left to right, top to bottom.

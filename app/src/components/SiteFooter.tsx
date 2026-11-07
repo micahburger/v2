@@ -4,7 +4,7 @@ type Variant = "classic" | "signoff" | "index" | "card";
 
 const LOCATION = "Los Angeles, CA";
 const TAGLINE = "Designing machines & systems since 2005";
-const CREDIT = "Built in Brooklyn, NY ©2026";
+const CREDIT = "Built in New York, New York ©2026";
 
 /**
  * Four footers with the same content, for the lab. The content is the live

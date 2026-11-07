@@ -2,15 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { jobs, type Job } from "../data/site";
 import { formatTenure, monthsBetween, useReducedMotion, useSeen } from "../hooks";
 
-type Variant = "static" | "logo" | "fill" | "focus" | "timeline";
+type Variant = "logo" | "fill" | "focus" | "timeline";
 
 const tenure = jobs.map((j) => monthsBetween(j.start, j.end));
 const longest = Math.max(...tenure);
 
 /**
  * Work history in the live site's layout: dates and location in the left
- * half, company (a link, in capitals) over the role in the right half.
- * "static" is exactly that. In every take the whole row is the link to the
+ * half, company (a link, in capitals) over the role in the right half. In
+ * every take the whole row is the link to the
  * company's site, opening in a new tab. The hover ideas layered on top:
  *  - LOGO: the company's logo, in black on a white card, floats beside the
  *    pointer while it's over that row. (Micah's ask.)
@@ -19,8 +19,9 @@ const longest = Math.max(...tenure);
  *    there.
  *  - FOCUS: the other rows step back, the hovered role nudges right, and a
  *    bar draws out under it showing tenure against the longest job.
- *  - TIMELINE: a 2010-to-now ruler above the list where every job is a
- *    span. Hovering a row lights its span and vice versa.
+ *  - TIMELINE: a first-job-to-now ruler above the list where every job is
+ *    a span, all one colour. Hovering a row raises its span in the text
+ *    colour and lightens the row; hovering a span does the same.
  *
  * Keyboard focus drives the same state as hover.
  */
@@ -29,7 +30,6 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
   const listRef = useRef<HTMLOListElement>(null);
   const seen = useSeen(listRef, 0.15);
   const reduced = useReducedMotion();
-  const interactive = variant !== "static";
 
   // Scrolling moves the rows out from under a still pointer without any
   // pointerleave, which would leave the hover card floating over whatever
@@ -46,7 +46,7 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
       {variant === "timeline" && <Timeline hover={hover} setHover={setHover} />}
       <ol
         ref={listRef}
-        className={`history__list ${seen || reduced || !interactive ? "is-seen" : ""} ${
+        className={`history__list ${seen || reduced ? "is-seen" : ""} ${
           hover !== null ? "has-hover" : ""
         }`}
         onPointerLeave={() => setHover(null)}
@@ -56,8 +56,8 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
             key={job.company}
             job={job}
             index={i}
-            active={interactive && hover === i}
-            onEnter={() => interactive && setHover(i)}
+            active={hover === i}
+            onEnter={() => setHover(i)}
             onLeave={() => setHover((h) => (h === i ? null : h))}
           />
         ))}
@@ -247,14 +247,11 @@ function Timeline({
           return (
             <span
               key={job.company}
-              className={`timeline__span ${hover === i ? "is-active" : ""} ${
-                hover !== null && hover !== i ? "is-dim" : ""
-              }`}
+              className={`timeline__span ${hover === i ? "is-active" : ""}`}
               style={
                 {
                   left: `${left}%`,
                   width: `${width}%`,
-                  "--brand": job.color,
                 } as React.CSSProperties
               }
               onPointerEnter={() => setHover(i)}

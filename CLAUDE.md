@@ -36,9 +36,9 @@ npm --prefix app run build   # tsc -b && vite build, the only gate
 The page is a faithful rebuild of the live Semplice homepage (measured off
 micahburger.com at 1279px: 12-col grid, 30px gutters, Poppins in #443736 on
 #F5F1EB, teal #5A98B1 links), in the live order: hero, Select Clients, Work
-History, Featured Projects, contact, footer. The header bar scrolls away
-(it is fixed on the live site; Micah didn't want it locked). The four new
-projects lead the featured list; the old case studies follow.
+History, Featured Projects, contact, footer. There is no header bar and no
+hero image: the page opens on the statement, set large, with "Micah
+Lindenberger" above it as an eyebrow (the page's h1, in Satoshi).
 
 Image sources are listed at the top of `app/src/data/site.ts`. Most came
 from `~/Desktop/ds-assets`; Lattice's from `../prtfolio images`.
@@ -51,10 +51,10 @@ a plain link gets the defaults.
 
 | Section | Takes (default first) | File |
 |---|---|---|
-| Colour | paper, graphite, forest, clay, harbor | palette blocks at the top of `global.css` |
-| Shift | off, deepen, saturate | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
-| History | timeline, static, logo, fill, focus | `components/WorkHistory.tsx` |
-| Footer | classic, signoff, index, card | `components/SiteFooter.tsx` |
+| Colour | paper, graphite, forest, clay | palette blocks at the top of `global.css` |
+| Shift | off, saturate, drift, dusk | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
+| History | timeline, logo, fill, focus | `components/WorkHistory.tsx` |
+| Footer | signoff, classic, index, card | `components/SiteFooter.tsx` |
 
 Settled and out of the lab: the client quilt is the **wave** build-in (the
 quilt is one image, `logoquilt2024.png`, cut into twelve tiles with
@@ -64,11 +64,35 @@ Shift: the page is split into stages by `data-stage` (0 intro + clients,
 1 work history, 2 featured, 3 contact + footer). A scroll listener writes
 the stage to `<html data-stage>`; CSS derives `--page` from the palette's
 `--paper` with relative OKLCH colour, a small fixed step per stage.
-Deliberately subtle: stage 3 is about 8% darker at most.
+Drift turns the hue at constant lightness; Dusk darkens, enriches and
+turns toward red-violet (a sunset that stays in one lighting mode).
 
-Timeline: the ruler runs from the first job's start to this month, so the
+**The rule (Micah, 2026-11-07): a shift never changes the lighting mode.**
+Light palettes stay light enough for dark text, dark ones dark enough for
+light text, from top to bottom. Enforced by `--l-min` / `--l-max`, an
+OKLCH lightness window per palette that every shift is clamped into
+(light: 0.80 to 1, dark: 0.14 to 0.42). A bolder try that swept light to
+dark per section (Sunset / Dawn / Canopy) broke this and was removed.
+
+The contact sentence's links use `--link-strong` (further from the page
+than `--link`), a faint resting underline, and a 2px underline that draws
+in on hover.
+
+Timeline is one colour: faint bars, and the hovered job's bar in the text
+colour (no per-company brand colours). Hovering a row lightens it to 50%;
+nothing else dims. The ruler runs from the first job's start to this month, so the
 first bar lines up with the section title and the last with the content
 edge. Section titles are 22px (the live site's are 18px).
+
+Each featured paragraph is one link (`.featured__block`) with a round
+arrow under it; hovering the text or the media slides the arrow right. The
+name is set apart by weight, not link colour. A fixed back-to-top button
+(`BackToTop.tsx`) sits bottom-right and grows on hover; footers keep
+`--clear-to-top` of space under their last line so it never covers text.
+
+Small round buttons have **no outlines or strokes** (Micah): just a
+`--chip` fill, white on light palettes and a lighter tint of `--page` on
+dark ones.
 
 Featured order: Rental application, Lattice, 2026 folio, Opendoor,
 Lincoln, Infinity, then an Archive row grouping WWE, BBC, ABA and Rockwell
@@ -104,13 +128,12 @@ and is parked in `app/_archive/`, outside the build.
 - No logo exists for Tip or Skip or Hanson Digital; the card sets the name.
 - The live page's `Section-divider2.jpg` (above the contact block) isn't in
   ds-assets, so it's left out.
-- The palm is a still (`photo.jpg`); the live hero is a video loop.
 
 ## Things that will bite you
 
 - `motion.ts` is the timing source of truth, but CSS can't import it; some
   values are mirrored in `global.css` with a comment saying which.
-- Weights: only Poppins 400/500, Satoshi 700 (header name, from Fontshare)
+- Weights: only Poppins 400/500, Satoshi 700 (the name eyebrow, from Fontshare)
   and Plex Mono 400 (lab panel) are loaded. Another weight gets synthesised.
 - Logos in the hover card must have transparent backgrounds: the black is
   `filter: brightness(0)`, which would turn an opaque box solid black.
