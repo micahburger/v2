@@ -1,0 +1,906 @@
+/* =====================================================================
+   micahburger.com v2 — homepage
+   A faithful rebuild of the live Semplice homepage first, to shift from
+   later. Every size and gap below was measured off micahburger.com at a
+   1279px-wide window; where a value looks odd (letter-spacing .2px, the
+   24px line on 18px text), it's because the live site does it.
+
+   Only Poppins 400/500 and Satoshi 700 are loaded (index.html). Any other
+   weight here would be synthesised by the browser.
+   ===================================================================== */
+
+:root {
+  --paper: #f5f1eb;
+  --ink: #443736;
+  --black: #000000;
+  --link: #5a98b1;
+  --rule: rgba(68, 55, 54, 0.25);
+
+  --font: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  --font-name: "Satoshi", "Poppins", Arial, sans-serif;
+  --font-label: "IBM Plex Mono", "Courier New", monospace;
+
+  /* Semplice's grid: 12 columns, 30px gutters, 30px outer margin, content
+     1220px wide at most. */
+  --gutter: 30px;
+  --content: 1220px;
+
+  /* Mirrors motion.ts EASE.* — CSS can't import them. */
+  --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Shared with the 2026 folio, so a hover grows the same on every site. */
+  --hover-grow-scale-card: 1.05;
+  --hover-grow-duration: 0.32s;
+  --hover-grow-easing: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul {
+  margin: 0;
+  font-weight: 400;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--content) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+/* ================= header ================= */
+
+/* Absolute rather than fixed: same bar, same place, but it scrolls away
+   with the page instead of riding along. */
+.site-header {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  z-index: 40;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  padding: 0 30px;
+  border-radius: 20px;
+  background: rgba(241, 233, 233, 0.68);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.site-header__name {
+  font-family: var(--font-name);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0;
+  color: var(--black);
+}
+
+.site-header__nav {
+  display: flex;
+  gap: 24px;
+}
+
+.site-header__nav a {
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--black);
+  transition: color 0.2s ease;
+}
+
+.site-header__nav a:hover {
+  color: var(--link);
+}
+
+/* ================= hero ================= */
+
+.hero {
+  padding-top: 210px;
+  align-items: start;
+}
+
+.hero__media {
+  grid-column: 1 / span 4;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.hero__statement {
+  grid-column: 5 / span 8;
+  font-size: 44px;
+  line-height: 48px;
+}
+
+/* ================= sections ================= */
+
+.section {
+  padding-top: 80px;
+}
+
+.section__label {
+  margin-bottom: 20px;
+  font-size: 18px;
+  line-height: 27px;
+}
+
+/* The hairline the live page draws between the logos and the history. */
+.section--ruled {
+  margin-top: 40px;
+  padding-top: 0;
+}
+
+.section--ruled::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 40px;
+  background: var(--rule);
+}
+
+.section--featured {
+  padding-top: 90px;
+}
+
+/* ================= client quilt ================= */
+
+/* One image, cut into twelve tiles with background-position. No gap, so
+   at rest the tiles add back up to exactly logoquilt2024.png. */
+.quilt {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.quilt__tile {
+  aspect-ratio: 480 / 217.67;
+  background-image: url("/img/logoquilt2024.png");
+  background-size: 400% 300%;
+  background-repeat: no-repeat;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .quilt:not(.quilt--static) .quilt__tile:hover {
+    scale: var(--hover-grow-scale-card);
+  }
+}
+
+/* WAVE: rise along diagonals; --d is set per tile. */
+.quilt--wave .quilt__tile {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+.quilt--wave.is-seen .quilt__tile {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease var(--d),
+    transform 0.7s var(--ease-enter) var(--d),
+    scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+/* ASSEMBLE: transform and opacity are written per frame by useAssemble. */
+.quilt--assemble .quilt__tile {
+  will-change: transform, opacity;
+}
+
+/* FLAP: each tile hangs from its top edge and swings down into place. */
+.quilt--flap .quilt__tile {
+  opacity: 0;
+  transform: perspective(700px) rotateX(88deg);
+  transform-origin: 50% 0;
+}
+
+.quilt--flap.is-seen .quilt__tile {
+  opacity: 1;
+  transform: perspective(700px) rotateX(0);
+  transition:
+    opacity 0.12s ease var(--d),
+    transform 0.55s var(--ease-enter) var(--d),
+    scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+/* ================= work history ================= */
+
+.history {
+  position: relative;
+}
+
+/* Rows carry their spacing as padding (so the Fill take has room to fill),
+   which would push the first row 20px below where the live page puts it. */
+.history__list {
+  margin-top: -20px;
+}
+
+.job {
+  position: relative;
+  isolation: isolate;
+  align-items: start;
+  padding: 20px 0;
+  transition: opacity 0.25s ease, color 0.2s ease;
+}
+
+.job__when {
+  grid-column: 1 / span 6;
+}
+
+.job__what {
+  grid-column: 7 / span 6;
+}
+
+.job__dates {
+  font-size: 18px;
+  line-height: 27px;
+}
+
+.job__where {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.job__company {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.job__role {
+  margin-top: 20px;
+  font-size: 25px;
+  line-height: 24px;
+  transition: transform 0.32s var(--ease-enter), color 0.2s ease;
+}
+
+.job__tenure {
+  display: none;
+}
+
+/* The company link covers the whole row (.job is the positioned parent),
+   so anywhere on the row opens the company's site. */
+.job__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.job__link:focus-visible {
+  outline: none;
+}
+
+.job__link:focus-visible::after {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Arrival for the exploratory takes: rows rise in, staggered. Static and
+   Logo match the live page, which doesn't animate them. */
+.history:not(.history--static):not(.history--logo) .job {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.history:not(.history--static):not(.history--logo) .history__list.is-seen .job {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.5s ease calc(var(--i) * 50ms),
+    transform 0.5s var(--ease-enter) calc(var(--i) * 50ms),
+    color 0.2s ease;
+}
+
+/* FILL: the row floods with the company colour from the bottom. */
+.history--fill .job::before {
+  content: "";
+  position: absolute;
+  inset: 0 -20px;
+  z-index: -1;
+  border-radius: 12px;
+  background: var(--brand);
+  transform: scaleY(0);
+  transform-origin: 50% 100%;
+  transition: transform 0.22s var(--ease-exit);
+}
+
+.history--fill .job.is-active::before {
+  transform: scaleY(1);
+  transition: transform 0.3s var(--ease-enter);
+}
+
+.history--fill .job.is-active,
+.history--fill .job.is-active a {
+  color: var(--brand-ink);
+}
+
+.follow-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.follow-card__inner {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 240px;
+  height: 150px;
+  padding: 18px;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  scale: 0.92;
+  transition: opacity 0.18s var(--ease-exit), scale 0.18s var(--ease-exit);
+}
+
+.follow-card.is-on .follow-card__inner {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 0.25s var(--ease-enter), scale 0.4s var(--ease-enter);
+}
+
+/* LOGO: a white card with the company's logo flattened to black. Every
+   logo sits in the card at once, stacked; only .is-current shows. */
+.follow-card__inner--logo {
+  position: relative;
+  width: 240px;
+  height: 136px;
+  padding: 0;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(68, 55, 54, 0.18);
+}
+
+.follow-card__logo {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  /* A fixed box rather than max-sizes: the files' own sizes run from 108px
+     to 1024px wide, and contain scales each one to fill the same box. Tall
+     enough for Hudson Rouge's stacked script; the wide wordmarks hit the
+     width first, so the height doesn't blow them up. */
+  width: 180px;
+  height: 76px;
+  object-fit: contain;
+  /* Official logo files come in brand colours; brightness(0) takes any
+     transparent logo to pure black, so one rule covers every file. */
+  filter: brightness(0);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.follow-card__logo.is-current {
+  opacity: 1;
+}
+
+/* Companies with no logo file: the name, set like a wordmark. */
+.follow-card__wordmark {
+  display: grid;
+  place-items: center;
+  max-width: none;
+  max-height: none;
+  padding: 0 16px;
+  color: #000000;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+
+.follow-card__name {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.follow-card__tenure {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* FOCUS: the rest step back; tenure draws out under the role. */
+.history--focus .has-hover .job:not(.is-active) {
+  opacity: 0.3;
+}
+
+.history--focus .job.is-active .job__role {
+  transform: translateX(12px);
+}
+
+.history--focus .job__tenure {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  height: 14px;
+}
+
+.job__bar {
+  display: block;
+  height: 4px;
+  width: calc(var(--w) * 240px);
+  border-radius: 2px;
+  background: var(--brand);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform 0.2s var(--ease-exit);
+}
+
+.job__tenure-text {
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.history--focus .job.is-active .job__bar {
+  transform: scaleX(1);
+  transition: transform 0.5s var(--ease-enter);
+}
+
+.history--focus .job.is-active .job__tenure-text {
+  opacity: 0.8;
+  transition: opacity 0.3s ease 0.1s;
+}
+
+/* TIMELINE: a ruler of the whole career above the rows. */
+.timeline {
+  margin-bottom: 24px;
+  user-select: none;
+}
+
+.timeline__track {
+  position: relative;
+  height: 64px;
+}
+
+.timeline__span {
+  position: absolute;
+  bottom: 0;
+  height: 10px;
+  /* A paper-coloured left edge keeps back-to-back jobs readable as two. */
+  border-left: 2px solid var(--paper);
+  border-radius: 4px;
+  background: rgba(68, 55, 54, 0.18);
+  transition:
+    height 0.35s var(--ease-enter),
+    background-color 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.timeline__span.is-active {
+  height: 40px;
+  background: var(--brand);
+}
+
+.timeline__span.is-dim {
+  opacity: 0.5;
+}
+
+.timeline__label {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 6px);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.3s var(--ease-enter);
+}
+
+.timeline__span.is-active .timeline__label {
+  opacity: 1;
+  transform: none;
+}
+
+.timeline__ticks {
+  position: relative;
+  height: 22px;
+  margin-top: 8px;
+  border-top: 1px solid var(--rule);
+}
+
+.timeline__ticks span {
+  position: absolute;
+  top: 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  translate: -50% 0;
+}
+
+.history--timeline .has-hover .job:not(.is-active) {
+  opacity: 0.4;
+}
+
+.history--timeline .job.is-active .job__role {
+  color: var(--brand);
+}
+
+/* ================= featured projects ================= */
+
+.featured {
+  display: grid;
+  gap: 80px;
+}
+
+.featured__row {
+  align-items: start;
+}
+
+/* The live paragraph is 410px wide inside a 490px, five-column cell. */
+.featured__text {
+  grid-column: 1 / span 5;
+  padding-right: 80px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.featured__media {
+  grid-column: 6 / span 7;
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #e9e4dc;
+}
+
+.featured__media > img,
+.slideshow > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slideshow > img {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.slideshow > img.is-current {
+  opacity: 1;
+}
+
+/* ================= contact + footer ================= */
+
+.contact {
+  padding-top: 200px;
+  display: flex;
+  justify-content: center;
+}
+
+.contact__text {
+  max-width: 907px;
+  font-size: 38px;
+  line-height: 51px;
+}
+
+.site-footer {
+  padding-top: 180px;
+  padding-bottom: 80px;
+}
+
+.site-footer__who {
+  grid-column: 1 / span 6;
+}
+
+.site-footer__name {
+  font-size: 18px;
+  line-height: 14px;
+}
+
+.site-footer__disciplines {
+  display: grid;
+  gap: 27px;
+  margin-top: 27px;
+  font-size: 13px;
+  line-height: 14px;
+}
+
+.site-footer__links {
+  grid-column: 7 / span 6;
+  padding-left: 60px;
+  display: grid;
+  align-content: start;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.site-footer__bottom {
+  margin-top: 100px;
+  align-items: end;
+}
+
+.site-footer__meta {
+  grid-column: 1 / span 9;
+  display: grid;
+  gap: 21px;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.site-footer__meta a {
+  color: inherit;
+}
+
+.site-footer__signoff {
+  grid-column: 10 / span 3;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.site-footer__ciao {
+  font-size: 70px;
+  line-height: 70px;
+  margin-bottom: 4px;
+}
+
+/* ================= phone / tablet ================= */
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hero {
+    padding-top: 150px;
+    row-gap: 28px;
+  }
+  .hero__media,
+  .hero__statement,
+  .job__when,
+  .job__what,
+  .featured__text,
+  .featured__media,
+  .site-footer__who,
+  .site-footer__links,
+  .site-footer__meta,
+  .site-footer__signoff {
+    grid-column: 1;
+  }
+  .hero__statement {
+    font-size: 30px;
+    line-height: 36px;
+  }
+  .job {
+    row-gap: 12px;
+  }
+  .job__role {
+    margin-top: 8px;
+    font-size: 22px;
+    line-height: 26px;
+  }
+  .featured {
+    gap: 64px;
+  }
+  .featured__row {
+    row-gap: 20px;
+  }
+  .featured__text {
+    padding-right: 0;
+  }
+  .featured__media {
+    border-radius: 20px;
+  }
+  .contact {
+    padding-top: 140px;
+  }
+  .contact__text {
+    font-size: 26px;
+    line-height: 36px;
+  }
+  .site-footer {
+    padding-top: 120px;
+  }
+  .site-footer__links {
+    padding-left: 0;
+    margin-top: 40px;
+  }
+  .site-footer__bottom {
+    row-gap: 48px;
+    margin-top: 64px;
+  }
+}
+
+@media (max-width: 760px) {
+  .site-header {
+    top: 16px;
+  }
+  .site-header__bar {
+    height: 60px;
+    padding: 0 22px;
+  }
+  /* Five project links and the name don't fit a phone-width bar. */
+  .site-header__nav {
+    display: none;
+  }
+}
+
+/* ================= lab switcher ================= */
+
+.lab {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  letter-spacing: 0;
+}
+
+@media (max-width: 900px) {
+  .lab {
+    left: auto;
+    right: 16px;
+    justify-items: end;
+  }
+}
+
+.lab__toggle {
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: #141414;
+  color: var(--paper);
+  font-family: var(--font-label);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+}
+
+.lab__panel {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(20, 20, 20, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  color: var(--paper);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.32);
+  animation: lab-in 0.24s var(--ease-enter) both;
+}
+
+@keyframes lab-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.lab__row {
+  display: grid;
+  gap: 6px;
+}
+
+.lab__title {
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.lab__seg {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lab__seg button {
+  flex: 1;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 13px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.lab__seg button.is-on {
+  background: var(--paper);
+  color: #141414;
+}
+
+.lab__replay {
+  justify-self: start;
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.8;
+}
+
+/* ================= reduced motion ================= */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.12s !important;
+    transition-delay: 0ms !important;
+  }
+}
