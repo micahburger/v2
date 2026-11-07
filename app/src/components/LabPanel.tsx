@@ -2,6 +2,7 @@ import { useState } from "react";
 import { LAB, LabKey, LabState } from "../lab";
 
 const TITLES: Record<LabKey, string> = {
+  palette: "Colour",
   quilt: "Clients",
   history: "History",
 };

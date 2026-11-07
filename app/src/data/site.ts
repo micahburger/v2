@@ -17,17 +17,24 @@
 // Images live in public/img. Their sources, for when they need re-exporting:
 //   hero-palm.jpg        ds-assets/photo.jpg (live uses a palm video loop)
 //   logoquilt2024.png    ds-assets/logoquilt2024.png
-//   lattice-1..5.jpg     prtfolio images/9, 7, 4, 8, 6.jpg (live order)
-//   opendoor-1..6.jpg    ds-assets/projectslideshow4, 5, 6, 2, 3, 9.jpg
-//   *-4up.gif            ds-assets/*-4up.gif
-//   *-gallery.jpg        ds-assets/*-Gallery.jpg, standing in for the
-//                        Lincoln, Rockwell and WWE 4-up GIFs, not in ds-assets
-//   rental-application, folio-2026, corner-bodega.jpg
-//                        screenshots of those live sites, until real exports
+// Carousel sets, all 16:9, resized to 1400px wide. Each starts on the frame
+// the live page opens on (the -Gallery still), then the case-study screens:
+//   lattice-1..5         prtfolio images/9, 7, 4, 8, 6.jpg (live order)
+//   opendoor-1..6        ds-assets/projectslideshow4, 5, 6, 2, 3, 9
+//   lincoln-1..5         Lincoln-Gallery, Lincoln13, 10, 14, 11-CaseStudy
+//   infinity-1..2        Carrier-Gallery, Infinity-Therm-9 (all there is)
+//   bbc-1..3             BBC-Gallery, BBC-8, BBC-9
+//   rockwell-1..4        Rockwell-Gallery, -3, -4, -5 (cropped from 4:3)
+//   aba-1..6             Aba-Gallery, ABA-1, -8, -10, -13, -6
+//   wwe-1..6             WWE-Gallery, WWE-1-1, -12, -10, -13, -9
+//   bodega-, rental-, folio-*
+//                        screenshots of those live sites (home page first,
+//                        then artist pages / case-study sections / folio
+//                        chapters), until real exports exist
 
 export type Media =
   | { kind: "image"; src: string; alt: string }
-  | { kind: "slideshow"; images: { src: string; alt: string }[] };
+  | { kind: "carousel"; images: { src: string; alt: string }[] };
 
 export type Featured = {
   id: string;
@@ -40,9 +47,8 @@ export type Featured = {
   media: Media;
 };
 
-const img = (src: string, alt: string): Media => ({ kind: "image", src: `/img/${src}`, alt });
 const slides = (prefix: string, count: number, alt: string): Media => ({
-  kind: "slideshow",
+  kind: "carousel",
   images: Array.from({ length: count }, (_, i) => ({
     src: `/img/${prefix}-${i + 1}.jpg`,
     alt: `${alt}, ${i + 1} of ${count}`,
@@ -55,14 +61,14 @@ export const featured: Featured[] = [
     name: "Corner Bodega",
     rest: " is a zine and print publisher founded in New York and LA in 2019. A rebuild of its shop and artist pages as a fast, static site.",
     href: "https://cornerbodega.micahburger.com",
-    media: img("corner-bodega.jpg", "Corner Bodega home page"),
+    media: slides("bodega", 3, "Corner Bodega"),
   },
   {
     id: "rental-application",
     name: "Rental application",
     rest: " A case study on redesigning the RentSpree rental application, from the first form field through payment and final submission.",
     href: "https://applicants.micahburger.com",
-    media: img("rental-application.jpg", "Rental application redesign case study"),
+    media: slides("rental", 3, "Rental application case study"),
   },
   {
     id: "lattice",
@@ -76,7 +82,7 @@ export const featured: Featured[] = [
     name: "2026 Mini portfolio",
     rest: " Four product chapters and a resume, built as a slide deck on desktop and a scrolling page on a phone.",
     href: "https://2026folio.micahburger.com",
-    media: img("folio-2026.jpg", "2026 mini portfolio, applicant experience chapter"),
+    media: slides("folio", 4, "2026 mini portfolio"),
   },
   {
     id: "opendoor",
@@ -90,42 +96,42 @@ export const featured: Featured[] = [
     name: "Lincoln.com",
     rest: " sought a fresh experience to engage shoppers with their latest luxury lineup. My mission was to redesign the popular “Build and Price” feature, where users customize and bring their dream Lincoln vehicle to life.",
     href: "https://micahburger.com/project/lincoln",
-    media: img("lincoln-gallery.jpg", "Lincoln Build and Price"),
+    media: slides("lincoln", 5, "Lincoln Build and Price"),
   },
   {
     id: "infinity",
     name: "Infinity Thermostat",
     rest: " I led a creative team to design a digital thermostat and app for Infinity, Carrier’s premium smart home brand, with the goal of modernizing their legacy app and wall controller for a more seamless digital experience.",
     href: "https://micahburger.com/project/infinity",
-    media: img("carrier-4up.gif", "Infinity thermostat and app"),
+    media: slides("infinity", 2, "Infinity thermostat and app"),
   },
   {
     id: "bbc",
     name: "BBC News Stream",
     rest: " Collaborating with the BBC News digital team, we designed a video-led news experience to engage and expand their user base, focusing on an intuitive platform that prioritized video content to capture and retain attention.",
     href: "https://micahburger.com/project/bbc",
-    media: img("bbc-4up.gif", "BBC News Stream"),
+    media: slides("bbc", 3, "BBC News Stream"),
   },
   {
     id: "rockwell",
     name: "Rockwell Group",
     rest: " A leading interior design firm, sought to reinvent how they showcased their hospitality projects. The objective was to craft an engaging and dynamic experience that would drive exploration across their diverse hotel portfolio.",
     href: "https://micahburger.com/project/rockwell",
-    media: img("rockwell-gallery.jpg", "Rockwell Group hospitality portfolio"),
+    media: slides("rockwell", 4, "Rockwell Group hospitality portfolio"),
   },
   {
     id: "aba",
     name: "American Bar Association",
     rest: " A collaborative discovery process with the American Bar digital team led to the creation of a new design language that would seamlessly extend across multiple platforms, balancing appeal to both younger and older audiences.",
     href: "https://micahburger.com/project/aba",
-    media: img("aba-4up.gif", "American Bar Association design language"),
+    media: slides("aba", 6, "American Bar Association design language"),
   },
   {
     id: "wwe",
     name: "WWE",
     rest: " sought to reinvent WWE.com to reflect the future of wrestling entertainment. We designed a bold, dynamic experience that matched the brand’s powerful image.",
     href: "https://micahburger.com/project/wwe",
-    media: img("wwe-gallery.jpg", "WWE.com redesign"),
+    media: slides("wwe", 6, "WWE.com redesign"),
   },
 ];
 

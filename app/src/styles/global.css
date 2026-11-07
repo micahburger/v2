@@ -10,11 +10,24 @@
    ===================================================================== */
 
 :root {
+  /* Colours live in the palettes below; :root only carries the live site's
+     ("paper"), so the page is right even before React sets data-palette. */
   --paper: #f5f1eb;
   --ink: #443736;
   --black: #000000;
   --link: #5a98b1;
   --rule: rgba(68, 55, 54, 0.25);
+  --bar: rgba(241, 233, 233, 0.68);
+  --media-bg: #e9e4dc;
+  --dot: rgba(68, 55, 54, 0.22);
+  --dot-active: #443736;
+  /* logoquilt2024.png is black logos on cream. On light pages "darken"
+     keeps the darker of image and page at each pixel, so the cream (and
+     the pale box behind Lincoln) disappears into any light page colour.
+     On dark pages the image is inverted to white-on-near-black and
+     "lighten" does the same job the other way round. */
+  --quilt-filter: none;
+  --quilt-blend: darken;
 
   --font: "Poppins", "Helvetica Neue", Arial, sans-serif;
   --font-name: "Satoshi", "Poppins", Arial, sans-serif;
@@ -35,6 +48,68 @@
   --hover-grow-easing: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* ================= palettes =================
+   Picked in the lab (data-palette on <html>). "paper" is the live site.
+   The others exist because cream-on-cream screens (Corner Bodega, the
+   2026 folio) vanish into the live page, while Opendoor and Lincoln, which
+   are dark, stand out; every alternative gives light screens something to
+   sit against. Mood names and bases come from the ds Lattice atmospheres;
+   link colours are lifted from each one's accent until they pass 4.5:1. */
+
+:root[data-palette="graphite"] {
+  --paper: #161516;
+  --ink: #e4ded6;
+  --black: #f4f1ec;
+  --link: #c4ae88;
+  --rule: rgba(244, 241, 236, 0.14);
+  --bar: rgba(36, 34, 35, 0.78);
+  --media-bg: #232123;
+  --dot: rgba(244, 241, 236, 0.24);
+  --dot-active: #f4f1ec;
+  --quilt-filter: invert(1);
+  --quilt-blend: lighten;
+}
+
+:root[data-palette="forest"] {
+  --paper: #2e3b35;
+  --ink: #e2ddd1;
+  --black: #f5f2ec;
+  --link: #bccca6;
+  --rule: rgba(245, 242, 236, 0.18);
+  --bar: rgba(60, 73, 67, 0.78);
+  --media-bg: #3c4943;
+  --dot: rgba(245, 242, 236, 0.26);
+  --dot-active: #f5f2ec;
+  --quilt-filter: invert(1);
+  --quilt-blend: lighten;
+}
+
+:root[data-palette="clay"] {
+  --paper: #e8d7c7;
+  --ink: #4d3a33;
+  --black: #2b1f1a;
+  --link: #8a4e30;
+  --rule: rgba(77, 58, 51, 0.22);
+  --bar: rgba(244, 234, 224, 0.62);
+  --media-bg: #dcc8b7;
+  --dot: rgba(77, 58, 51, 0.24);
+  --dot-active: #4d3a33;
+}
+
+:root[data-palette="harbor"] {
+  --paper: #1b2433;
+  --ink: #d6dce6;
+  --black: #ffffff;
+  --link: #8fbae2;
+  --rule: rgba(255, 255, 255, 0.14);
+  --bar: rgba(40, 52, 72, 0.78);
+  --media-bg: #263247;
+  --dot: rgba(255, 255, 255, 0.24);
+  --dot-active: #ffffff;
+  --quilt-filter: invert(1);
+  --quilt-blend: lighten;
+}
+
 *,
 *::before,
 *::after {
@@ -43,6 +118,10 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  /* Overscroll (the rubber band past the top and bottom) shows html, not
+     body, so it carries the palette too. */
+  background: var(--paper);
+  transition: background-color 0.4s ease;
 }
 
 body {
@@ -56,6 +135,8 @@ body {
   letter-spacing: 0.2px;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  /* A palette switch washes over rather than snapping. */
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 h1,
@@ -131,7 +212,7 @@ button {
   height: 70px;
   padding: 0 30px;
   border-radius: 20px;
-  background: rgba(241, 233, 233, 0.68);
+  background: var(--bar);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -225,6 +306,8 @@ button {
   background-image: url("/img/logoquilt2024.png");
   background-size: 400% 300%;
   background-repeat: no-repeat;
+  filter: var(--quilt-filter);
+  mix-blend-mode: var(--quilt-blend);
   transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
 }
 
@@ -540,7 +623,7 @@ button {
   /* A paper-coloured left edge keeps back-to-back jobs readable as two. */
   border-left: 2px solid var(--paper);
   border-radius: 4px;
-  background: rgba(68, 55, 54, 0.18);
+  background: var(--dot);
   transition:
     height 0.35s var(--ease-enter),
     background-color 0.25s ease,
@@ -614,18 +697,21 @@ button {
   line-height: 24px;
 }
 
-.featured__media {
+.featured__side {
   grid-column: 6 / span 7;
+}
+
+.featured__media {
   position: relative;
   display: block;
   aspect-ratio: 16 / 9;
   border-radius: 28px;
   overflow: hidden;
-  background: #e9e4dc;
+  background: var(--media-bg);
+  transition: background-color 0.4s ease;
 }
 
-.featured__media > img,
-.slideshow > img {
+.featured__media > img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -633,13 +719,95 @@ button {
   object-fit: cover;
 }
 
-.slideshow > img {
-  opacity: 0;
-  transition: opacity 0.8s ease;
+/* ---- the grab-and-swipe carousel (carousel.ts) ----
+   Same mechanics as the folio's .media-stage / .media-track: every slide
+   shares one box and steps itself out by whole widths (--slide), and only
+   the track moves. Slides never transition; they re-address themselves the
+   instant the loop wraps, which is how one crosses edges unseen. */
+
+.carousel__stage {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  /* Vertical swipes stay the page's (scrolling); horizontal ones are ours. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.slideshow > img.is-current {
-  opacity: 1;
+.carousel__stage[data-phase="dragging"] {
+  cursor: grabbing;
+}
+
+.carousel__track {
+  /* Mirrors carousel.ts CAROUSEL_AUTO_MS and its curve. */
+  --slide-ms: 700ms;
+  --slide-easing: cubic-bezier(0.65, 0, 0.35, 1);
+  display: grid;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+/* A thrown swipe leaves at the speed it was thrown and settles: quick and
+   all ease-out. Mirrors CAROUSEL_MANUAL_MS. */
+.carousel__stage[data-source="manual"] .carousel__track {
+  --slide-ms: 400ms;
+  --slide-easing: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.carousel__stage[data-phase="settling"] .carousel__track {
+  transition: transform var(--slide-ms) var(--slide-easing);
+}
+
+.carousel__slide {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  object-fit: cover;
+  transform: translateX(calc(var(--slide, 0) * 100%));
+  -webkit-user-drag: none;
+}
+
+/* 8px dots with a 20px target, as in the folio. */
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.carousel__dot {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.carousel__dot::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--dot);
+  transition: background-color 0.25s ease;
+}
+
+.carousel__dot.is-active::after {
+  background: var(--dot-active);
+}
+
+@media (hover: hover) {
+  .carousel__dot:not(.is-active):hover::after {
+    background: var(--dot-active);
+    opacity: 0.6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__stage[data-phase="settling"] .carousel__track {
+    transition-duration: 0.12s;
+  }
 }
 
 /* ================= contact + footer ================= */
@@ -731,7 +899,7 @@ button {
   .job__when,
   .job__what,
   .featured__text,
-  .featured__media,
+  .featured__side,
   .site-footer__who,
   .site-footer__links,
   .site-footer__meta,
@@ -826,6 +994,8 @@ button {
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
+  /* The edge keeps the black pill findable on the dark palettes. */
+  border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 

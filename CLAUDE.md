@@ -5,8 +5,9 @@ Semplice/WordPress), meant to become the hub that links to every case study
 and prototype: Corner Bodega, the rental application case study, Lattice,
 the 2026 mini portfolio, plus the older case studies still on the live site.
 
-Planned home while in progress: **v2.micahburger.com** (Hostinger subdomain,
-not set up yet as of 2026-11-06).
+Live at **https://v2.micahburger.com** (Hostinger, set up 2026-11-06).
+Repo: github.com/micahburger/v2. hPanel's Git deploy pulls `main` into
+`public_html` on every push.
 
 Vite + React 18 + TypeScript, same setup as `../2026folio-site`.
 
@@ -50,6 +51,7 @@ a plain link gets the defaults.
 
 | Section | Takes (default first) | File |
 |---|---|---|
+| Colour | paper, graphite, forest, clay, harbor | palette blocks at the top of `global.css` |
 | Clients | static, wave, assemble, flap | `components/ClientQuilt.tsx` |
 | History | logo, static, fill, focus, timeline | `components/WorkHistory.tsx` |
 
@@ -60,15 +62,28 @@ background-position, so the build-ins move logos individually.
 to black by CSS, on a white card beside the pointer. Every row links to the
 company's site in a new tab.
 
+Palettes are sets of CSS custom properties under `:root[data-palette=…]`;
+`main.tsx` sets the attribute before first render so a palette link doesn't
+fade in from cream. Paper is the live site; the others exist because light
+screens (Corner Bodega, the folio) disappear into the cream page. The logo
+quilt follows the palette through `--quilt-filter` / `--quilt-blend`.
+
+Featured media is the folio's grab-and-swipe carousel (`carousel.ts`, a
+port of 2026folio's `useMediaGallery`): autoplay every 4.2s while the row
+is on screen, slow 700ms drift, quick 400ms settle after a throw. A press
+that turns into a drag swallows the click, so the media can still link to
+the project. A two-image set is doubled so the loop has a slide past both
+edges.
+
 The first round of featured carousels (Wash, Strips, Stack) was too much
 and is parked in `app/_archive/`, outside the build.
 
 ## Placeholders still in
 
 - Rental application, 2026 folio and Corner Bodega media are screenshots
-  of those live sites; swap for real exports.
-- Lincoln, Rockwell and WWE use their `-Gallery.jpg` stills; the live site
-  has `-4up.gif` animations for them that aren't in ds-assets.
+  of those live sites; swap for real exports. `bodega-3` and `folio-4`
+  caught a mouse pointer.
+- Infinity has only two 16:9 stills in ds-assets.
 - No logo exists for Tip or Skip or Hanson Digital; the card sets the name.
 - The live page's `Section-divider2.jpg` (above the contact block) isn't in
   ds-assets, so it's left out.

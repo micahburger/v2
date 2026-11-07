@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 
-// The "lab" is how the interaction explorations live side by side: the
-// client quilt and the work history each have a few takes, and a small panel
-// switches between them. "Static" is the live site as it is today; the
+// The "lab" is how the explorations live side by side: a colour palette for
+// the whole page, plus a few takes each on the client quilt and the work
+// history, switched from a small panel. "Paper" and "Static" are the live
+// site as it is today; the
 // history defaults to "Logo", which Micah asked for directly. (The
 // featured-project carousels were parked in app/_archive.)
 // The choice rides in the query string only, so a link to "the flap quilt
@@ -11,6 +12,13 @@ import { useCallback, useEffect, useState } from "react";
 // kept serving stale picks after the defaults changed, so it went.) Once a take wins, delete the others and this file.
 
 export const LAB = {
+  palette: [
+    { id: "paper", label: "Paper" },
+    { id: "graphite", label: "Graphite" },
+    { id: "forest", label: "Forest" },
+    { id: "clay", label: "Clay" },
+    { id: "harbor", label: "Harbor" },
+  ],
   quilt: [
     { id: "static", label: "Static" },
     { id: "wave", label: "Wave" },
@@ -33,8 +41,8 @@ function isValid<K extends LabKey>(key: K, value: unknown): value is LabState[K]
   return LAB[key].some((option) => option.id === value);
 }
 
-function read(): LabState {
-  const state: LabState = { quilt: "static", history: "logo" };
+export function readLab(): LabState {
+  const state: LabState = { palette: "paper", quilt: "static", history: "logo" };
   const params = new URLSearchParams(window.location.search);
   (Object.keys(LAB) as LabKey[]).forEach((key) => {
     const value = params.get(key);
@@ -44,7 +52,7 @@ function read(): LabState {
 }
 
 export function useLab() {
-  const [lab, setLabState] = useState<LabState>(read);
+  const [lab, setLabState] = useState<LabState>(readLab);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

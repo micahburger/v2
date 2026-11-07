@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLab } from "./lab";
 import { contact, disciplines, footerLinks, nav } from "./data/site";
 import LabPanel from "./components/LabPanel";
@@ -16,6 +16,12 @@ export default function App() {
   // Bumped by "Replay build-ins": a new key remounts the quilt and history,
   // which resets their once-only arrival animations.
   const [replay, setReplay] = useState(0);
+
+  // On <html>, not a wrapper, so the palette reaches the page background
+  // behind everything (including overscroll) and the fixed lab panel.
+  useEffect(() => {
+    document.documentElement.dataset.palette = lab.palette;
+  }, [lab.palette]);
 
   return (
     <>
