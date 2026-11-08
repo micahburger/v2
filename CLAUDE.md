@@ -181,6 +181,13 @@ once v2 replaces it.
 - A featured row whose `href` starts with `/` opens in the same tab and
   carries the lab query string along (`linkTo` in FeaturedProjects.tsx);
   every other project link still opens a new tab.
+- Always on the Night palette (#161417, the ground the Opendoor screens
+  were exported on) with the shift off, whatever the homepage's lab says:
+  set before first paint in `app/index.html`, then in `main.tsx`. Framed
+  images then have no visible edge.
+- The case study lab shows only its own rows (`CASE_LAB` in `lab.ts`):
+  Outcomes, three takes on the closing numbers and learnings (Stats,
+  Ledger, Statement). The homepage shows `HOME_LAB`.
 - Opendoor (2026-11-08) is the first and the template: a first pass at the
   live page's structure and copy on v2's grid, type and palettes, to be
   shifted toward the v2 look next. Lincoln, Infinity and the archive

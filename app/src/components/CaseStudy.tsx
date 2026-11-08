@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from "react";
 import type { Block, CaseStudy, Img, Note } from "../data/caseStudies";
-import { useSectionStage } from "../hooks";
+import { CASE_LAB, LabState, useLab } from "../lab";
+import LabPanel from "./LabPanel";
 import BeforeAfter from "./BeforeAfter";
 import Slideshow from "./Slideshow";
 import SiteFooter from "./SiteFooter";
@@ -11,11 +12,11 @@ import BackToTop from "./BackToTop";
  * order (data/caseStudies.ts), then the homepage's sign-off footer.
  *
  * First pass (Micah, 2026-11-08): the live Semplice page's structure and
- * copy, rebuilt on the v2 homepage's grid, type and palettes, so it already
- * sits in the site and can be shifted toward it from here. It follows the
- * palette and scroll shift the visitor arrived with (the query string rides
- * along on the links in and out); ?palette=graphite is closest to the live
- * page's black.
+ * copy, rebuilt on the v2 homepage's grid and type. Always on the Night
+ * palette with no scroll shift (set in index.html and main.tsx), whatever
+ * the homepage is on: the screens were exported on that black, so they
+ * read as part of the page rather than as boxes on it, as on the live
+ * site. The lab query rides along on the link home.
  */
 export default function CaseStudyPage({ study }: { study: CaseStudy }) {
   // The ds's "{Project} · Micah Lindenberger", with a middle dot for the
@@ -24,17 +25,21 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
     document.title = `${study.name} · Micah Lindenberger`;
   }, [study.name]);
 
-  useSectionStage();
-
-  const home = `/${window.location.search}`;
+  const [lab, setLab] = useLab();
+  // Read at the click, like the homepage's links in: the lab rewrites the
+  // query in an effect, after this render.
+  const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.href = `/${window.location.search}`;
+  };
 
   return (
     <>
       <main className="cs">
-        <header className="cs-hero wrap" data-stage="0">
-          {/* Back to the homepage, set where the homepage sets the name, so
-              the two pages open the same way. */}
-          <a className="cs-hero__home" href={home}>
+        <header className="cs-hero wrap">
+          {/* A pill, not the name (Micah, 2026-11-08): it says what it does.
+              Stands in until a proper case-study nav lets you jump between
+              projects. */}
+          <a className="cs-home" href="/" onClick={goHome} onAuxClick={goHome}>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path
                 d="M19 12H5M11.5 5.5 5 12l6.5 6.5"
@@ -45,7 +50,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                 strokeLinejoin="round"
               />
             </svg>
-            Micah Lindenberger
+            Back to home
           </a>
           <h1 className="cs-hero__title" tabIndex={-1}>
             {study.title}
@@ -55,29 +60,27 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
         {study.blocks.map((block, i) => (
           <section
             key={i}
-            className={`cs-block cs-block--${block.kind} ${block.kind === "heading" && block.ruled ? "cs-block--ruled" : ""} wrap`}
-            data-stage={study.stages[i]}
+            className={`cs-block cs-block--${block.kind} ${(block.kind === "heading" && block.ruled) || block.kind === "results" ? "cs-block--ruled" : ""} wrap`}
           >
-            <BlockView block={block} />
+            <BlockView block={block} outcomes={lab.outcomes} />
           </section>
         ))}
 
         <nav className="cs-end wrap" aria-label="Case study">
-          <a className="u-line" href={home}>
+          <a className="u-line" href="/" onClick={goHome} onAuxClick={goHome}>
             Back to all work
           </a>
         </nav>
       </main>
 
-      <div data-stage="3">
-        <SiteFooter />
-      </div>
+      <SiteFooter />
       <BackToTop />
+      <LabPanel keys={CASE_LAB} lab={lab} setLab={setLab} />
     </>
   );
 }
 
-function BlockView({ block }: { block: Block }) {
+function BlockView({ block, outcomes }: { block: Block; outcomes: LabState["outcomes"] }) {
   switch (block.kind) {
     case "intro":
       return (
@@ -142,31 +145,8 @@ function BlockView({ block }: { block: Block }) {
         </>
       );
 
-    case "takeaways":
-      return (
-        <ul className="cs-takeaways grid">
-          {block.notes.map((note) => (
-            <li key={note.title}>
-              <h3 className="cs-label">{note.title}</h3>
-              <p>{note.body}</p>
-            </li>
-          ))}
-        </ul>
-      );
-
-    case "outcomes":
-      return (
-        <ul className="cs-outcomes grid">
-          {block.items.map((item) => (
-            <li key={item.label}>
-              <h3 className="cs-label">{item.label}</h3>
-              <p>
-                <Starred text={item.text} />
-              </p>
-            </li>
-          ))}
-        </ul>
-      );
+    case "results":
+      return <Results block={block} take={outcomes} />;
 
     case "video":
       return (
@@ -188,6 +168,94 @@ function BlockView({ block }: { block: Block }) {
         </div>
       );
   }
+}
+
+type ResultsBlock = Extract<Block, { kind: "results" }>;
+
+/**
+ * The close, three ways (lab "Outcomes", Micah 2026-11-08). The live page
+ * ran three learnings as 22px paragraphs, then the numbers buried inside
+ * two 36px sentences: five blocks of large type, nothing to scan. Each take
+ * puts the numbers first and shrinks each learning to a claim and a line.
+ *
+ *  - STATS: the three numbers huge in a row, one short label under each,
+ *    then the learnings in three quiet columns on the same grid lines.
+ *  - LEDGER: a two-column table, the ds "table index" register. Section
+ *    names on the left in four columns, rows with hairlines on the right:
+ *    number then label, learning title then line.
+ *  - STATEMENT: the numbers as one large sentence with the figures in the
+ *    accent, then the learnings as three ruled columns underneath.
+ */
+function Results({ block, take }: { block: ResultsBlock; take: LabState["outcomes"] }) {
+  if (take === "ledger") {
+    return (
+      <div className="cs-ledger">
+        <div className="cs-ledger__group grid">
+          <h2 className="cs-ledger__title">{block.title}</h2>
+          <ul className="cs-ledger__rows">
+            {block.stats.map((stat) => (
+              <li key={stat.value} className="cs-ledger__row">
+                <span className="cs-ledger__value">{stat.value}</span>
+                <span>{stat.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="cs-ledger__group grid">
+          <h3 className="cs-ledger__title">{block.learningsTitle}</h3>
+          <ul className="cs-ledger__rows">
+            {block.learnings.map((note) => (
+              <li key={note.title} className="cs-ledger__row">
+                <span className="cs-ledger__claim">{note.title}</span>
+                <span>{note.body}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
+  const learnings = (
+    <div className="cs-learnings">
+      <h3 className="cs-label">{block.learningsTitle}</h3>
+      <ul className="cs-learnings__list grid">
+        {block.learnings.map((note) => (
+          <li key={note.title}>
+            <p className="cs-learnings__claim">{note.title}</p>
+            <p>{note.body}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  if (take === "statement") {
+    return (
+      <>
+        <h2 className="cs-label">{block.title}</h2>
+        <p className="cs-statement">
+          <Starred text={block.summary} />
+        </p>
+        {learnings}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h2 className="cs-heading">{block.title}</h2>
+      <ul className="cs-stats grid">
+        {block.stats.map((stat) => (
+          <li key={stat.value}>
+            <p className="cs-stats__value">{stat.value}</p>
+            <p className="cs-stats__label">{stat.label}</p>
+          </li>
+        ))}
+      </ul>
+      {learnings}
+    </>
+  );
 }
 
 /** A titled paragraph list: pain points, features. */

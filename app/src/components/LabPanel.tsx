@@ -6,29 +6,34 @@ const TITLES: Record<LabKey, string> = {
   shift: "Shift",
   clients: "Clients",
   history: "History",
+  outcomes: "Outcomes",
 };
 
 /**
  * The switcher for the interaction explorations. Collapsed it's a single
  * pill in the corner so it stays out of screenshots; open, one segmented
- * row per section. "Replay" remounts the quilt, since its build-in only
+ * row per section, only the ones that apply to the page. "Replay" remounts the quilt, since its build-in only
  * fires the first time it scrolls into view.
  */
 export default function LabPanel({
+  keys,
   lab,
   setLab,
   onReplay,
 }: {
+  /** The rows to show (HOME_LAB or CASE_LAB in lab.ts). */
+  keys: LabKey[];
   lab: LabState;
   setLab: <K extends LabKey>(key: K, value: LabState[K]) => void;
-  onReplay: () => void;
+  /** Omitted where there's nothing to replay (case studies). */
+  onReplay?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   return (
     <div className={`lab ${open ? "is-open" : ""}`}>
       {open && (
         <div className="lab__panel" role="group" aria-label="Interaction variants">
-          {(Object.keys(LAB) as LabKey[]).map((key) => (
+          {keys.map((key) => (
             <div className="lab__row" key={key}>
               <span className="lab__title">{TITLES[key]}</span>
               <div className="lab__seg" role="radiogroup" aria-label={TITLES[key]}>
@@ -47,9 +52,11 @@ export default function LabPanel({
               </div>
             </div>
           ))}
-          <button type="button" className="lab__replay" onClick={onReplay}>
-            Replay build-ins
-          </button>
+          {onReplay && (
+            <button type="button" className="lab__replay" onClick={onReplay}>
+              Replay build-ins
+            </button>
+          )}
         </div>
       )}
       <button

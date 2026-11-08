@@ -78,8 +78,8 @@ export function inertProps(on: boolean): Record<string, string> {
  * IntersectionObserver: it's the same answer computed directly, and it
  * keeps working where observers are throttled, such as background tabs.
  * Runs whether or not a shift is on, so switching it on mid-page lands on
- * the right colour straight away. Shared by the homepage and the case
- * studies, which mark their own sections with data-stage.
+ * the right colour straight away. Homepage only: case studies sit on one
+ * fixed colour (Night, no shift).
  */
 export function useSectionStage() {
   useEffect(() => {

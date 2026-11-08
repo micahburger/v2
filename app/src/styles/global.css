@@ -73,6 +73,26 @@
   --logo-filter: brightness(0) invert(1);
 }
 
+:root[data-palette="night"] {
+  /* Case studies only, never in the lab (Micah, 2026-11-08: "still use
+     the black so the UI and images look seamless"). The paper is the exact
+     ground the Opendoor screens were exported on (#161417, sampled from
+     hero, journey-map, next-steps and prelim-offer-v2), so a framed image
+     has no visible edge and reads as part of the page, as on the live
+     site. The rest is Graphite's. --media-bg matches too, so a frame
+     waiting on its image is page, not a grey box. */
+  --paper: #161417;
+  --ink: #e4ded6;
+  --black: #f4f1ec;
+  --link: #c4ae88;
+  --link-strong: #ecd2a4;
+  --rule: rgba(244, 241, 236, 0.14);
+  --media-bg: #161417;
+  --dot: rgba(244, 241, 236, 0.24);
+  --dot-active: #f4f1ec;
+  --logo-filter: brightness(0) invert(1);
+}
+
 :root[data-palette="forest"] {
   --paper: #2e3b35;
   --ink: #e2ddd1;
@@ -133,7 +153,8 @@
 
 /* Dark palettes: never above 0.42, never into pure black either. */
 :root[data-palette="graphite"],
-:root[data-palette="forest"] {
+:root[data-palette="forest"],
+:root[data-palette="night"] {
   --l-min: 0.14;
   --l-max: 0.42;
   /* White would shout on a dark page; a lighter tint of the page itself
@@ -1238,32 +1259,43 @@ button {
   padding-top: 180px;
 }
 
-/* Back home, in the homepage's name style (Satoshi 700, 18px), with a
-   small arrow that nudges left on hover, the way the footer links nudge
-   right. */
-.cs-hero__home {
+/* Back to home: a small rounded pill in the --chip fill the round buttons
+   use (white on light palettes, a lift of the page on Night), no outline.
+   The arrow nudges left on hover and the pill grows by the shared button
+   token, as the folio's pills do. */
+.cs-home {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 28px;
-  font-family: var(--font-name);
-  font-weight: 700;
-  font-size: 18px;
+  margin-bottom: 32px;
+  padding: 10px 18px 10px 14px;
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.2;
   letter-spacing: 0;
-  color: var(--black);
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
 }
 
-.cs-hero__home svg {
-  width: 0.9em;
-  height: 0.9em;
+.cs-home svg {
+  width: 16px;
+  height: 16px;
   transition: transform 0.32s var(--ease-enter);
 }
 
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .cs-hero__home:hover svg {
-    transform: translateX(-4px);
+  .cs-home:hover {
+    scale: var(--hover-grow-scale-button);
   }
+  .cs-home:hover svg {
+    transform: translateX(-3px);
+  }
+}
+
+.cs-home:focus-visible {
+  border-radius: 999px;
 }
 
 /* The homepage statement's size and leading, at most ten columns wide so
@@ -1569,10 +1601,12 @@ p.cs-body {
   right: 20px;
 }
 
-/* ---- learnings and outcomes ---- */
+/* ---- the close: outcomes and learnings (Results in CaseStudy.tsx) ----
+   Three takes from the lab. All share the label style and keep to the
+   12-column grid, so every column of text starts on a grid line. */
 
 .cs-label {
-  margin-bottom: 12px;
+  margin-bottom: 20px;
   font-size: 13px;
   font-weight: 500;
   line-height: 1.4;
@@ -1580,37 +1614,111 @@ p.cs-body {
   opacity: 0.75;
 }
 
-.cs-takeaways {
-  row-gap: 48px;
+/* Learnings for Stats and Statement: three columns of four, a short claim
+   in the name colour and one line under it, each column ruled on top so
+   the three read as a set. */
+.cs-learnings {
+  margin-top: 96px;
 }
 
-.cs-takeaways > li {
+.cs-learnings__list {
+  row-gap: 32px;
+}
+
+.cs-learnings__list > li {
   grid-column: span 4;
-  padding-right: 20px;
+  padding-top: 20px;
+  padding-right: 24px;
+  border-top: 1px solid var(--rule);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.cs-learnings__claim {
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+/* STATS: display-size numbers, tight like the ds titles, one line under. */
+.cs-stats {
+  row-gap: 40px;
+  margin-top: 48px;
+}
+
+.cs-stats > li {
+  grid-column: span 4;
+}
+
+.cs-stats__value {
+  font-size: clamp(64px, 8vw, 112px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--black);
+}
+
+.cs-stats__label {
+  max-width: 300px;
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* LEDGER: section name in four columns on the left, hairline rows in the
+   other eight. Each row is its own two-column grid: the number (or the
+   learning's claim) then its line. */
+.cs-ledger {
+  display: grid;
+  gap: 80px;
+}
+
+.cs-ledger__title {
+  grid-column: 1 / span 4;
   font-size: 22px;
-  line-height: 1.36;
+  line-height: 30px;
   color: var(--black);
 }
 
-.cs-block--outcomes {
-  padding-top: 80px;
+.cs-ledger__rows {
+  grid-column: 5 / span 8;
+  border-bottom: 1px solid var(--rule);
 }
 
-.cs-outcomes {
-  row-gap: 48px;
+.cs-ledger__row {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+  column-gap: var(--gutter);
+  align-items: baseline;
+  padding: 24px 0;
+  border-top: 1px solid var(--rule);
+  font-size: 16px;
+  line-height: 1.5;
 }
 
-.cs-outcomes > li {
-  grid-column: span 6;
-  padding-right: 40px;
-  font-size: clamp(26px, 2.6vw, 36px);
-  line-height: 1.22;
-  letter-spacing: -0.01em;
+.cs-ledger__value {
+  font-size: 48px;
+  line-height: 1;
+  letter-spacing: -0.03em;
   color: var(--black);
 }
 
-/* The numbers carry the outcome, so they're the part in the accent. */
-.cs-outcomes em {
+.cs-ledger__claim {
+  font-weight: 500;
+  color: var(--black);
+}
+
+/* STATEMENT: the numbers as one sentence at the contact sentence's scale,
+   the figures in the accent. */
+.cs-statement {
+  max-width: 1000px;
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--black);
+  text-wrap: balance;
+}
+
+.cs-statement em {
   font-style: normal;
   color: var(--link-strong);
 }
@@ -1631,9 +1739,8 @@ p.cs-body {
   .cs-hero {
     padding-top: 112px;
   }
-  .cs-hero__home {
-    margin-bottom: 20px;
-    font-size: 16px;
+  .cs-home {
+    margin-bottom: 24px;
   }
   .cs-hero__title {
     font-size: 32px;
@@ -1703,16 +1810,39 @@ p.cs-body {
     width: 36px;
     height: 36px;
   }
-  .cs-takeaways > li,
-  .cs-outcomes > li {
+  .cs-stats > li,
+  .cs-learnings__list > li,
+  .cs-ledger__title,
+  .cs-ledger__rows {
     grid-column: 1;
     padding-right: 0;
   }
-  .cs-takeaways > li {
-    font-size: 20px;
+  .cs-stats {
+    row-gap: 32px;
+    margin-top: 32px;
   }
-  .cs-block--outcomes {
-    padding-top: 64px;
+  .cs-stats__value {
+    font-size: 64px;
+  }
+  .cs-learnings {
+    margin-top: 72px;
+  }
+  .cs-ledger {
+    gap: 56px;
+  }
+  .cs-ledger__title {
+    margin-bottom: 16px;
+  }
+  /* Too narrow for two columns of a row: the number over its line. */
+  .cs-ledger__row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 8px;
+  }
+  .cs-ledger__value {
+    font-size: 40px;
+  }
+  .cs-statement {
+    font-size: 28px;
   }
   .cs-end {
     padding-top: 80px;

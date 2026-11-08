@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSectionStage } from "./hooks";
-import { useLab } from "./lab";
+import { HOME_LAB, useLab } from "./lab";
 import { contact } from "./data/site";
 import LabPanel from "./components/LabPanel";
 import FeaturedProjects from "./components/FeaturedProjects";
@@ -86,7 +86,7 @@ export default function App() {
       </div>
 
       <BackToTop />
-      <LabPanel lab={lab} setLab={setLab} onReplay={() => setReplay((n) => n + 1)} />
+      <LabPanel keys={HOME_LAB} lab={lab} setLab={setLab} onReplay={() => setReplay((n) => n + 1)} />
     </>
   );
 }

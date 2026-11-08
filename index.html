@@ -5,6 +5,15 @@
 <html lang="en" data-palette="clay" data-shift="dusk">
   <head>
     <meta charset="UTF-8" />
+    <!-- A case study (/project/…) is always Night with no scroll shift, set
+         here before the first paint: set later, the page would paint Clay
+         and then fade to black over html's 0.9s background transition. -->
+    <script>
+      if (location.pathname.indexOf("/project/") === 0) {
+        document.documentElement.dataset.palette = "night";
+        document.documentElement.dataset.shift = "off";
+      }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Micah Lindenberger</title>
     <meta
@@ -24,8 +33,8 @@
       rel="stylesheet"
     />
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-CbKNsAQ5.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-C5U37z9O.css">
+    <script type="module" crossorigin src="/assets/index-D9cW8cNY.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BJvYiOXw.css">
   </head>
   <body>
     <div id="root"></div>

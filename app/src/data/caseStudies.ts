@@ -61,10 +61,18 @@ export type Block =
   | { kind: "compare"; before: Img; after: Img; beforeLabel: string; afterLabel: string; body?: string }
   /** A grab-and-swipe set of images with a note under it. */
   | { kind: "slideshow"; label: string; images: Img[]; note?: Note }
-  /** Notes in columns, the note's body set large (learnings). */
-  | { kind: "takeaways"; notes: Note[] }
-  /** Outcome statements, large, with *starred* phrases set in the accent. */
-  | { kind: "outcomes"; items: { label: string; text: string }[] }
+  /** The close: the numbers and what was learned. Laid out three ways in
+   *  the lab (CaseStudy.tsx, "Outcomes"); each take uses the parts it
+   *  needs. `summary` is the numbers as one sentence, *starred* phrases set
+   *  in the accent; `stats` are the same numbers split out. */
+  | {
+      kind: "results";
+      title: string;
+      stats: { value: string; label: string }[];
+      summary: string;
+      learningsTitle: string;
+      learnings: Note[];
+    }
   | { kind: "video"; src: string; poster: string; width: number; height: number; label: string };
 
 export type CaseStudy = {
@@ -72,10 +80,6 @@ export type CaseStudy = {
   /** Short name, for the document title and links. */
   name: string;
   title: string;
-  /** Which colour-shift stage each block starts (block index -> stage),
-   *  so a case study darkens through its sections the way the homepage
-   *  does. Blocks before the first entry are stage 0. */
-  stages: Record<number, number>;
   blocks: Block[];
 };
 
@@ -85,8 +89,6 @@ export const opendoor: CaseStudy = {
   slug: "opendoor",
   name: "Opendoor",
   title: "Redesign of Opendoor’s seller experience",
-  // The three section headings: pain points, enhancements, learnings.
-  stages: { 1: 1, 4: 2, 11: 3 },
   blocks: [
     {
       kind: "intro",
@@ -222,34 +224,35 @@ export const opendoor: CaseStudy = {
         body: "The new visual style (named Novo) was tokenized, allowing for easy updates across the design system, making it efficient for teams to maintain consistency in future iterations.",
       },
     },
-    { kind: "heading", title: "Learnings and outcomes", ruled: true },
     {
-      kind: "takeaways",
-      notes: [
-        {
-          title: "Confidence Through Clarity",
-          body: "Consistent forms, intuitive design, and user-tested content created a seamless flow, empowering sellers to progress confidently with clear and actionable next steps.",
-        },
-        {
-          title: "Empathy for User Needs",
-          body: "Building flexibility into the platform allowed users to have options to sell their home, leading to reduced frustration and a sense of support throughout the home-selling journey.",
-        },
-        {
-          title: "The Power of Transparency",
-          body: "Providing clear, upfront details about pricing and comparisons fostered trust, empowering users to feel confident in their choices and reinforcing Opendoor’s value.",
-        },
+      // Rewritten from the live page's "Learnings and outcomes" (Micah,
+      // 2026-11-08: keep the substance, simplify): the numbers lead, each
+      // learning is a short claim and one sentence, and the three impact
+      // figures are no longer buried mid-sentence. The figures are the
+      // live page's: a 22% rise in initial video call scheduling, a 12%
+      // lift in final offers received, closings 3 days faster on average.
+      kind: "results",
+      title: "Outcomes",
+      stats: [
+        { value: "22%", label: "rise in sellers scheduling the first video call" },
+        { value: "12%", label: "lift in final offers received" },
+        { value: "3 days", label: "faster to close, on average" },
       ],
-    },
-    {
-      kind: "outcomes",
-      items: [
+      summary:
+        "Video call scheduling rose *22%*, final offers received rose *12%*, and sellers closed *3 days sooner* on average.",
+      learningsTitle: "What I learned",
+      learnings: [
         {
-          label: "Business impact",
-          text: "Increased customer engagement, with a *22% rise in initial video call scheduling* and a *12% lift in final offers received*.",
+          title: "Clarity builds confidence.",
+          body: "Consistent forms and tested content gave sellers one clear next step at every stage.",
         },
         {
-          label: "Customer impact",
-          text: "Faster closings, with the average process *shortened by 3 days*, reducing stress and improving the overall customer experience.",
+          title: "Flexibility is empathy.",
+          body: "Letting sellers choose how and when to sell cut frustration and made the journey feel supported.",
+        },
+        {
+          title: "Transparency earns trust.",
+          body: "Showing pricing and comparisons up front made the offer easier to understand, and to believe.",
         },
       ],
     },

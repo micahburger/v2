@@ -37,7 +37,18 @@ export const LAB = {
     { id: "timeline", label: "Timeline" },
     { id: "logo", label: "Logo" },
   ],
+  // Case studies' closing section (Micah, 2026-11-08): numbers in a row
+  // over the learnings, a two-column ledger, or one sentence of results.
+  outcomes: [
+    { id: "stats", label: "Stats" },
+    { id: "ledger", label: "Ledger" },
+    { id: "statement", label: "Statement" },
+  ],
 } as const;
+
+/** Which lab rows each page shows; the rest don't apply there. */
+export const HOME_LAB: LabKey[] = ["palette", "shift", "clients", "history"];
+export const CASE_LAB: LabKey[] = ["outcomes"];
 
 export type LabKey = keyof typeof LAB;
 export type LabState = { [K in LabKey]: (typeof LAB)[K][number]["id"] };
