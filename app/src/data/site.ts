@@ -216,12 +216,12 @@ export const contact = {
   linkedin: "https://www.linkedin.com/in/micahburger/",
 };
 
+// Illustration dropped with its footer link (Micah, 2026-11-07).
 export const disciplines = [
   "Product Design",
   "Interaction Design",
   "Art Direction",
   "Creative Strategy",
-  "Illustration",
 ];
 
 /** Footer links. Shop is Corner Bodega's own site now, and Illustration
