@@ -1158,6 +1158,27 @@ button {
   grid-column: span 4;
 }
 
+/* Label, then a small arrow that nudges right on hover, as the featured
+   corner arrow does. Sized to the text's x-height-ish so it reads as part
+   of the word, not an icon beside it. */
+.footer-signoff__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-signoff__link svg {
+  width: 0.8em;
+  height: 0.8em;
+  transition: transform 0.32s var(--ease-enter);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .footer-signoff__link:hover svg {
+    transform: translateX(4px);
+  }
+}
+
 .footer-signoff__ciao {
   /* Display line-height under 1 and negative tracking, per the ds; sized
      so the word spans most of the content width at any window. */
@@ -1169,13 +1190,19 @@ button {
   color: var(--black);
 }
 
+/* The bottom line used to be spread left / centre / right with
+   space-between, which put the email and the credit on no column at all:
+   the email centred between the disciplines and links above it, the credit
+   flush right while the links start at column 9. Now it's the top row's
+   grid, three spans of four, every line left-aligned to the column above. */
 .footer-signoff__base {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 8px 24px;
+  row-gap: 8px;
   margin-top: 40px;
   font-size: 13px;
+}
+
+.footer-signoff__base > * {
+  grid-column: span 4;
 }
 
 .footer-signoff__base a {
@@ -1187,7 +1214,8 @@ button {
     padding-top: 120px;
   }
   .footer-signoff__who,
-  .footer-signoff__list {
+  .footer-signoff__list,
+  .footer-signoff__base > * {
     grid-column: 1;
   }
   .footer-signoff__cols {

@@ -224,12 +224,12 @@ export const disciplines = [
   "Illustration",
 ];
 
-/** Footer links. The live site points Home/Shop/Illustration at a stale
- *  temp-domain URL; these use the real domain. */
+/** Footer links. Shop is Corner Bodega's own site now, and Illustration
+ *  was dropped (Micah, 2026-11-07). Everything but Home leaves for another
+ *  site, so those open in a new tab, like the featured projects. */
 export const footerLinks = [
   { label: "Home", href: "https://micahburger.com/" },
-  { label: "Shop", href: "https://micahburger.com/project/shop" },
-  { label: "Illustration", href: "https://micahburger.com/project/subway-people" },
-  { label: "Insta", href: "https://www.instagram.com/micahburger/" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/micahburger/" },
+  { label: "Shop", href: "https://cornerbodega.pub/", external: true },
+  { label: "Insta", href: "https://www.instagram.com/micahburger/", external: true },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/micahburger/", external: true },
 ];

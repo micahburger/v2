@@ -1,6 +1,6 @@
 import { contact, disciplines, footerLinks } from "../data/site";
 
-const LOCATION = "Los Angeles, CA";
+const LOCATION = "New York, New York";
 const TAGLINE = "Designing machines & systems since 2005";
 const CREDIT = "Built in New York, New York ©2026";
 
@@ -31,14 +31,38 @@ export default function SiteFooter() {
         <ul className="footer-signoff__list footer-signoff__links">
           {footerLinks.map((link) => (
             <li key={link.label}>
-              <a href={link.href}>➞ {link.label}</a>
+              {/* The arrow after the word, not before it: leading arrows read
+                  as bullets. The page's own arrow (the featured corner's),
+                  not a ➞ glyph, which Poppins doesn't have and the browser
+                  filled in from another font. */}
+              <a
+                className="footer-signoff__link"
+                href={link.href}
+                {...("external" in link ? { target: "_blank", rel: "noreferrer" } : {})}
+              >
+                {link.label}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M5 12h14M12.5 5.5 19 12l-6.5 6.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                {"external" in link && <span className="visually-hidden"> (opens in a new tab)</span>}
+              </a>
             </li>
           ))}
         </ul>
       </div>
       {/* Decorative at this size; the word is still read out once. */}
       <p className="footer-signoff__ciao">Ciao.</p>
-      <div className="footer-signoff__base">
+      {/* On the same three columns as the top row, so each bottom line sits
+          under a column above it: where under the name, email under the
+          disciplines, credit under the links. */}
+      <div className="footer-signoff__base grid">
         <p>{LOCATION}</p>
         <a href={`mailto:${contact.email}`}>{contact.email}</a>
         <p>{CREDIT}</p>
