@@ -25,8 +25,9 @@
 //   offer-breakdown.png    offerbreakdown.png
 //   novo-1..6.jpg          designsystem_novo3, designsystem_novo2, dark,
 //                          colors2, colors4, cards (the live slideshow order)
-//   final-offer.mp4        final offer video.mp4
-//   final-offer-poster.jpg a frame of it (Quick Look)
+//   final-offer.mp4        final offer video.mp4   (not on the page for
+//   final-offer-poster.jpg a frame of it            now; see the end of
+//                                                   opendoor's blocks)
 // JPEGs re-saved at quality 82, at most 2000px on the long side; the PNGs
 // are cut out on transparency and are copied as they are.
 
@@ -256,14 +257,10 @@ export const opendoor: CaseStudy = {
         },
       ],
     },
-    {
-      kind: "video",
-      src: od("final-offer.mp4"),
-      poster: od("final-offer-poster.jpg"),
-      width: 1280,
-      height: 924,
-      label: "The final offer, from the email to the offer page",
-    },
+    // The final-offer video closed the live page; off for now (Micah,
+    // 2026-11-08). To bring it back:
+    // { kind: "video", src: od("final-offer.mp4"), poster: od("final-offer-poster.jpg"),
+    //   width: 1280, height: 924, label: "The final offer, from the email to the offer page" },
   ],
 };
 

@@ -1378,11 +1378,18 @@ button {
 }
 
 /* Objective and Role: quieter than the paragraphs, label set in the
-   name's colour so the pair scans as two facts. */
+   name's colour so the pair scans as two facts. Held in a card a shade
+   lighter than the page (Micah, 2026-11-08: "subtle"), so the brief reads
+   apart from the story above it. A 6% wash of the text colour into the
+   page, rather than a fixed grey, so it's a lift of whatever the page
+   is; the Back to home pill uses the stronger --chip. */
 .cs-facts {
   display: grid;
-  gap: 16px;
-  margin: 12px 0 0;
+  gap: 20px;
+  margin: 20px 0 0;
+  padding: 28px 32px;
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--ink) 6%, var(--page));
   font-size: 15px;
   line-height: 1.6;
 }
@@ -1742,6 +1749,9 @@ p.cs-body {
   .cs-home {
     margin-bottom: 24px;
   }
+  .cs-facts {
+    padding: 24px;
+  }
   .cs-hero__title {
     font-size: 32px;
     line-height: 1.12;
@@ -1983,9 +1993,17 @@ p.cs-body {
   }
 }
 
-/* ================= lab switcher ================= */
+/* ================= lab switcher =================
+   Tool chrome, not part of the design, so it has its own fixed colours
+   instead of the palette's: it used --paper for its text and selected
+   button, which is cream on the light palettes but near-black on Night,
+   Graphite and Forest, where the labels all but vanished into the dark
+   panel (Micah, 2026-11-08). Always a near-black panel with off-white
+   text now, on every palette and page. */
 
 .lab {
+  --lab-bg: #141414;
+  --lab-fg: #f5f4f1;
   position: fixed;
   left: 16px;
   bottom: 16px;
@@ -2007,14 +2025,14 @@ p.cs-body {
 .lab__toggle {
   padding: 10px 16px;
   border-radius: 999px;
-  background: #141414;
-  color: var(--paper);
+  background: var(--lab-bg);
+  color: var(--lab-fg);
   font-family: var(--font-label);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   /* The edge keeps the black pill findable on the dark palettes. */
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(245, 244, 241, 0.22);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
 
@@ -2023,10 +2041,12 @@ p.cs-body {
   gap: 12px;
   padding: 16px;
   border-radius: 16px;
-  background: rgba(20, 20, 20, 0.92);
+  background: rgba(20, 20, 20, 0.94);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  color: var(--paper);
+  color: var(--lab-fg);
+  /* Same edge as the toggle, so the panel's outline holds on a black page. */
+  border: 1px solid rgba(245, 244, 241, 0.14);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.32);
   animation: lab-in 0.24s var(--ease-enter) both;
 }
@@ -2048,7 +2068,7 @@ p.cs-body {
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .lab__seg {
@@ -2056,7 +2076,7 @@ p.cs-body {
   gap: 2px;
   padding: 3px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(245, 244, 241, 0.1);
 }
 
 .lab__seg button {
@@ -2065,12 +2085,20 @@ p.cs-body {
   border-radius: 999px;
   font-weight: 500;
   font-size: 13px;
+  /* Unselected at 75%: quieter than the pick, still easy to read. */
+  color: rgba(245, 244, 241, 0.75);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+@media (hover: hover) {
+  .lab__seg button:not(.is-on):hover {
+    color: var(--lab-fg);
+  }
+}
+
 .lab__seg button.is-on {
-  background: var(--paper);
-  color: #141414;
+  background: var(--lab-fg);
+  color: var(--lab-bg);
 }
 
 .lab__replay {
