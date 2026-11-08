@@ -53,10 +53,12 @@ a plain link gets the defaults.
 |---|---|---|
 | Colour | paper, graphite, forest, clay | palette blocks at the top of `global.css` |
 | Shift | off, saturate, drift, dusk | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
-| History | timeline, logo, fill, focus | `components/WorkHistory.tsx` |
-| Footer | signoff, classic, index, card | `components/SiteFooter.tsx` |
+| History | timeline, logo | `components/WorkHistory.tsx` |
 
-Settled and out of the lab: the client quilt is the **wave** build-in.
+Settled and out of the lab: the footer is the **sign-off** (three quiet
+columns, then "Ciao." set enormous); Classic, Index and Card were cut on
+2026-11-07, as were the Fill and Focus history takes. The client quilt is
+the **wave** build-in.
 Tiles are either a slice of `logoquilt2024.png` (the live site's single
 image, cut with background-position) or their own logo file in the same
 box, flattened to one colour by `--logo-filter`. `clients` in

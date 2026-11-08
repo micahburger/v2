@@ -1,27 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { jobs, type Job } from "../data/site";
-import { formatTenure, monthsBetween, useReducedMotion, useSeen } from "../hooks";
+import { useReducedMotion, useSeen } from "../hooks";
 
-type Variant = "logo" | "fill" | "focus" | "timeline";
-
-const tenure = jobs.map((j) => monthsBetween(j.start, j.end));
-const longest = Math.max(...tenure);
+type Variant = "logo" | "timeline";
 
 /**
  * Work history in the live site's layout: dates and location in the left
  * half, company (a link, in capitals) over the role in the right half. In
- * every take the whole row is the link to the
- * company's site, opening in a new tab. The hover ideas layered on top:
+ * both takes the whole row is the link to the company's site, opening in a
+ * new tab. The hover ideas layered on top:
  *  - LOGO: the company's logo, in black on a white card, floats beside the
  *    pointer while it's over that row. (Micah's ask.)
- *  - FILL: the row floods with the company's colour from the bottom up, and
- *    a small card trails the pointer with the company and how long I was
- *    there.
- *  - FOCUS: the other rows step back, the hovered role nudges right, and a
- *    bar draws out under it showing tenure against the longest job.
  *  - TIMELINE: a first-job-to-now ruler above the list where every job is
  *    a span, all one colour. Hovering a row raises its span in the text
  *    colour and lightens the row; hovering a span does the same.
+ *
+ * Fill (the row flooding with a brand colour) and Focus (the other rows
+ * stepping back while a tenure bar drew out) were tried and cut from the
+ * lab on 2026-11-07.
  *
  * Keyboard focus drives the same state as hover.
  */
@@ -62,9 +58,7 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
           />
         ))}
       </ol>
-      {(variant === "fill" || variant === "logo") && (
-        <FollowCard job={hover === null ? null : jobs[hover]} kind={variant} />
-      )}
+      {variant === "logo" && <LogoCard job={hover === null ? null : jobs[hover]} />}
     </div>
   );
 }
@@ -85,13 +79,7 @@ function Row({
   return (
     <li
       className={`job grid ${active ? "is-active" : ""}`}
-      style={
-        {
-          "--brand": job.color,
-          "--brand-ink": job.ink,
-          "--i": index,
-        } as React.CSSProperties
-      }
+      style={{ "--i": index } as React.CSSProperties}
       onPointerEnter={onEnter}
       onFocus={onEnter}
       onBlur={onLeave}
@@ -114,22 +102,18 @@ function Row({
           )}
         </p>
         <p className="job__role">{job.role}</p>
-        <span className="job__tenure" aria-hidden="true">
-          <span className="job__bar" style={{ "--w": tenure[index] / longest } as React.CSSProperties} />
-          <span className="job__tenure-text">{formatTenure(tenure[index])}</span>
-        </span>
       </div>
     </li>
   );
 }
 
-/** The card that trails the pointer in LOGO and FILL. One element for the
- *  whole list, eased toward the pointer each frame (lerp .18) so it lags
- *  like something with weight instead of being glued to the cursor.
+/** The card that trails the pointer in LOGO. One element for the whole
+ *  list, eased toward the pointer each frame (lerp .18) so it lags like
+ *  something with weight instead of being glued to the cursor.
  *
- *  LOGO renders every logo up front and only shows the current one, so
- *  moving between rows never waits on an image request. */
-function FollowCard({ job, kind }: { job: Job | null; kind: "logo" | "fill" }) {
+ *  Every logo renders up front and only the current one shows, so moving
+ *  between rows never waits on an image request. */
+function LogoCard({ job }: { job: Job | null }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
   const fine = useRef(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
@@ -171,41 +155,27 @@ function FollowCard({ job, kind }: { job: Job | null; kind: "logo" | "fill" }) {
   }, [reduced]);
 
   if (!fine.current) return null;
-  if (kind === "logo") {
-    return (
-      <div ref={ref} className={`follow-card ${job ? "is-on" : ""}`} aria-hidden="true">
-        <div className="follow-card__inner follow-card__inner--logo">
-          {jobs.map((j) =>
-            j.logo ? (
-              <img
-                key={j.company}
-                src={j.logo}
-                alt=""
-                className={`follow-card__logo ${j === last ? "is-current" : ""}`}
-              />
-            ) : (
-              <span
-                key={j.company}
-                className={`follow-card__logo follow-card__wordmark ${j === last ? "is-current" : ""}`}
-              >
-                {j.company}
-              </span>
-            ),
-          )}
-        </div>
-      </div>
-    );
-  }
   return (
     <div ref={ref} className={`follow-card ${job ? "is-on" : ""}`} aria-hidden="true">
-      {last && (
-        <div className="follow-card__inner" style={{ backgroundColor: last.color, color: last.ink }}>
-          <span className="follow-card__name">{last.company}</span>
-          <span className="follow-card__tenure">
-            {formatTenure(monthsBetween(last.start, last.end))}
-          </span>
-        </div>
-      )}
+      <div className="follow-card__inner follow-card__inner--logo">
+        {jobs.map((j) =>
+          j.logo ? (
+            <img
+              key={j.company}
+              src={j.logo}
+              alt=""
+              className={`follow-card__logo ${j === last ? "is-current" : ""}`}
+            />
+          ) : (
+            <span
+              key={j.company}
+              className={`follow-card__logo follow-card__wordmark ${j === last ? "is-current" : ""}`}
+            >
+              {j.company}
+            </span>
+          ),
+        )}
+      </div>
     </div>
   );
 }

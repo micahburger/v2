@@ -81,7 +81,7 @@ export default function App() {
       </main>
 
       <div data-stage="3">
-        <SiteFooter variant={lab.footer} />
+        <SiteFooter />
       </div>
 
       <BackToTop />

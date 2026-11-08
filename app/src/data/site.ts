@@ -187,22 +187,19 @@ export type Job = {
    *  file are flattened to black by CSS, so official colour files are fine.
    *  Without one, the card sets the company name in type instead. */
   logo?: string;
-  /** Placeholder brand colour for the Fill/Timeline hover variants only. */
-  color: string;
-  ink: string;
-  /** For tenure and the timeline: ISO year-month, `null` for current. */
+  /** For the timeline: ISO year-month, `null` for current. */
   start: string;
   end: string | null;
 };
 
 export const jobs: Job[] = [
-  { company: "RENTSPREE", logo: "/img/logos/rentspree.svg", role: "Sr. Staff Product Designer", dates: "Mar 2025 - Present", location: "New York, NY", href: "https://www.rentspree.com/", color: "#2B5CE6", ink: "#FFFFFF", start: "2025-03", end: null },
-  { company: "OPENDOOR", logo: "/img/logos/opendoor.svg", role: "Staff Product Designer", dates: "Feb 2022 - Dec 2024", location: "Los Angeles, CA", href: "https://www.opendoor.com/", color: "#3D6DF2", ink: "#FFFFFF", start: "2022-02", end: "2024-12" },
-  { company: "RAYTHEON TECHNOLOGY", logo: "/img/logos/raytheon-technologies.svg", role: "Product Design Manager", dates: "Sept 2018 - Jan 2022", location: "Brooklyn, New York", href: "https://www.rtx.com/", color: "#D7263D", ink: "#FFFFFF", start: "2018-09", end: "2022-01" },
-  { company: "HUDSON ROUGE", logo: "/img/logos/hudson-rouge.png", role: "Design Director", dates: "Apr 2017 - Sept 2018", location: "NYC, New York", href: "https://www.hudsonrouge.com/", color: "#7A1F2B", ink: "#FFFFFF", start: "2017-04", end: "2018-09" },
-  { company: "CODE & THEORY", logo: "/img/logos/code-and-theory.svg", role: "Senior Product Design", dates: "Feb 2013 - Mar 2017", location: "NYC, New York", href: "https://www.codeandtheory.com/", color: "#141414", ink: "#F5F1EB", start: "2013-02", end: "2017-03" },
-  { company: "TIP OR SKIP (START UP)", role: "Founding Designer", dates: "April 2012 - Feb 2013", location: "NYC, New York", href: "https://ecosystem.freewayphx.com/companies/tip_or_skip", color: "#F2A93B", ink: "#141414", start: "2012-04", end: "2013-02" },
-  { company: "HANSON DIGITAL", role: "Product Designer", dates: "Aug 2010 - Apr 2012", location: "Maumee, Ohio", color: "#2E7D6B", ink: "#FFFFFF", start: "2010-08", end: "2012-04" },
+  { company: "RENTSPREE", logo: "/img/logos/rentspree.svg", role: "Sr. Staff Product Designer", dates: "Mar 2025 - Present", location: "New York, NY", href: "https://www.rentspree.com/", start: "2025-03", end: null },
+  { company: "OPENDOOR", logo: "/img/logos/opendoor.svg", role: "Staff Product Designer", dates: "Feb 2022 - Dec 2024", location: "Los Angeles, CA", href: "https://www.opendoor.com/", start: "2022-02", end: "2024-12" },
+  { company: "RAYTHEON TECHNOLOGY", logo: "/img/logos/raytheon-technologies.svg", role: "Product Design Manager", dates: "Sept 2018 - Jan 2022", location: "Brooklyn, New York", href: "https://www.rtx.com/", start: "2018-09", end: "2022-01" },
+  { company: "HUDSON ROUGE", logo: "/img/logos/hudson-rouge.png", role: "Design Director", dates: "Apr 2017 - Sept 2018", location: "NYC, New York", href: "https://www.hudsonrouge.com/", start: "2017-04", end: "2018-09" },
+  { company: "CODE & THEORY", logo: "/img/logos/code-and-theory.svg", role: "Senior Product Design", dates: "Feb 2013 - Mar 2017", location: "NYC, New York", href: "https://www.codeandtheory.com/", start: "2013-02", end: "2017-03" },
+  { company: "TIP OR SKIP (START UP)", role: "Founding Designer", dates: "April 2012 - Feb 2013", location: "NYC, New York", href: "https://ecosystem.freewayphx.com/companies/tip_or_skip", start: "2012-04", end: "2013-02" },
+  { company: "HANSON DIGITAL", role: "Product Designer", dates: "Aug 2010 - Apr 2012", location: "Maumee, Ohio", start: "2010-08", end: "2012-04" },
 ];
 
 export const contact = {

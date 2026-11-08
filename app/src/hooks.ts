@@ -52,23 +52,6 @@ export function useOnScreen(ref: RefObject<Element>, threshold = 0.35) {
   return on;
 }
 
-/** Whole months between two "YYYY-MM" strings, end inclusive. */
-export function monthsBetween(start: string, end: string | null) {
-  const [sy, sm] = start.split("-").map(Number);
-  const now = new Date();
-  const [ey, em] = end ? end.split("-").map(Number) : [now.getFullYear(), now.getMonth() + 1];
-  return (ey - sy) * 12 + (em - sm) + 1;
-}
-
-export function formatTenure(months: number) {
-  const y = Math.floor(months / 12);
-  const m = months % 12;
-  const parts = [];
-  if (y) parts.push(`${y} yr${y > 1 ? "s" : ""}`);
-  if (m) parts.push(`${m} mo${m > 1 ? "s" : ""}`);
-  return parts.join(" ");
-}
-
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 export function formatMonth(value: string | null) {

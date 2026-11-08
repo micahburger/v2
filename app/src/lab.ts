@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 
 // The "lab" is how the explorations live side by side: a colour palette for
-// the whole page, an optional section-by-section colour shift on scroll, a
-// few takes on the work history and four footers, switched from a small
-// panel. "Paper" is the live site's colour; the history defaults to
-// "Timeline", Micah's pick so far. (The client quilt was settled on its
-// wave build-in and left the lab; the first featured-project carousels are
-// parked in app/_archive.)
+// the whole page, an optional section-by-section colour shift on scroll and
+// two takes on the work history, switched from a small panel. "Paper" is
+// the live site's colour; the history defaults to "Timeline", Micah's pick
+// so far. (The client quilt was settled on its wave build-in and the footer
+// on the sign-off, and both left the lab; the first featured-project
+// carousels are parked in app/_archive.)
 // The choice rides in the query string only, so a link to "graphite with the
-// focus history" is shareable and a plain link always gets the
+// logo history" is shareable and a plain link always gets the
 // defaults. (It used to also remember the last pick in localStorage; that
 // kept serving stale picks after the defaults changed, so it went.) Once a take wins, delete the others and this file.
 
@@ -26,16 +26,8 @@ export const LAB = {
     { id: "dusk", label: "Dusk" },
   ],
   history: [
-    { id: "logo", label: "Logo" },
-    { id: "fill", label: "Fill" },
-    { id: "focus", label: "Focus" },
     { id: "timeline", label: "Timeline" },
-  ],
-  footer: [
-    { id: "signoff", label: "Sign-off" },
-    { id: "classic", label: "Classic" },
-    { id: "index", label: "Index" },
-    { id: "card", label: "Card" },
+    { id: "logo", label: "Logo" },
   ],
 } as const;
 
@@ -47,7 +39,7 @@ function isValid<K extends LabKey>(key: K, value: unknown): value is LabState[K]
 }
 
 export function readLab(): LabState {
-  const state: LabState = { palette: "paper", shift: "off", history: "timeline", footer: "signoff" };
+  const state: LabState = { palette: "paper", shift: "off", history: "timeline" };
   const params = new URLSearchParams(window.location.search);
   (Object.keys(LAB) as LabKey[]).forEach((key) => {
     const value = params.get(key);
@@ -61,6 +53,8 @@ export function useLab() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    // Old links may still carry ?footer=; the footer left the lab, so drop it.
+    params.delete("footer");
     (Object.keys(lab) as LabKey[]).forEach((key) => params.set(key, lab[key]));
     window.history.replaceState(null, "", `${window.location.pathname}?${params}${window.location.hash}`);
   }, [lab]);

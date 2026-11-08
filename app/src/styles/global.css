@@ -418,8 +418,9 @@ button {
   position: relative;
 }
 
-/* Rows carry their spacing as padding (so the Fill take has room to fill),
-   which would push the first row 20px below where the live page puts it. */
+/* Rows carry their spacing as padding (a bigger hover target than margins
+   would give), which would push the first row 20px below where the live
+   page puts it. */
 .history__list {
   margin-top: -20px;
 }
@@ -463,10 +464,6 @@ button {
   transition: transform 0.32s var(--ease-enter), color 0.2s ease;
 }
 
-.job__tenure {
-  display: none;
-}
-
 /* The company link covers the whole row (.job is the positioned parent),
    so anywhere on the row opens the company's site. */
 .job__link::after {
@@ -495,7 +492,7 @@ button {
   white-space: nowrap;
 }
 
-/* Arrival for the exploratory takes: rows rise in, staggered. Logo
+/* Arrival for Timeline: rows rise in, staggered. Logo
    matches the live page, which doesn't animate them. */
 .history:not(.history--logo) .job {
   opacity: 0;
@@ -511,29 +508,6 @@ button {
     color 0.2s ease;
 }
 
-/* FILL: the row floods with the company colour from the bottom. */
-.history--fill .job::before {
-  content: "";
-  position: absolute;
-  inset: 0 -20px;
-  z-index: -1;
-  border-radius: 12px;
-  background: var(--brand);
-  transform: scaleY(0);
-  transform-origin: 50% 100%;
-  transition: transform 0.22s var(--ease-exit);
-}
-
-.history--fill .job.is-active::before {
-  transform: scaleY(1);
-  transition: transform 0.3s var(--ease-enter);
-}
-
-.history--fill .job.is-active,
-.history--fill .job.is-active a {
-  color: var(--brand-ink);
-}
-
 .follow-card {
   position: fixed;
   top: 0;
@@ -543,14 +517,7 @@ button {
 }
 
 .follow-card__inner {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 240px;
-  height: 150px;
-  padding: 18px;
   border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
   opacity: 0;
   scale: 0.92;
   transition: opacity 0.18s var(--ease-exit), scale 0.18s var(--ease-exit);
@@ -607,61 +574,6 @@ button {
   font-size: 15px;
   letter-spacing: 0.06em;
   text-align: center;
-}
-
-.follow-card__name {
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 1.1;
-}
-
-.follow-card__tenure {
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-/* FOCUS: the rest step back; tenure draws out under the role. */
-.history--focus .has-hover .job:not(.is-active) {
-  opacity: 0.3;
-}
-
-.history--focus .job.is-active .job__role {
-  transform: translateX(12px);
-}
-
-.history--focus .job__tenure {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 14px;
-  height: 14px;
-}
-
-.job__bar {
-  display: block;
-  height: 4px;
-  width: calc(var(--w) * 240px);
-  border-radius: 2px;
-  background: var(--brand);
-  transform: scaleX(0);
-  transform-origin: 0 50%;
-  transition: transform 0.2s var(--ease-exit);
-}
-
-.job__tenure-text {
-  font-size: 13px;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.history--focus .job.is-active .job__bar {
-  transform: scaleX(1);
-  transition: transform 0.5s var(--ease-enter);
-}
-
-.history--focus .job.is-active .job__tenure-text {
-  opacity: 0.8;
-  transition: opacity 0.3s ease 0.1s;
 }
 
 /* TIMELINE: a ruler of the whole career above the rows. One colour only
@@ -962,69 +874,8 @@ button {
   background-size: 100% 2px, 100% 1px;
 }
 
-.site-footer {
-  padding-top: 180px;
-  padding-bottom: var(--clear-to-top);
-}
-
-.site-footer__who {
-  grid-column: 1 / span 6;
-}
-
-.site-footer__name {
-  font-size: 18px;
-  line-height: 14px;
-}
-
-.site-footer__disciplines {
-  display: grid;
-  gap: 27px;
-  margin-top: 27px;
-  font-size: 13px;
-  line-height: 14px;
-}
-
-.site-footer__links {
-  grid-column: 7 / span 6;
-  padding-left: 60px;
-  display: grid;
-  align-content: start;
-  font-size: 14px;
-  line-height: 21px;
-}
-
-.site-footer__bottom {
-  margin-top: 100px;
-  align-items: end;
-}
-
-.site-footer__meta {
-  grid-column: 1 / span 9;
-  display: grid;
-  gap: 21px;
-  font-size: 12px;
-  line-height: 12px;
-}
-
-.site-footer__meta a {
-  color: inherit;
-}
-
-.site-footer__signoff {
-  grid-column: 10 / span 3;
-  font-size: 16px;
-  line-height: 24px;
-}
-
-.site-footer__ciao {
-  font-size: 70px;
-  line-height: 70px;
-  margin-bottom: 4px;
-}
-
-/* ---- footer explorations (SiteFooter.tsx) ----
-   Same content in each; only the arrangement changes. All four sit on the
-   12-column grid and use palette tokens only, so they hold in every
+/* ---- footer (SiteFooter.tsx) ----
+   On the 12-column grid with palette tokens only, so it holds in every
    palette. */
 
 .footer-muted {
@@ -1076,149 +927,19 @@ button {
   color: inherit;
 }
 
-/* INDEX: a four-column table, each column under its own hairline. */
-.footer-index {
-  padding-top: 160px;
-  padding-bottom: var(--clear-to-top);
-}
-
-.footer-index__col {
-  grid-column: span 3;
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  padding-top: 16px;
-  border-top: 1px solid var(--ink);
-  font-size: 15px;
-  line-height: 24px;
-}
-
-.footer-index__name {
-  font-size: 22px;
-  line-height: 30px;
-}
-
-.footer-index__label {
-  margin-bottom: 12px;
-  font-size: 13px;
-  opacity: 0.65;
-}
-
-.footer-index__bar {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  margin-top: 96px;
-  padding-top: 16px;
-  border-top: 1px solid var(--rule);
-  font-size: 13px;
-}
-
-/* CARD: an inverted panel. --ink on --paper flips with every palette, so
-   it's dark on the light palettes and light on the dark ones. */
-.footer-card {
-  padding-top: 160px;
-  padding-bottom: var(--clear-to-top);
-}
-
-.footer-card__panel {
-  display: grid;
-  gap: 72px;
-  padding: 48px 56px 40px;
-  border-radius: 28px;
-  background: var(--ink);
-  color: var(--paper);
-  transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-.footer-card__panel a {
-  color: inherit;
-}
-
-.footer-card__top {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 32px;
-}
-
-.footer-card__ciao {
-  font-size: 70px;
-  line-height: 0.85;
-  letter-spacing: -0.03em;
-}
-
-.footer-card__links {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px 24px;
-  font-size: 15px;
-}
-
-.footer-card__label {
-  margin-bottom: 8px;
-  font-size: 13px;
-  opacity: 0.65;
-}
-
-.footer-card__email {
-  font-size: clamp(26px, 3.6vw, 44px);
-  line-height: 1.1;
-  letter-spacing: -0.01em;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
-  word-break: break-all;
-}
-
-/* Three fixed columns rather than a wrapping row, which dropped the credit
-   under the disciplines at desktop widths. */
-.footer-card__bottom {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 8px 40px;
-  font-size: 13px;
-  opacity: 0.75;
-}
-
 @media (max-width: 900px) {
-  .footer-signoff,
-  .footer-index,
-  .footer-card {
+  .footer-signoff {
     padding-top: 120px;
   }
   .footer-signoff__who,
-  .footer-signoff__list,
-  .footer-index__col {
+  .footer-signoff__list {
     grid-column: 1;
   }
-  .footer-signoff__cols,
-  .footer-index__cols {
+  .footer-signoff__cols {
     row-gap: 28px;
   }
   .footer-signoff__ciao {
     margin-top: 48px;
-  }
-  .footer-index__bar {
-    margin-top: 56px;
-  }
-  .footer-card {
-    padding-inline: 16px;
-  }
-  .footer-card__panel {
-    gap: 48px;
-    padding: 32px 24px 28px;
-    border-radius: 22px;
-  }
-  .footer-card__top {
-    flex-direction: column;
-  }
-  .footer-card__links {
-    justify-content: flex-start;
-  }
-  .footer-card__bottom {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -1238,11 +959,7 @@ button {
   .job__when,
   .job__what,
   .featured__text,
-  .featured__side,
-  .site-footer__who,
-  .site-footer__links,
-  .site-footer__meta,
-  .site-footer__signoff {
+  .featured__side {
     grid-column: 1;
   }
   .hero__statement {
@@ -1275,17 +992,6 @@ button {
   .contact__text {
     font-size: 26px;
     line-height: 36px;
-  }
-  .site-footer {
-    padding-top: 120px;
-  }
-  .site-footer__links {
-    padding-left: 0;
-    margin-top: 40px;
-  }
-  .site-footer__bottom {
-    row-gap: 48px;
-    margin-top: 64px;
   }
 }
 

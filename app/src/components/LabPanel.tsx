@@ -5,7 +5,6 @@ const TITLES: Record<LabKey, string> = {
   palette: "Colour",
   shift: "Shift",
   history: "History",
-  footer: "Footer",
 };
 
 /**
