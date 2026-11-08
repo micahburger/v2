@@ -50,7 +50,7 @@ export default function App() {
           <h2 id="clients-title" className="section__label">
             Select Clients
           </h2>
-          <ClientQuilt key={`quilt-${replay}`} />
+          <ClientQuilt key={`${lab.clients}-${replay}`} variant={lab.clients} />
         </section>
 
         <section className="section section--ruled wrap" aria-labelledby="history-title" data-stage="1">
@@ -69,13 +69,13 @@ export default function App() {
 
         <section className="contact wrap" data-stage="3">
           <p className="contact__text">
-            Thanks for exploring my work! You’ve got questions? I’m all ears—reach out{" "}
+            Thanks for exploring my work! You’ve got questions? I’ve got answers. Reach out{" "}
             <a href={`mailto:${contact.email}`}>via email</a>. Want to know more about my story?
             Check out my{" "}
             <a href={contact.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
-            </a>{" "}
-            and let’s connect!
+            </a>
+            .
           </p>
         </section>
       </main>

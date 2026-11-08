@@ -4,6 +4,7 @@ import { LAB, LabKey, LabState } from "../lab";
 const TITLES: Record<LabKey, string> = {
   palette: "Colour",
   shift: "Shift",
+  clients: "Clients",
   history: "History",
 };
 

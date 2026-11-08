@@ -64,11 +64,19 @@ const slides = (prefix: string, count: number, alt: string): Media => ({
   })),
 });
 
-// Order (Micah, 2026-11-07): the three newest first, then Opendoor and the
-// rest as before, with the oldest four grouped into Archive. Corner Bodega
-// is out for now; its entry and images (bodega-1..3) are kept below / in
-// public/img for when it comes back.
+// Order (Micah, 2026-11-07): the 2026 folio leads, then the rental
+// application, Lattice and Opendoor, then the rest as before, with the
+// oldest four grouped into Archive. Corner Bodega is out for now; its entry
+// and images (bodega-1..3) are kept below / in public/img for when it
+// comes back.
 export const featured: Featured[] = [
+  {
+    id: "folio-2026",
+    name: "2026 Mini portfolio",
+    rest: " A separate site for my recent product work at RentSpree, in four chapters: the applicant experience, requesting an application, messaging and the AI rental assistant.",
+    href: "https://2026folio.micahburger.com",
+    media: slides("folio", 4, "2026 mini portfolio"),
+  },
   {
     id: "rental-application",
     name: "Rental application",
@@ -82,13 +90,6 @@ export const featured: Featured[] = [
     rest: " is an interactive design explorer for shaping digital art direction. Mix typography, color, layout, spacing, and content to create live compositions, with a Creative Guide that explains the thinking behind each choice.",
     href: "https://lattice2026.micahburger.com/",
     media: slides("lattice", 5, "Lattice"),
-  },
-  {
-    id: "folio-2026",
-    name: "2026 Mini portfolio",
-    rest: " Four product chapters and a resume, built as a slide deck on desktop and a scrolling page on a phone.",
-    href: "https://2026folio.micahburger.com",
-    media: slides("folio", 4, "2026 mini portfolio"),
   },
   {
     id: "opendoor",
@@ -179,6 +180,9 @@ export const clients: ClientLogo[] = [
 export type Job = {
   /** As displayed: the live site sets these in capitals. */
   company: string;
+  /** The company in ordinary case, for the Resume take, which sets it as a
+   *  small line over the role the way the 2026 folio's resume does. */
+  name: string;
   role: string;
   dates: string;
   location: string;
@@ -187,19 +191,24 @@ export type Job = {
    *  file are flattened to black by CSS, so official colour files are fine.
    *  Without one, the card sets the company name in type instead. */
   logo?: string;
+  /** The rounded app-icon tile from the 2026 folio's resume
+   *  (public/img/workhistory), used by the Resume take. The folio had five;
+   *  Hanson's is its "h." from hansoninc.com and Tip or Skip's is made up,
+   *  both white on black to sit with Hudson Rouge and Code & Theory. */
+  tile: string;
   /** For the timeline: ISO year-month, `null` for current. */
   start: string;
   end: string | null;
 };
 
 export const jobs: Job[] = [
-  { company: "RENTSPREE", logo: "/img/logos/rentspree.svg", role: "Sr. Staff Product Designer", dates: "Mar 2025 - Present", location: "New York, NY", href: "https://www.rentspree.com/", start: "2025-03", end: null },
-  { company: "OPENDOOR", logo: "/img/logos/opendoor.svg", role: "Staff Product Designer", dates: "Feb 2022 - Dec 2024", location: "Los Angeles, CA", href: "https://www.opendoor.com/", start: "2022-02", end: "2024-12" },
-  { company: "RAYTHEON TECHNOLOGY", logo: "/img/logos/raytheon-technologies.svg", role: "Product Design Manager", dates: "Sept 2018 - Jan 2022", location: "Brooklyn, New York", href: "https://www.rtx.com/", start: "2018-09", end: "2022-01" },
-  { company: "HUDSON ROUGE", logo: "/img/logos/hudson-rouge.png", role: "Design Director", dates: "Apr 2017 - Sept 2018", location: "NYC, New York", href: "https://www.hudsonrouge.com/", start: "2017-04", end: "2018-09" },
-  { company: "CODE & THEORY", logo: "/img/logos/code-and-theory.svg", role: "Senior Product Design", dates: "Feb 2013 - Mar 2017", location: "NYC, New York", href: "https://www.codeandtheory.com/", start: "2013-02", end: "2017-03" },
-  { company: "TIP OR SKIP (START UP)", role: "Founding Designer", dates: "April 2012 - Feb 2013", location: "NYC, New York", href: "https://ecosystem.freewayphx.com/companies/tip_or_skip", start: "2012-04", end: "2013-02" },
-  { company: "HANSON DIGITAL", role: "Product Designer", dates: "Aug 2010 - Apr 2012", location: "Maumee, Ohio", start: "2010-08", end: "2012-04" },
+  { company: "RENTSPREE", name: "RentSpree", tile: "/img/workhistory/rentspree.png", logo: "/img/logos/rentspree.svg", role: "Sr. Staff Product Designer", dates: "Mar 2025 - Present", location: "New York, NY", href: "https://www.rentspree.com/", start: "2025-03", end: null },
+  { company: "OPENDOOR", name: "Opendoor", tile: "/img/workhistory/opendoor.png", logo: "/img/logos/opendoor.svg", role: "Staff Product Designer", dates: "Feb 2022 - Dec 2024", location: "Los Angeles, CA", href: "https://www.opendoor.com/", start: "2022-02", end: "2024-12" },
+  { company: "RAYTHEON TECHNOLOGY", name: "Raytheon Technologies", tile: "/img/workhistory/raytheon.png", logo: "/img/logos/raytheon-technologies.svg", role: "Product Design Manager", dates: "Sept 2018 - Jan 2022", location: "Brooklyn, New York", href: "https://www.rtx.com/", start: "2018-09", end: "2022-01" },
+  { company: "HUDSON ROUGE", name: "Hudson Rouge", tile: "/img/workhistory/hudson-rouge.png", logo: "/img/logos/hudson-rouge.png", role: "Design Director", dates: "Apr 2017 - Sept 2018", location: "NYC, New York", href: "https://www.hudsonrouge.com/", start: "2017-04", end: "2018-09" },
+  { company: "CODE & THEORY", name: "Code & Theory", tile: "/img/workhistory/code-and-theory.png", logo: "/img/logos/code-and-theory.svg", role: "Senior Product Design", dates: "Feb 2013 - Mar 2017", location: "NYC, New York", href: "https://www.codeandtheory.com/", start: "2013-02", end: "2017-03" },
+  { company: "TIP OR SKIP (START UP)", name: "Tip or Skip", tile: "/img/workhistory/tip-or-skip.svg", role: "Founding Designer", dates: "April 2012 - Feb 2013", location: "NYC, New York", start: "2012-04", end: "2013-02" },
+  { company: "HANSON DIGITAL", name: "Hanson Digital", tile: "/img/workhistory/hanson.svg", role: "Product Designer", dates: "Aug 2010 - Apr 2012", location: "Maumee, Ohio", href: "https://hansoninc.com/work", start: "2010-08", end: "2012-04" },
 ];
 
 export const contact = {

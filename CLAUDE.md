@@ -51,14 +51,20 @@ a plain link gets the defaults.
 
 | Section | Takes (default first) | File |
 |---|---|---|
-| Colour | paper, graphite, forest, clay | palette blocks at the top of `global.css` |
-| Shift | off, saturate, drift, dusk | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
-| History | timeline, logo | `components/WorkHistory.tsx` |
+| Colour | clay, paper, graphite, forest | palette blocks at the top of `global.css` |
+| Shift | dusk, off, saturate, drift | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
+| Clients | marquee, quilt | `components/ClientQuilt.tsx` |
+| History | resume, timeline, logo | `components/WorkHistory.tsx` |
 
 Settled and out of the lab: the footer is the **sign-off** (three quiet
 columns, then "Ciao." set enormous); Classic, Index and Card were cut on
-2026-11-07, as were the Fill and Focus history takes. The client quilt is
-the **wave** build-in.
+2026-11-07, as were the Fill and Focus history takes. The client quilt's
+build-in is the **wave**; the quilt is back in the lab against **Marquee**
+(2026-11-07), every logo in one full-bleed row drifting right to left on a
+loop (5s per tile, paused under the pointer and off screen, still under
+reduced motion). The quilt image doesn't centre its logos vertically (top
+row ~62%, middle 50%, bottom 40%), so the marquee shifts each slice by
+`ROW_SHIFT` to keep the belt level.
 Tiles are either a slice of `logoquilt2024.png` (the live site's single
 image, cut with background-position) or their own logo file in the same
 box, flattened to one colour by `--logo-filter`. `clients` in
@@ -90,8 +96,17 @@ nothing else dims. The ruler runs from the first job's start to this month, so t
 first bar lines up with the section title and the last with the content
 edge. Section titles are 22px (the live site's are 18px).
 
-Each featured paragraph is one link (`.featured__block`) with a round
-arrow under it; hovering the text or the media slides the arrow right. The
+Featured rows settled on **Corner** (2026-11-07): only the project's name
+is a link in the paragraph, underlined with `.u-line` (the contact
+sentence's faint 1px line, 2px drawing in on hover; the Archive's inline
+links use it too), and a round arrow sits on the media's bottom-right
+corner. It beat the whole paragraph as a link with an arrow under it
+(three clickable things per row) and an underline-only version.
+
+Defaults (2026-11-07): Clay, Dusk, Marquee, Resume. Each lab list leads
+with its default (`readLab` takes the first), and `app/index.html` puts
+`data-palette="clay" data-shift="dusk"` on `<html>` so the first paint is
+already Clay. The
 name is set apart by weight, not link colour. A fixed back-to-top button
 (`BackToTop.tsx`) sits bottom-right and grows on hover; footers keep
 `--clear-to-top` of space under their last line so it never covers text.
@@ -100,10 +115,23 @@ Small round buttons have **no outlines or strokes** (Micah): just a
 `--chip` fill, white on light palettes and a lighter tint of `--page` on
 dark ones.
 
-Featured order: Rental application, Lattice, 2026 folio, Opendoor,
+Featured order: 2026 folio, Rental application, Lattice, Opendoor,
 Lincoln, Infinity, then an Archive row grouping WWE, BBC, ABA and Rockwell
-(a placeholder until they get a proper home). Corner Bodega is parked in
+(a placeholder until they get a proper home). Every featured link opens
+in a new tab, so the homepage stays open as the hub. Corner Bodega is parked in
 `parked` in `data/site.ts`.
+
+"Resume" is the 2026 folio's resume rows (`ResumeLayout.tsx` there),
+brought over on 2026-11-07 as a first step toward the two sites feeling
+like one family: the folio's rounded logo tiles (copied into
+`public/img/workhistory`), set in Poppins rather than the folio's Proxima
+Nova. Each row is tile | role over "company · city" | dates on the right
+edge; the first try stacked four lines in the folio's order and Micah
+found it cluttered. The list starts at column 6, sharing the featured
+media's edge. Hanson's tile is its "h." mark from hansoninc.com and Tip
+or Skip's (a split coin) was made up; both are white on black SVGs to
+match Hudson Rouge and Code & Theory. With Resume picked, Featured opens
+with the same hairline as Work History (`:has()` on the section).
 
 "Logo" (Micah's ask): hovering a job floats that company's logo, flattened
 to black by CSS, on a white card beside the pointer. Every row links to the
@@ -112,8 +140,14 @@ company's site in a new tab.
 Palettes are sets of CSS custom properties under `:root[data-palette=…]`;
 `main.tsx` sets the attribute before first render so a palette link doesn't
 fade in from cream. Paper is the live site; the others exist because light
-screens (Corner Bodega, the folio) disappear into the cream page. The logo
-quilt follows the palette through `--quilt-filter` / `--quilt-blend`.
+screens (Corner Bodega, the folio) disappear into the cream page. Client
+logos follow the palette through `--logo-filter` (black, or white on dark
+palettes). Quilt slices come from `logoquilt2024-alpha.png`, the live
+image with its cream ground made transparent by
+`app/scripts/quilt-alpha.mjs` (`node app/scripts/quilt-alpha.mjs in.png
+out.png`). Don't go back to hiding the cream with mix-blend-mode: a blend
+stops at its stacking context, so inside the masked, animated marquee the
+logos showed cream boxes on every coloured palette.
 
 Featured media is the folio's grab-and-swipe carousel (`carousel.ts`, a
 port of 2026folio's `useMediaGallery`): autoplay every 4.2s while the row

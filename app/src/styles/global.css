@@ -24,15 +24,9 @@
   --media-bg: #e9e4dc;
   --dot: rgba(68, 55, 54, 0.22);
   --dot-active: #443736;
-  /* logoquilt2024.png is black logos on cream. On light pages "darken"
-     keeps the darker of image and page at each pixel, so the cream (and
-     the pale box behind Lincoln) disappears into any light page colour.
-     On dark pages the image is inverted to white-on-near-black and
-     "lighten" does the same job the other way round. */
-  --quilt-filter: none;
-  --quilt-blend: darken;
-  /* Separate logo files in the quilt: any colours to solid black (needs a
-     transparent background), and to white on the dark palettes. */
+  /* Every client logo, quilt slice or its own file: any colours to solid
+     black (needs a transparent background), and to white on the dark
+     palettes. */
   --logo-filter: brightness(0);
 
   --font: "Poppins", "Helvetica Neue", Arial, sans-serif;
@@ -76,8 +70,6 @@
   --media-bg: #232123;
   --dot: rgba(244, 241, 236, 0.24);
   --dot-active: #f4f1ec;
-  --quilt-filter: invert(1);
-  --quilt-blend: lighten;
   --logo-filter: brightness(0) invert(1);
 }
 
@@ -91,8 +83,6 @@
   --media-bg: #3c4943;
   --dot: rgba(245, 242, 236, 0.26);
   --dot-active: #f5f2ec;
-  --quilt-filter: invert(1);
-  --quilt-blend: lighten;
   --logo-filter: brightness(0) invert(1);
 }
 
@@ -337,6 +327,23 @@ button {
   padding-top: 90px;
 }
 
+/* With the Resume history, the list ends in open space on the left and a
+   ragged column on the right, so Featured gets the same hairline the
+   history section opens with (Micah, 2026-11-07): same rule, same 40px
+   above and below. The other takes end on full-width rows and do without. */
+.section:has(.history--resume) + .section--featured {
+  margin-top: 40px;
+  padding-top: 0;
+}
+
+.section:has(.history--resume) + .section--featured::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 40px;
+  background: var(--rule);
+}
+
 /* ================= client quilt ================= */
 
 /* Four to a row, the last short row centred (flex rather than grid, which
@@ -355,13 +362,20 @@ button {
   transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
 }
 
-/* A slice of the quilt image. */
+/* A slice of the quilt image, in its transparent version:
+   logoquilt2024-alpha.png is logoquilt2024.png with the cream ground taken
+   out (each pixel's opacity is how much darker it was than the cream, so
+   edges stay soft). The original was laid on the page with
+   mix-blend-mode: darken / lighten to hide the cream, but a blend only
+   reaches as far as its stacking context: inside the marquee (masked and
+   animated) there was no page to blend with, and every logo sat in a
+   cream box on the coloured palettes. A transparent image needs no blend,
+   so it works on any page colour, under any shift, in either take. */
 .quilt__tile--slice {
-  background-image: url("/img/logoquilt2024.png");
+  background-image: url("/img/logoquilt2024-alpha.png");
   background-size: 400% 300%;
   background-repeat: no-repeat;
-  filter: var(--quilt-filter);
-  mix-blend-mode: var(--quilt-blend);
+  filter: var(--logo-filter);
 }
 
 /* A logo with its own file, sized to sit like the ones in the image
@@ -410,6 +424,90 @@ button {
     opacity 0.5s ease var(--d),
     transform 0.7s var(--ease-enter) var(--d),
     scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+/* MARQUEE: the logos in one row, drifting right to left on a loop
+   (ClientQuilt). Full-bleed: pulled out of .wrap to the window's edges so
+   the belt runs across the whole screen, not inside the content column.
+   body's overflow-x: hidden is what keeps 100vw from adding a sideways
+   scrollbar where scrollbars take up room. Edges fade so logos arrive and
+   leave rather than being cut by the window. */
+.marquee {
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.marquee.is-seen {
+  opacity: 1;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+}
+
+/* The quilt's tile, at the quilt's size: a quarter of the content column
+   (which is 100vw less the gutters, up to --content). In the quilt that
+   width comes from flex-basis 25% of its parent; the track here is as
+   wide as its tiles, so the size has to be spelled out. Undoes the wave's
+   rise, which belongs to the quilt. */
+.marquee .quilt__tile {
+  flex: 0 0 auto;
+  width: calc(min(var(--content), 100vw - var(--gutter) * 2) / 4);
+  opacity: 1;
+  transform: none;
+}
+
+/* Brings every logo to the tile's middle, so the belt runs level: slices
+   by their quilt row (--row-shift, see ROW_SHIFT in ClientQuilt), and the
+   file logos by dropping the 12% that matched them to the quilt's top row. */
+.marquee .quilt__tile--slice {
+  translate: 0 var(--row-shift);
+}
+
+.marquee .quilt__logo {
+  top: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .marquee__track {
+    animation: marquee var(--marquee-duration) linear infinite;
+    animation-play-state: paused;
+  }
+  .marquee.is-running .marquee__track {
+    animation-play-state: running;
+  }
+  /* Holds still under the pointer so a logo can be read. */
+  @media (hover: hover) {
+    .marquee.is-running:hover .marquee__track {
+      animation-play-state: paused;
+    }
+  }
+}
+
+/* No motion: a still row you can scroll sideways through instead. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 900px) {
+  /* A quarter of a phone's width is too small to read a logo; about two
+     and a half at a time instead. */
+  .marquee .quilt__tile {
+    width: 40vw;
+  }
 }
 
 /* ================= work history ================= */
@@ -651,6 +749,143 @@ button {
   opacity: 0.5;
 }
 
+/* RESUME: the 2026 folio's resume rows (its .work-history-* rules), on
+   this page's grid and type. The folio puts "Work history" in a column of
+   its own with the jobs beside it; here that's the title on the left and
+   the list on the right. :has() so App's section markup stays the same for every take. */
+.section:has(.history--resume) {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: start;
+}
+
+.section:has(.history--resume)::before {
+  grid-column: 1 / -1;
+}
+
+/* The list starts at column 6, where the featured media starts below, so
+   the two sections share an edge. The right half alone (from column 7)
+   was too narrow for "Raytheon Technologies · Brooklyn, New York" beside a
+   dates column, and wrapped. */
+.section:has(.history--resume) .section__label {
+  grid-column: 1 / span 5;
+}
+
+.history--resume {
+  grid-column: 6 / span 7;
+}
+
+/* Rows carry their spacing as padding so the stretched link covers the
+   gap too and there's no dead strip between rows. */
+.history--resume .history__list {
+  margin-top: -18px;
+}
+
+/* Tile | role over company · city | dates. The tile and the dates span
+   both text lines and centre on them, so each row is one level band: the
+   two lines (about 52px) sit inside the 64px tile's height rather than
+   hanging off the bottom of it as the folio's four-line stack did. */
+.resume-job {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  grid-template-areas:
+    "tile role  dates"
+    "tile where dates";
+  align-content: center;
+  column-gap: 24px;
+  row-gap: 4px;
+  padding: 18px 0;
+}
+
+/* The folio's tile, a touch smaller (64px, 16px corners: the folio's
+   72/18 ratio) now it sits beside two lines instead of four. The PNGs
+   carry their own white ground and hairline, so no border here (the
+   folio found it doubled). */
+.resume-job__tile {
+  grid-area: tile;
+  align-self: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  object-fit: cover;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+.resume-job.is-active .resume-job__tile {
+  scale: var(--hover-grow-scale-card);
+}
+
+/* The one large line. 400: size carries it, and only 400/500 are loaded. */
+.resume-job__role {
+  grid-area: role;
+  align-self: end;
+  font-size: 22px;
+  line-height: 28px;
+}
+
+/* Company and city as one quiet line in the text colour. The company was
+   in link colour; with the whole row as the link that colour only added
+   a third voice to a two-voice row, so it's gone. */
+.resume-job__where {
+  grid-area: where;
+  align-self: start;
+  font-size: 15px;
+  line-height: 22px;
+  opacity: 0.65;
+}
+
+.resume-job__where a {
+  color: inherit;
+}
+
+/* Right edge, centred on the row, numerals lined up down the column. */
+.resume-job__dates {
+  grid-area: dates;
+  align-self: center;
+  font-size: 15px;
+  line-height: 22px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+  white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .section:has(.history--resume) .section__label,
+  .history--resume {
+    grid-column: 1 / -1;
+  }
+  /* No room for a dates column on a phone: dates join the small lines. */
+  .resume-job {
+    grid-template-columns: 56px minmax(0, 1fr);
+    grid-template-areas:
+      "tile role"
+      "tile where"
+      "tile dates";
+    column-gap: 18px;
+    row-gap: 2px;
+    padding: 16px 0;
+  }
+  .history--resume .history__list {
+    margin-top: -16px;
+  }
+  .resume-job__tile {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+  }
+  .resume-job__role {
+    font-size: 19px;
+    line-height: 25px;
+  }
+  .resume-job__where,
+  .resume-job__dates {
+    align-self: start;
+    font-size: 14px;
+    line-height: 20px;
+  }
+}
+
 /* ================= featured projects ================= */
 
 .featured {
@@ -662,20 +897,10 @@ button {
   align-items: start;
 }
 
-/* The project's name: no longer a link on its own (the whole block is),
-   so it's set apart by weight, not colour. */
+/* The project's name, the row's one text link: set apart by weight and
+   its underline (.u-line), in the text colour rather than the link colour. */
 .featured__name {
   font-weight: 500;
-}
-
-/* The whole paragraph as one link. Text keeps the page's ink; the arrow
-   underneath is what says "this goes somewhere". */
-.featured__block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 24px;
-  color: inherit;
 }
 
 .featured__arrow {
@@ -693,23 +918,38 @@ button {
   transition: transform 0.32s var(--ease-enter);
 }
 
-/* The hover is the arrow moving on: hovering the text or the project's
-   media slides it right inside its circle. No fill swap, no outline. */
+/* The contact sentence's 3px drop suits its 51px lines; the featured
+   paragraphs are set tight (24px), where 3px put the line nearer the next
+   line's capitals than its own words. */
+.featured .u-line {
+  padding-bottom: 1px;
+}
+
+/* The name is in the text colour, so its underline is too; as a link it
+   has to be told not to take the link colour. */
+.featured__name.u-line {
+  color: inherit;
+}
+
+/* The round arrow on the media's bottom-right corner, over the
+   picture. The --chip fill (white on light palettes) holds up on any
+   screenshot; a soft shadow lifts it off light ones. Above the carousel's
+   stage so it isn't dragged with the slides, but it lets the pointer
+   through, so a grab that starts on it still swipes. */
+.featured__arrow--corner {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  .featured__block:hover .featured__arrow svg,
-  .featured__block:focus-visible .featured__arrow svg,
-  .featured__row:has(.featured__media:hover) .featured__arrow svg {
+  .featured__media:hover .featured__arrow--corner svg,
+  .featured__row:has(.featured__name:hover) .featured__arrow--corner svg {
     transform: translateX(5px);
   }
-}
-
-.featured__block:focus-visible {
-  outline: none;
-}
-
-.featured__block:focus-visible .featured__arrow {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
 }
 
 /* The live paragraph is 410px wide inside a 490px, five-column cell. */
@@ -851,9 +1091,15 @@ button {
    links read as links at rest, and a solid 2px one that draws in from the
    left on hover (and out to the right on leave, via the origin flip). Drawn
    rather than text-decoration because text-decoration can't animate its
-   length. */
+   length. Shared as .u-line with the featured projects' names and the
+   Archive's links, so every text link on the page underlines the same way;
+   currentColor, so it follows whatever colour the link is set in. */
 .contact__text a {
   color: var(--link-strong);
+}
+
+.contact__text a,
+.u-line {
   padding-bottom: 3px;
   background-image:
     linear-gradient(currentColor, currentColor),
@@ -869,9 +1115,18 @@ button {
 }
 
 .contact__text a:hover,
-.contact__text a:focus-visible {
+.contact__text a:focus-visible,
+.u-line:hover,
+.u-line:focus-visible,
+/* A featured row also draws its name's line from the media, which opens
+   the same project. */
+.featured__row:has(.featured__media:hover) .featured__name.u-line {
   background-position: 0 100%, 0 100%;
   background-size: 100% 2px, 100% 1px;
+}
+
+.u-line:focus-visible {
+  outline: none;
 }
 
 /* ---- footer (SiteFooter.tsx) ----

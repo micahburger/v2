@@ -1,31 +1,39 @@
 import { useCallback, useEffect, useState } from "react";
 
 // The "lab" is how the explorations live side by side: a colour palette for
-// the whole page, an optional section-by-section colour shift on scroll and
-// two takes on the work history, switched from a small panel. "Paper" is
-// the live site's colour; the history defaults to "Timeline", Micah's pick
-// so far. (The client quilt was settled on its wave build-in and the footer
-// on the sign-off, and both left the lab; the first featured-project
-// carousels are parked in app/_archive.)
+// the whole page, an optional section-by-section colour shift on scroll, the
+// client logos as a quilt or a drifting marquee, and three takes on the work
+// history, switched from a small panel. Each list leads with its default.
+// Defaults (Micah, 2026-11-07): Clay, Dusk, Marquee, Resume. Paper, Off,
+// Quilt and Timeline were the live site's look and the earlier defaults.
+// Settled and out of the lab: the footer (sign-off) and how a featured
+// project reads as a link (Corner); the first featured-project carousels
+// are parked in app/_archive.
 // The choice rides in the query string only, so a link to "graphite with the
-// logo history" is shareable and a plain link always gets the
-// defaults. (It used to also remember the last pick in localStorage; that
-// kept serving stale picks after the defaults changed, so it went.) Once a take wins, delete the others and this file.
+// logo history" is shareable and a plain link always gets the defaults. (It
+// used to also remember the last pick in localStorage; that kept serving
+// stale picks after the defaults changed, so it went.) Once a take wins,
+// delete the others and this file.
 
 export const LAB = {
   palette: [
+    { id: "clay", label: "Clay" },
     { id: "paper", label: "Paper" },
     { id: "graphite", label: "Graphite" },
     { id: "forest", label: "Forest" },
-    { id: "clay", label: "Clay" },
   ],
   shift: [
+    { id: "dusk", label: "Dusk" },
     { id: "off", label: "Off" },
     { id: "saturate", label: "Saturate" },
     { id: "drift", label: "Drift" },
-    { id: "dusk", label: "Dusk" },
+  ],
+  clients: [
+    { id: "marquee", label: "Marquee" },
+    { id: "quilt", label: "Quilt" },
   ],
   history: [
+    { id: "resume", label: "Resume" },
     { id: "timeline", label: "Timeline" },
     { id: "logo", label: "Logo" },
   ],
@@ -39,7 +47,11 @@ function isValid<K extends LabKey>(key: K, value: unknown): value is LabState[K]
 }
 
 export function readLab(): LabState {
-  const state: LabState = { palette: "paper", shift: "off", history: "timeline" };
+  // Each list's first entry, so the order above is the one place a default
+  // is set.
+  const state = Object.fromEntries(
+    (Object.keys(LAB) as LabKey[]).map((key) => [key, LAB[key][0].id]),
+  ) as LabState;
   const params = new URLSearchParams(window.location.search);
   (Object.keys(LAB) as LabKey[]).forEach((key) => {
     const value = params.get(key);
@@ -53,8 +65,9 @@ export function useLab() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    // Old links may still carry ?footer=; the footer left the lab, so drop it.
+    // Old links may still carry ?footer= or ?links=; both left the lab.
     params.delete("footer");
+    params.delete("links");
     (Object.keys(lab) as LabKey[]).forEach((key) => params.set(key, lab[key]));
     window.history.replaceState(null, "", `${window.location.pathname}?${params}${window.location.hash}`);
   }, [lab]);
