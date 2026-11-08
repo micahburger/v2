@@ -1226,6 +1226,506 @@ button {
   }
 }
 
+/* ================= case study (CaseStudy.tsx) =================
+   The live Semplice case study's layout, rebuilt on this page's grid,
+   type and palette tokens so it sits in the site. Sizes follow the live
+   page where it had one (38px section titles, 36px outcome statements,
+   phone screens about three columns wide) and the homepage where it
+   didn't. Screens exported on a dark ground get the homepage's rounded
+   media box; transparent phone cut-outs sit straight on the page. */
+
+.cs-hero {
+  padding-top: 180px;
+}
+
+/* Back home, in the homepage's name style (Satoshi 700, 18px), with a
+   small arrow that nudges left on hover, the way the footer links nudge
+   right. */
+.cs-hero__home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  font-family: var(--font-name);
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: var(--black);
+}
+
+.cs-hero__home svg {
+  width: 0.9em;
+  height: 0.9em;
+  transition: transform 0.32s var(--ease-enter);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cs-hero__home:hover svg {
+    transform: translateX(-4px);
+  }
+}
+
+/* The homepage statement's size and leading, at most ten columns wide so
+   the title breaks into two even lines like the live one. */
+.cs-hero__title {
+  max-width: 1000px;
+  font-size: clamp(40px, 5.4vw, 76px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.cs-hero__title:focus {
+  outline: none;
+}
+
+.cs-block {
+  padding-top: 120px;
+}
+
+.cs-block--intro {
+  padding-top: 72px;
+}
+
+/* A section title opens a new part of the story, so more room above it
+   than between blocks, and less below it, so it holds onto what follows. */
+.cs-block--heading {
+  padding-top: 160px;
+}
+
+.cs-block--heading + .cs-block {
+  padding-top: 56px;
+}
+
+/* The homepage's hairline between sections, above the titles that start a
+   new part (pain points, learnings). */
+.cs-block--ruled {
+  margin-top: 120px;
+  padding-top: 0;
+}
+
+.cs-block--ruled::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-bottom: 40px;
+  background: var(--rule);
+}
+
+/* 38px like the homepage's contact sentence and the live page's titles. */
+.cs-heading {
+  max-width: 900px;
+  font-size: 38px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--black);
+  text-wrap: balance;
+}
+
+.cs-lede {
+  max-width: 640px;
+  margin-top: 16px;
+}
+
+/* ---- intro ---- */
+
+.cs-intro {
+  align-items: center;
+}
+
+.cs-intro__text {
+  grid-column: 1 / span 6;
+  padding-right: 40px;
+  display: grid;
+  gap: 20px;
+}
+
+.cs-intro__media {
+  grid-column: 7 / span 6;
+}
+
+/* Objective and Role: quieter than the paragraphs, label set in the
+   name's colour so the pair scans as two facts. */
+.cs-facts {
+  display: grid;
+  gap: 16px;
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.cs-facts dt {
+  font-weight: 500;
+  color: var(--black);
+}
+
+.cs-facts dd {
+  margin: 0;
+}
+
+/* ---- images ---- */
+
+.cs-frame {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--media-bg);
+  transition: background-color 0.4s ease;
+}
+
+.cs-frame > img,
+.cs-cutout > img {
+  width: 100%;
+  height: auto;
+}
+
+/* The slideshow's frame holds an absolutely placed stage, so it takes its
+   height from aspect-ratio (set inline) rather than from an image. */
+.cs-frame--stage {
+  width: 100%;
+}
+
+.cs-caption {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0.7;
+}
+
+figure {
+  margin: 0;
+}
+
+/* ---- image beside notes ----
+   Phone screens take three columns, about the 293px the live page gives
+   them; the notes take five beside them, one column of air between.
+   "half" images (a wide composite) take seven. On the right, the notes
+   come first and the image is pushed to the far side. */
+
+.cs-split {
+  align-items: center;
+}
+
+.cs-split--phone.cs-split--image-left .cs-split__media {
+  grid-column: 2 / span 3;
+}
+
+.cs-split--phone.cs-split--image-left .cs-split__notes {
+  grid-column: 6 / span 5;
+}
+
+.cs-split--phone.cs-split--image-right .cs-split__notes {
+  grid-column: 2 / span 5;
+  grid-row: 1;
+}
+
+.cs-split--phone.cs-split--image-right .cs-split__media {
+  grid-column: 8 / span 3;
+  grid-row: 1;
+}
+
+.cs-split--half.cs-split--image-right .cs-split__notes {
+  grid-column: 1 / span 4;
+  grid-row: 1;
+}
+
+.cs-split--half.cs-split--image-right .cs-split__media {
+  grid-column: 6 / span 7;
+  grid-row: 1;
+}
+
+.cs-split--half.cs-split--image-left .cs-split__media {
+  grid-column: 1 / span 7;
+}
+
+.cs-split--half.cs-split--image-left .cs-split__notes {
+  grid-column: 9 / span 4;
+}
+
+/* Phone screenshots are long, so their frames get a phone's corners
+   rather than the 28px of a wide picture. */
+.cs-split--phone .cs-frame {
+  border-radius: 36px;
+}
+
+.cs-notes {
+  display: grid;
+  gap: 28px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.cs-notes__title {
+  margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--black);
+}
+
+/* A paragraph or note under a wide image: eight columns, like the live
+   page's text under its slider. */
+.cs-body {
+  max-width: 800px;
+  margin-top: 28px;
+}
+
+p.cs-body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* ---- before / after (BeforeAfter.tsx) ---- */
+
+.compare {
+  --compare-line: #ffffff;
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  background: var(--media-bg);
+  cursor: ew-resize;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.compare > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-user-drag: none;
+}
+
+.compare__after {
+  clip-path: inset(0 0 0 var(--pos));
+}
+
+/* The line is white, not ink: these screens are on a near-black ground in
+   every palette. */
+.compare__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 2px;
+  margin-left: -1px;
+  background: var(--compare-line);
+  pointer-events: none;
+}
+
+.compare__knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: var(--compare-line);
+  color: #141414;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* A click glides on the ds drag-settle curve; a drag tracks 1:1. */
+.compare.is-settling .compare__after {
+  transition: clip-path 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.compare.is-settling .compare__handle {
+  transition: left 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.compare:has(input:focus-visible) .compare__knob {
+  outline: 2px solid var(--compare-line);
+  outline-offset: 3px;
+}
+
+/* Plain words in the label face, never colour-coded (ds). */
+.compare__tag {
+  position: absolute;
+  top: 20px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+  font-family: var(--font-label);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.compare__tag--before {
+  left: 20px;
+}
+
+.compare__tag--after {
+  right: 20px;
+}
+
+/* ---- learnings and outcomes ---- */
+
+.cs-label {
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+}
+
+.cs-takeaways {
+  row-gap: 48px;
+}
+
+.cs-takeaways > li {
+  grid-column: span 4;
+  padding-right: 20px;
+  font-size: 22px;
+  line-height: 1.36;
+  color: var(--black);
+}
+
+.cs-block--outcomes {
+  padding-top: 80px;
+}
+
+.cs-outcomes {
+  row-gap: 48px;
+}
+
+.cs-outcomes > li {
+  grid-column: span 6;
+  padding-right: 40px;
+  font-size: clamp(26px, 2.6vw, 36px);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  color: var(--black);
+}
+
+/* The numbers carry the outcome, so they're the part in the accent. */
+.cs-outcomes em {
+  font-style: normal;
+  color: var(--link-strong);
+}
+
+.cs-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cs-end {
+  padding-top: 120px;
+  font-size: 18px;
+}
+
+@media (max-width: 900px) {
+  .cs-hero {
+    padding-top: 112px;
+  }
+  .cs-hero__home {
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+  .cs-hero__title {
+    font-size: 32px;
+    line-height: 1.12;
+  }
+  .cs-block {
+    padding-top: 80px;
+  }
+  .cs-block--intro {
+    padding-top: 40px;
+  }
+  .cs-block--heading {
+    padding-top: 112px;
+  }
+  .cs-block--heading + .cs-block {
+    padding-top: 40px;
+  }
+  .cs-block--ruled {
+    margin-top: 80px;
+    padding-top: 0;
+  }
+  .cs-heading {
+    font-size: 26px;
+  }
+  /* One column, picture first in every split so the page reads image,
+     then what it shows, all the way down. */
+  .cs-intro,
+  .cs-split {
+    row-gap: 32px;
+  }
+  .cs-intro__text,
+  .cs-intro__media,
+  .cs-split .cs-split__media,
+  .cs-split .cs-split__notes {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    padding-right: 0;
+  }
+  .cs-split__media {
+    order: -1;
+  }
+  /* A phone at full width would be a screen taller than the screen it's
+     on; about two thirds of the column keeps it a picture of a phone. */
+  .cs-split--phone .cs-split__media {
+    width: min(100%, 300px);
+    justify-self: center;
+  }
+  .cs-split--phone .cs-frame {
+    border-radius: 28px;
+  }
+  .cs-frame,
+  .compare {
+    border-radius: 20px;
+  }
+  .compare__tag {
+    top: 12px;
+    padding: 5px 9px;
+    font-size: 10px;
+  }
+  .compare__tag--before {
+    left: 12px;
+  }
+  .compare__tag--after {
+    right: 12px;
+  }
+  .compare__knob {
+    width: 36px;
+    height: 36px;
+  }
+  .cs-takeaways > li,
+  .cs-outcomes > li {
+    grid-column: 1;
+    padding-right: 0;
+  }
+  .cs-takeaways > li {
+    font-size: 20px;
+  }
+  .cs-block--outcomes {
+    padding-top: 64px;
+  }
+  .cs-end {
+    padding-top: 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .compare.is-settling .compare__after,
+  .compare.is-settling .compare__handle {
+    transition-duration: 0.12s;
+  }
+}
+
 /* ================= phone / tablet ================= */
 
 @media (max-width: 900px) {

@@ -159,6 +159,33 @@ edges.
 The first round of featured carousels (Wash, Strips, Stack) was too much
 and is parked in `app/_archive/`, outside the build.
 
+## Case studies
+
+`/project/<slug>` renders a case study instead of the homepage (`main.tsx`
+reads the path once; moving between pages is a plain page load, and
+`.htaccess` already sends every unknown path to `index.html`). The path is
+the live site's own, so old `micahburger.com/project/…` links keep working
+once v2 replaces it.
+
+- Content: `app/src/data/caseStudies.ts`, one `CaseStudy` per project, made
+  of typed blocks (intro, heading, split, figure, compare, slideshow,
+  takeaways, outcomes, video). A new case study is new data, not new
+  components. `stages` marks which blocks start each scroll-shift stage.
+- Rendering: `components/CaseStudy.tsx`, with `BeforeAfter.tsx` (the wipe)
+  and `Slideshow.tsx` (the homepage carousel without the link). Styles are
+  the `case study` block in `global.css`.
+- Images: `app/public/img/<slug>/`, sources listed at the top of
+  `caseStudies.ts` (Opendoor's came from `~/Desktop/ds-assets`). Screens on a
+  dark ground get the rounded frame; transparent phone PNGs are `look:
+  "cutout"`.
+- A featured row whose `href` starts with `/` opens in the same tab and
+  carries the lab query string along (`linkTo` in FeaturedProjects.tsx);
+  every other project link still opens a new tab.
+- Opendoor (2026-11-08) is the first and the template: a first pass at the
+  live page's structure and copy on v2's grid, type and palettes, to be
+  shifted toward the v2 look next. Lincoln, Infinity and the archive
+  projects still link to the live site.
+
 ## Placeholders still in
 
 - Rental application, 2026 folio and Corner Bodega media are screenshots

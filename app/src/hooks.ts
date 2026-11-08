@@ -65,3 +65,53 @@ export function formatMonth(value: string | null) {
 export function inertProps(on: boolean): Record<string, string> {
   return on ? { inert: "" } : {};
 }
+
+/**
+ * Which part of the page the visitor is in, written to <html data-stage>
+ * for the scroll colour shift (see "section shift" in global.css): the last
+ * element marked data-stage whose top has passed the middle of the
+ * viewport. Because it's "last one passed", the gaps between sections keep
+ * the stage of the section above, so the colour changes once per section
+ * rather than flickering at the seams.
+ *
+ * A scroll listener (one rAF per frame at most) rather than an
+ * IntersectionObserver: it's the same answer computed directly, and it
+ * keeps working where observers are throttled, such as background tabs.
+ * Runs whether or not a shift is on, so switching it on mid-page lands on
+ * the right colour straight away. Shared by the homepage and the case
+ * studies, which mark their own sections with data-stage.
+ */
+export function useSectionStage() {
+  useEffect(() => {
+    const root = document.documentElement;
+    // :not(html): the stage is written to <html data-stage>, which would
+    // otherwise match too and feed its own last value back in.
+    const marks = [...document.querySelectorAll<HTMLElement>("[data-stage]:not(html)")];
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const line = window.innerHeight / 2;
+      let stage = "0";
+      for (const el of marks) {
+        if (el.getBoundingClientRect().top <= line) stage = el.dataset.stage ?? stage;
+      }
+      // At the very bottom the footer can be too short to reach the middle
+      // line; reaching the end of the page counts as being in it.
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+        stage = marks[marks.length - 1]?.dataset.stage ?? stage;
+      }
+      if (root.dataset.stage !== stage) root.dataset.stage = stage;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+}

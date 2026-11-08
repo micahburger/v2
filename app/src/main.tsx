@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
+import CaseStudyPage from "./components/CaseStudy";
+import { caseStudyFor } from "./data/caseStudies";
 import { readLab } from "./lab";
 import "./styles/global.css";
 
@@ -11,8 +13,13 @@ const initial = readLab();
 document.documentElement.dataset.palette = initial.palette;
 document.documentElement.dataset.shift = initial.shift;
 
+// Routing is just the path, read once: /project/<slug> is a case study,
+// anything else the homepage. Moving between them is an ordinary page load
+// (plain links), so the browser handles back, forward and scroll position
+// itself. Unknown paths reach index.html through Vite's SPA fallback in dev
+// and .htaccess in production.
+const study = caseStudyFor(window.location.pathname);
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <React.StrictMode>{study ? <CaseStudyPage study={study} /> : <App />}</React.StrictMode>,
 );

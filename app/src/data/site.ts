@@ -49,7 +49,8 @@ export type Featured = {
    *  runs straight on ("Lattice is…"), omitted where it doesn't. */
   rest: string;
   /** Omitted for a row that isn't one project (Archive): the name is then
-   *  plain text and the links live in `group`. */
+   *  plain text and the links live in `group`. A path ("/project/…") is a
+   *  case study on this site and opens in the same tab. */
   href?: string;
   /** Projects gathered into this row, linked inline after `rest`. */
   group?: { label: string; href: string }[];
@@ -95,7 +96,8 @@ export const featured: Featured[] = [
     id: "opendoor",
     name: "Opendoor",
     rest: " wanted to create a cohesive, flexible experience for home sellers, integrating the option to list on the market with Opendoor’s cash offer.",
-    href: "https://micahburger.com/project/opendoor",
+    // The v2 case study (components/CaseStudy.tsx), the first one built here.
+    href: "/project/opendoor",
     media: slides("opendoor", 6, "Opendoor seller experience"),
   },
   {

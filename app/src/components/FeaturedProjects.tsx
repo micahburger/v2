@@ -5,6 +5,25 @@ import { relativeOffset, useCarousel } from "../carousel";
 
 const NEW_TAB = { target: "_blank", rel: "noreferrer" } as const;
 
+/** Where a project link goes and how. Another site opens in a new tab, so
+ *  this page stays put as the hub. A case study on this site ("/project/…")
+ *  opens in place, the way any page of one site does, with the back button
+ *  and the case study's own link home to return; it carries the query
+ *  string so the palette the visitor picked follows them in. */
+function linkTo(href: string | undefined) {
+  if (!href) return {};
+  if (!href.startsWith("/")) return { href, ...NEW_TAB };
+  // The query is read at the click, not at render: the lab writes it to the
+  // URL in an effect, after the render that would otherwise bake in the
+  // previous pick. (Middle clicks don't fire click, hence auxclick too.)
+  const withQuery = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.currentTarget.href = `${href}${window.location.search}`;
+  };
+  return { href, onClick: withQuery, onAuxClick: withQuery };
+}
+
+const isLocal = (href: string | undefined) => !!href?.startsWith("/");
+
 /**
  * Featured projects as the live site lays them out: one row per project,
  * the paragraph in the left five columns and the media in the right seven,
@@ -23,9 +42,10 @@ const NEW_TAB = { target: "_blank", rel: "noreferrer" } as const;
  * arrow. Those links carry the same underline, since in the link colour
  * alone they read as a tint, not as four things to click.
  *
- * Every project link opens in a new tab (Micah, 2026-11-07), so this page
- * stays put as the hub to come back to. The text link says so to screen
- * readers; the media links are hidden from them already.
+ * Every link to another site opens in a new tab (Micah, 2026-11-07), so
+ * this page stays put as the hub to come back to. The text link says so to
+ * screen readers; the media links are hidden from them already. Case
+ * studies built into this site open in place (see linkTo).
  *
  * Where a project has more than one image, the media is the folio's
  * grab-and-swipe carousel (carousel.ts): it drifts on its own every 4.2s
@@ -61,9 +81,9 @@ function Row({ project }: { project: Featured }) {
       <p className="featured__text">
         {project.href ? (
           // Only the name links; the rest of the paragraph is reading matter.
-          <a className="featured__name u-line" href={project.href} {...NEW_TAB}>
+          <a className="featured__name u-line" {...linkTo(project.href)}>
             {project.name}
-            <span className="visually-hidden"> (opens in a new tab)</span>
+            {!isLocal(project.href) && <span className="visually-hidden"> (opens in a new tab)</span>}
           </a>
         ) : (
           <span className="featured__name">{project.name}</span>
@@ -122,7 +142,7 @@ function MediaView({
   return (
     // Same destination as the name link, so it's kept out of the tab order
     // and the accessibility tree: one stop per project, not two.
-    <a className="featured__media" href={href} {...NEW_TAB} tabIndex={-1} aria-hidden="true" draggable={false}>
+    <a className="featured__media" {...linkTo(href)} tabIndex={-1} aria-hidden="true" draggable={false}>
       <img src={src} alt="" loading="lazy" decoding="async" draggable={false} />
       {corner && CORNER}
     </a>
@@ -162,8 +182,7 @@ function Carousel({
     >
       <a
         className="featured__media"
-        href={images[shown].href ?? href}
-        {...NEW_TAB}
+        {...linkTo(images[shown].href ?? href)}
         tabIndex={-1}
         aria-hidden="true"
         draggable={false}
