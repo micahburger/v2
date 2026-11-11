@@ -50,6 +50,42 @@
   --hover-grow-scale-card: 1.05;
   --hover-grow-duration: 0.32s;
   --hover-grow-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- the case study scale (Micah, 2026-11-10: "systematize") ----
+     One set of names for every case study page's type, spacing and
+     corners, so Opendoor, RentSpree and applicants.micahburger.com are
+     one system. applicants-site/css/styles.css declares these same names
+     with these same values (it's a static site on its own subdomain and
+     can't import this file): change one, change both. Colours aren't
+     here because v2 already has them as the Night palette; the applicants
+     page copies Night's values into its --page-* tokens.
+
+     Two text sizes carry nearly everything: --cs-body for paragraphs and
+     notes, --cs-small for captions and labels. Weights are Poppins 400
+     and 500 only (the only two loaded). */
+  --cs-display: clamp(40px, 5.4vw, 76px); /* page title */
+  --cs-statement: clamp(30px, 3.6vw, 48px); /* a stated outcome */
+  --cs-heading: 38px; /* section titles, 1.25 leading, -0.01em */
+  --cs-lede: 18px; /* intro paragraphs, 1.5 leading */
+  --cs-body: 16px; /* paragraphs and notes, 1.6 leading */
+  --cs-small: 13px; /* captions and labels */
+  --cs-block: 120px; /* between blocks */
+  --cs-part: 160px; /* before a section title: a new part of the story */
+  --radius-media: 28px; /* screens and image frames, homepage media too */
+  --radius-card: 20px; /* cards and menus */
+  --radius-phone: 36px; /* a phone-shaped screenshot */
+}
+
+@media (max-width: 900px) {
+  :root {
+    --cs-display: 32px;
+    --cs-statement: 28px;
+    --cs-heading: 26px;
+    --cs-block: 80px;
+    --cs-part: 112px;
+    --radius-media: 20px;
+    --radius-phone: 28px;
+  }
 }
 
 /* ================= palettes =================
@@ -989,7 +1025,7 @@ button {
   position: relative;
   display: block;
   aspect-ratio: 16 / 9;
-  border-radius: 28px;
+  border-radius: var(--radius-media);
   overflow: hidden;
   background: var(--media-bg);
   transition: background-color 0.4s ease;
@@ -1332,7 +1368,7 @@ button {
    the title breaks into two even lines like the live one. */
 .cs-hero__title {
   max-width: 1000px;
-  font-size: clamp(40px, 5.4vw, 76px);
+  font-size: var(--cs-display);
   line-height: 1.06;
   letter-spacing: -0.015em;
   text-wrap: balance;
@@ -1343,7 +1379,7 @@ button {
 }
 
 .cs-block {
-  padding-top: 120px;
+  padding-top: var(--cs-block);
 }
 
 .cs-block--intro {
@@ -1372,7 +1408,7 @@ button {
   --dot-active: var(--chapter-ink);
   align-items: center;
   padding: 72px 64px;
-  border-radius: 28px;
+  border-radius: var(--radius-media);
   background: var(--chapter-bg);
   color: var(--chapter-ink);
 }
@@ -1395,7 +1431,7 @@ button {
 }
 
 .cs-chapter__text p {
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.6;
 }
 
@@ -1444,7 +1480,7 @@ button {
 /* A section title opens a new part of the story, so more room above it
    than between blocks, and less below it, so it holds onto what follows. */
 .cs-block--heading {
-  padding-top: 160px;
+  padding-top: var(--cs-part);
 }
 
 .cs-block--heading + .cs-block {
@@ -1469,7 +1505,7 @@ button {
 /* 38px like the homepage's contact sentence and the live page's titles. */
 .cs-heading {
   max-width: 900px;
-  font-size: 38px;
+  font-size: var(--cs-heading);
   line-height: 1.25;
   letter-spacing: -0.01em;
   color: var(--black);
@@ -1509,7 +1545,7 @@ button {
   gap: 20px;
   margin: 20px 0 0;
   padding: 28px 32px;
-  border-radius: 20px;
+  border-radius: var(--radius-card);
   background: color-mix(in srgb, var(--ink) 6%, var(--page));
   font-size: 15px;
   line-height: 1.6;
@@ -1528,7 +1564,7 @@ button {
 
 .cs-frame {
   position: relative;
-  border-radius: 28px;
+  border-radius: var(--radius-media);
   overflow: hidden;
   background: var(--media-bg);
   transition: background-color 0.4s ease;
@@ -1561,7 +1597,7 @@ button {
 
 .cs-caption {
   margin-top: 12px;
-  font-size: 13px;
+  font-size: var(--cs-small);
   line-height: 1.4;
   opacity: 0.7;
 }
@@ -1619,19 +1655,19 @@ figure {
 /* Phone screenshots are long, so their frames get a phone's corners
    rather than the 28px of a wide picture. */
 .cs-split--phone .cs-frame {
-  border-radius: 36px;
+  border-radius: var(--radius-phone);
 }
 
 .cs-notes {
   display: grid;
   gap: 28px;
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.6;
 }
 
 .cs-notes__title {
   margin-bottom: 6px;
-  font-size: 16px;
+  font-size: var(--cs-body);
   font-weight: 500;
   line-height: 1.4;
   color: var(--black);
@@ -1645,7 +1681,7 @@ figure {
 }
 
 p.cs-body {
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.6;
 }
 
@@ -1654,7 +1690,7 @@ p.cs-body {
 .compare {
   --compare-line: #ffffff;
   position: relative;
-  border-radius: 28px;
+  border-radius: var(--radius-media);
   overflow: hidden;
   background: var(--media-bg);
   cursor: ew-resize;
@@ -1748,7 +1784,7 @@ p.cs-body {
 
 .cs-label {
   margin-bottom: 20px;
-  font-size: 13px;
+  font-size: var(--cs-small);
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -1771,7 +1807,7 @@ p.cs-body {
   padding-top: 20px;
   padding-right: 24px;
   border-top: 1px solid var(--rule);
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.6;
 }
 
@@ -1801,7 +1837,7 @@ p.cs-body {
 .cs-stats__label {
   max-width: 300px;
   margin-top: 16px;
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.5;
 }
 
@@ -1832,7 +1868,7 @@ p.cs-body {
   align-items: baseline;
   padding: 24px 0;
   border-top: 1px solid var(--rule);
-  font-size: 16px;
+  font-size: var(--cs-body);
   line-height: 1.5;
 }
 
@@ -1852,7 +1888,7 @@ p.cs-body {
    the figures in the accent. */
 .cs-statement {
   max-width: 1000px;
-  font-size: clamp(30px, 3.6vw, 48px);
+  font-size: var(--cs-statement);
   line-height: 1.2;
   letter-spacing: -0.015em;
   color: var(--black);
@@ -1912,17 +1948,10 @@ p.cs-body {
     padding: 24px;
   }
   .cs-hero__title {
-    font-size: 32px;
     line-height: 1.12;
-  }
-  .cs-block {
-    padding-top: 80px;
   }
   .cs-block--intro {
     padding-top: 40px;
-  }
-  .cs-block--heading {
-    padding-top: 112px;
   }
   .cs-block--heading + .cs-block {
     padding-top: 40px;
@@ -1930,9 +1959,6 @@ p.cs-body {
   .cs-block--ruled {
     margin-top: 80px;
     padding-top: 0;
-  }
-  .cs-heading {
-    font-size: 26px;
   }
   /* One column, picture first in every split so the page reads image,
      then what it shows, all the way down. */
@@ -1956,13 +1982,6 @@ p.cs-body {
   .cs-split--phone .cs-split__media {
     width: min(100%, 300px);
     justify-self: center;
-  }
-  .cs-split--phone .cs-frame {
-    border-radius: 28px;
-  }
-  .cs-frame,
-  .compare {
-    border-radius: 20px;
   }
   .compare__tag {
     top: 12px;
@@ -2009,9 +2028,6 @@ p.cs-body {
   }
   .cs-ledger__value {
     font-size: 40px;
-  }
-  .cs-statement {
-    font-size: 28px;
   }
   .cs {
     padding-bottom: 80px;
@@ -2064,9 +2080,6 @@ p.cs-body {
   }
   .featured__text {
     padding-right: 0;
-  }
-  .featured__media {
-    border-radius: 20px;
   }
   .contact {
     padding-top: 140px;

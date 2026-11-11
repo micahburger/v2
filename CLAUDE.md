@@ -203,6 +203,13 @@ once v2 replaces it.
   applicant chapter's CTA leads to applicants.micahburger.com, which stays
   its own static site (`../applicants-site`). The Outcomes lab pill only
   shows on studies with a results block.
+- **One case study system** (Micah, 2026-11-10): type, spacing and corners
+  are `--cs-*` / `--radius-media|card|phone` tokens in `:root` (phone values
+  in the 900px block), used by every case study rule and the homepage media.
+  applicants-site/css/styles.css declares the same names and values and
+  maps Night's colours into its `--page-*` tokens; it's Poppins 400/500
+  throughout now (its RentSpree `.product` screens keep Newsreader and
+  Manrope). Change a value in one, change it in the other.
 - Back to home is **locked on scroll** on every case study (Micah,
   2026-11-10): `.cs-bar` is a sticky bar outside the header (sticky only
   holds inside its parent), resting 180px down and holding 24px from the
