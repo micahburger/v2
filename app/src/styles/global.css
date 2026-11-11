@@ -1871,9 +1871,10 @@ p.cs-body {
   object-fit: cover;
 }
 
-.cs-end {
-  padding-top: 120px;
-  font-size: 18px;
+/* The room the end link's 120px used to keep between the last block and
+   the footer, now that the link is gone. */
+.cs {
+  padding-bottom: 120px;
 }
 
 @media (max-width: 900px) {
@@ -2012,8 +2013,8 @@ p.cs-body {
   .cs-statement {
     font-size: 28px;
   }
-  .cs-end {
-    padding-top: 80px;
+  .cs {
+    padding-bottom: 80px;
   }
 }
 

@@ -72,11 +72,15 @@ const slides = (prefix: string, count: number, alt: string): Media => ({
 // comes back.
 export const featured: Featured[] = [
   {
-    id: "folio-2026",
-    name: "2026 Mini portfolio",
-    rest: " A separate site for my recent product work at RentSpree, in four chapters: the applicant experience, requesting an application, messaging and the AI rental assistant.",
-    href: "https://2026folio.micahburger.com",
-    media: slides("folio", 4, "2026 mini portfolio"),
+    // Was the "2026 Mini portfolio" row, linking out to the folio's own
+    // site. Since 2026-11-10 the same four chapters are a case study here
+    // (/project/rentspree), so the row opens that in place and is named for
+    // it; the Rental application row below is the long read on the first.
+    id: "rentspree",
+    name: "RentSpree",
+    rest: " My recent product work, in four chapters: the applicant experience, requesting an application, messaging and the AI rental assistant.",
+    href: "/project/rentspree",
+    media: slides("folio", 4, "RentSpree product work"),
   },
   {
     id: "rental-application",

@@ -115,10 +115,12 @@ Small round buttons have **no outlines or strokes** (Micah): just a
 `--chip` fill, white on light palettes and a lighter tint of `--page` on
 dark ones.
 
-Featured order: 2026 folio, Rental application, Lattice, Opendoor,
+Featured order: RentSpree (was the 2026 folio row; since 2026-11-10 it
+opens `/project/rentspree` here), Rental application, Lattice, Opendoor,
 Lincoln, Infinity, then an Archive row grouping WWE, BBC, ABA and Rockwell
-(a placeholder until they get a proper home). Every featured link opens
-in a new tab, so the homepage stays open as the hub. Corner Bodega is parked in
+(a placeholder until they get a proper home). Featured links to other
+sites open in a new tab, so the homepage stays open as the hub; case
+studies built here open in place. Corner Bodega is parked in
 `parked` in `data/site.ts`.
 
 "Resume" is the 2026 folio's resume rows (`ResumeLayout.tsx` there),

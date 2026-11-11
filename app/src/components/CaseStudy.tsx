@@ -80,12 +80,9 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             <BlockView block={block} outcomes={lab.outcomes} />
           </section>
         ))}
-
-        <nav className="cs-end wrap" aria-label="Case study">
-          <a className="u-line" href="/" onClick={goHome} onAuxClick={goHome}>
-            Back to all work
-          </a>
-        </nav>
+        {/* No "Back to all work" link at the end any more (Micah,
+            2026-11-10): the locked Back to home pill is on screen the
+            whole way down, so a second way home only repeated it. */}
       </main>
 
       <SiteFooter />
