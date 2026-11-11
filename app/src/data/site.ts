@@ -30,6 +30,11 @@
 //                        screenshots of those live sites (home page first,
 //                        then artist pages / case-study sections / folio
 //                        chapters), until real exports exist
+//   rental-1             except this one (2026-11-10): the hand holding
+//                        the phone, applicants-site/img/closing.jpg, set on
+//                        a 1316x740 ground of its own edge colour (#161417)
+//                        with the side edges faded in. It replaced a capture
+//                        of the old scramble title, retired from that page.
 
 export type Slide = {
   src: string;
@@ -99,7 +104,8 @@ export const featured: Featured[] = [
   {
     id: "opendoor",
     name: "Opendoor",
-    rest: " wanted to create a cohesive, flexible experience for home sellers, integrating the option to list on the market with Opendoor’s cash offer.",
+    // Follows the case study's opening (revised 2026-11-10).
+    rest: " was adding ‘List with Opendoor’ alongside its cash offer. I led the redesign of the seller experience so sellers could compare the two options, understand their offer, and know what would happen next.",
     // The v2 case study (components/CaseStudy.tsx), the first one built here.
     href: "/project/opendoor",
     media: slides("opendoor", 6, "Opendoor seller experience"),

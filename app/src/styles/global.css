@@ -1791,30 +1791,11 @@ p.cs-body {
   opacity: 0.75;
 }
 
-/* Learnings for Stats and Statement: three columns of four, a short claim
-   in the name colour and one line under it, each column ruled on top so
-   the three read as a set. */
+/* The reflection for Stats and Statement: the label, then one paragraph
+   at lede size (.cs-lede). Until 2026-11-10 this held three ruled columns
+   of maxims. */
 .cs-learnings {
   margin-top: 96px;
-}
-
-.cs-learnings__list {
-  row-gap: 32px;
-}
-
-.cs-learnings__list > li {
-  grid-column: span 4;
-  padding-top: 20px;
-  padding-right: 24px;
-  border-top: 1px solid var(--rule);
-  font-size: var(--cs-body);
-  line-height: 1.6;
-}
-
-.cs-learnings__claim {
-  margin-bottom: 6px;
-  font-weight: 500;
-  color: var(--black);
 }
 
 /* STATS: display-size numbers, tight like the ds titles, one line under. */
@@ -1882,6 +1863,16 @@ p.cs-body {
 .cs-ledger__claim {
   font-weight: 500;
   color: var(--black);
+}
+
+/* The reflection under "What I learned": one paragraph, set like a row
+   (hairline above, the rows' padding and size) but spanning the column. */
+.cs-ledger__prose {
+  max-width: 640px;
+  padding: 24px 0;
+  border-top: 1px solid var(--rule);
+  font-size: var(--cs-body);
+  line-height: 1.6;
 }
 
 /* STATEMENT: the numbers as one sentence at the contact sentence's scale,
@@ -1999,7 +1990,6 @@ p.cs-body {
     height: 36px;
   }
   .cs-stats > li,
-  .cs-learnings__list > li,
   .cs-ledger__title,
   .cs-ledger__rows {
     grid-column: 1;

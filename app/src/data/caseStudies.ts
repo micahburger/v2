@@ -72,7 +72,9 @@ export type Block =
       stats: { value: string; label: string }[];
       summary: string;
       learningsTitle: string;
-      learnings: Note[];
+      /** What the project taught, as one short paragraph. (Was three
+       *  titled maxims until 2026-11-10.) */
+      reflection: string;
     }
   | { kind: "video"; src: string; poster: string; width: number; height: number; label: string }
   /** One project from a body of work, as the 2026 folio sets it: a title
@@ -105,26 +107,39 @@ export const opendoor: CaseStudy = {
   slug: "opendoor",
   name: "Opendoor",
   title: "Redesign of Opendoor’s seller experience",
+  // Copy revised 2026-11-10 (Micah's editorial brief, for Staff Product
+  // Designer reviewers): one story from the business change to the seller
+  // needs, the design decisions and testing, the result and the outcomes.
+  // Only claims Micah supplied or the screens themselves show. The
+  // preliminary versus final offer distinction is the prelim screen's own
+  // copy ("based on what we know about your house today", "a precise cash
+  // offer after your assessment"); its progress list gives the step order.
   blocks: [
     {
       kind: "intro",
       paragraphs: [
-        "Opendoor aimed to simplify home selling, but the addition of ‘List with Opendoor’ created a new challenge: how to seamlessly integrate these distinct pathways.",
-        "I led the redesign of the seller experience, working across teams to unify the flow from offer to closing while also refreshing Opendoor’s visual and interaction design standards. This project set the foundation for a more cohesive design that would scale with the platform’s evolving needs.",
+        "Opendoor was adding ‘List with Opendoor’ alongside its cash offer. Sellers needed a clear way to compare the two options, understand their offer, and know what would happen next.",
+        "I led the redesign of the seller experience with Product, Design, and Engineering, simplifying key pages and forms while updating the visual and interaction patterns used across the journey.",
       ],
       facts: [
         {
           label: "Objective",
-          text: "To create a cohesive, flexible experience for home sellers, integrating the option to list on the market with Opendoor’s cash offer.",
+          text: "Help sellers compare their options, understand pricing, and move forward with a clear next step.",
         },
         {
           label: "Role",
-          text: "Led the redesign and managed cross-functional collaboration across Product, Design, and Engineering.",
+          text: "Led the experience redesign in partnership with Product, Design, and Engineering.",
+        },
+        {
+          // The headline result, surfaced in the opening (brief, item 6);
+          // the full set is in the outcomes at the end.
+          label: "Outcome",
+          text: "A 22% rise in sellers scheduling the first video call.",
         },
       ],
       image: { src: od("hero.jpg"), alt: "The redesigned final offer on a phone, held in a hand", width: 1330, height: 1600 },
     },
-    { kind: "heading", title: "Key pain points & customer insights", ruled: true },
+    { kind: "heading", title: "What sellers needed to understand", ruled: true },
     {
       kind: "split",
       image: { src: od("original-design.png"), alt: "The original preliminary offer screen on mobile", width: 796, height: 1760, look: "cutout" },
@@ -133,31 +148,28 @@ export const opendoor: CaseStudy = {
       size: "phone",
       notes: [
         {
-          title: "Limited price transparency",
-          body: "Sellers often lacked a clear understanding of their home’s value and how Opendoor’s offer compared to other market options. Without easy-to-access price comparisons, users felt uncertain about the fairness and value of the offer.",
+          title: "Compare the selling options",
+          body: "Selling directly to Opendoor and listing on the market trade speed against price in different ways. Sellers needed an easy way to weigh the two side by side.",
         },
         {
-          title: "Rigid experience for diverse seller needs",
-          body: "Sellers have different motivations, such as needing to sell quickly or waiting for a favorable market, but the experience did not accommodate these varying preferences. Without flexibility, the platform felt one-size-fits-all and missed an opportunity to personalize the journey.",
+          title: "Understand the offer",
+          body: "Sellers needed to see the offer, the range around it, and the factors that shaped it, including fees and condition adjustments.",
         },
         {
-          title: "Unclear differentiation of Opendoor’s benefits",
-          body: "Users struggled to see how Opendoor’s unique advantages, such as a faster, simpler selling process, set it apart from traditional real estate options. This lack of clarity made it difficult for sellers to fully appreciate the value Opendoor could provide.",
-        },
-        {
-          title: "Inconsistent and disjointed navigation",
-          body: "Prior form designs and navigation lacked standardization, leading to a fragmented experience that could increase user frustration and abandonment rates. This issue was particularly problematic on mobile, where ease of use is critical.",
+          title: "Know what happens next",
+          body: "Selling takes several steps. Forms and navigation varied from page to page, especially on mobile, which made it hard to tell where you were and what to do next.",
         },
       ],
     },
     {
       kind: "figure",
       image: { src: od("journey-map.jpg"), alt: "Seller experience map: from listing or selling to Opendoor, through offers, video call and walkthrough, to closing", width: 2200, height: 1238 },
+      caption: "The seller journey for both paths, from the first offer through the video call and walkthrough to closing.",
     },
     {
       kind: "heading",
-      title: "Enhancements to the user journey",
-      lede: "To address these issues, we focused on enhancing clarity, personalization, and consistency.",
+      title: "Making the offer and next steps clearer",
+      lede: "After onboarding, sellers arrive at the preliminary offer page. That offer is based on what Opendoor knows about the home so far; a precise cash offer follows the home assessment. The page has to explain the number and lead to the next step: scheduling a video call.",
     },
     {
       kind: "compare",
@@ -165,7 +177,7 @@ export const opendoor: CaseStudy = {
       after: { src: od("prelim-offer-v2.jpg"), alt: "The preliminary offer redesigned in Novo, on mobile and desktop", width: 2000, height: 1125 },
       beforeLabel: "Before",
       afterLabel: "After",
-      body: "After onboarding, customers arrive at the preliminary offer page, designed to guide them toward the next step: scheduling a video call. Through iterative user testing, this page evolved into a clear and engaging experience, communicating three critical points: the preliminary offer price, the key factors influencing the offer, and the next steps in the process. This redesign ensures customers feel informed, confident, and empowered to proceed toward closing on their home.",
+      body: "We tested how to present the offer range and explored card layouts that made pricing recognizable as Opendoor. We simplified the page and its content, explained what happens next, and paired a prominent blue CTA with a progress indicator so sellers could understand where they were in the process and what to expect.",
     },
     {
       kind: "split",
@@ -174,12 +186,8 @@ export const opendoor: CaseStudy = {
       size: "phone",
       notes: [
         {
-          title: "Price Comparison Tool",
-          body: "We introduced a side-by-side price comparison feature, allowing sellers to easily understand how Opendoor’s offer compares to other options, building transparency and trust.",
-        },
-        {
-          title: "Enhanced Messaging",
-          body: "Clear, targeted messaging highlighted Opendoor’s unique value proposition as a streamlined alternative to traditional real estate.",
+          title: "Comparing the two ways to sell",
+          body: "Sell to Opendoor and List with Opendoor sit side by side, each with a one-line description, a ballpark price range, a timeline, and the number of showings. Sellers can weigh speed against price on one screen, with a full comparison chart a tap away and one button to schedule the video call.",
         },
       ],
     },
@@ -189,10 +197,9 @@ export const opendoor: CaseStudy = {
       imageSide: "left",
       size: "phone",
       notes: [
-        { title: "Personalized Selling Options", body: "Added options for flexible closing and move dates." },
         {
-          title: "Standardized Forms & Navigation",
-          body: "Redesigned forms with consistent layouts and locked “Next” CTAs simplified the user flow, reducing friction and abandonment.",
+          title: "One form pattern",
+          body: "Every form step shares one layout: a plain question, a line of context, large answer options, and a persistent ‘Next’ button in the same place on every step. Sellers learn the pattern once, on mobile and desktop.",
         },
       ],
     },
@@ -203,12 +210,8 @@ export const opendoor: CaseStudy = {
       size: "half",
       notes: [
         {
-          title: "Understanding customer journeys",
-          body: "Enhanced backend integration with frontend forms provided greater insight into where customers were in their journey, helping us anticipate and meet their needs.",
-        },
-        {
-          title: "Clear path to completion",
-          body: "Previously, multi-path flows created confusion. The new flow prioritized a prominent, locked “Next Step” CTA, making it clear what users needed to do to progress.",
+          title: "One next step at a time",
+          body: "Earlier flows branched in several directions. Now each stage ends in a single ‘Next step’ bar with one blue button, such as Schedule video call or Sign and close. A progress list runs from Request offer to Sign & Close and marks what’s up next, and forms show a progress bar above the back and Next buttons.",
         },
       ],
     },
@@ -219,8 +222,8 @@ export const opendoor: CaseStudy = {
       size: "phone",
       notes: [
         {
-          title: "Transparent offer breakdown",
-          body: "We added a detailed “What Went Into Your Offer” section, providing users transparency into our pricing and fee structure to increase confidence in the Opendoor offer.",
+          title: "Final offer breakdown",
+          body: "The final offer lists each charge and adjustment with a plain explanation: the Simple Sale charge and condition adjustments, then the proceeds from Opendoor. Costs outside of Opendoor, such as title and escrow, are shown separately as fees paid to third parties.",
         },
       ],
     },
@@ -236,17 +239,16 @@ export const opendoor: CaseStudy = {
         { src: od("novo-6.jpg"), alt: "Novo cards", width: 2000, height: 1125 },
       ],
       note: {
-        title: "Tokenized art direction",
-        body: "The new visual style (named Novo) was tokenized, allowing for easy updates across the design system, making it efficient for teams to maintain consistency in future iterations.",
+        title: "Extending the redesign across the design system",
+        body: "The new visual style, Novo, was built on design tokens, so shared styles such as colour, type, and cards could be maintained and updated across the design system rather than screen by screen.",
       },
     },
     {
-      // Rewritten from the live page's "Learnings and outcomes" (Micah,
-      // 2026-11-08: keep the substance, simplify): the numbers lead, each
-      // learning is a short claim and one sentence, and the three impact
-      // figures are no longer buried mid-sentence. The figures are the
-      // live page's: a 22% rise in initial video call scheduling, a 12%
-      // lift in final offers received, closings 3 days faster on average.
+      // The three figures are the live page's: a 22% rise in sellers
+      // scheduling the first video call, a 12% lift in final offers
+      // received, closings 3 days faster on average. Keep their wording;
+      // no measurement context is documented in this repo, so none is
+      // given (questions for Micah are in the 2026-11-10 handoff).
       kind: "results",
       title: "Outcomes",
       stats: [
@@ -257,20 +259,8 @@ export const opendoor: CaseStudy = {
       summary:
         "Video call scheduling rose *22%*, final offers received rose *12%*, and sellers closed *3 days sooner* on average.",
       learningsTitle: "What I learned",
-      learnings: [
-        {
-          title: "Clarity builds confidence.",
-          body: "Consistent forms and tested content gave sellers one clear next step at every stage.",
-        },
-        {
-          title: "Flexibility is empathy.",
-          body: "Letting sellers choose how and when to sell cut frustration and made the journey feel supported.",
-        },
-        {
-          title: "Transparency earns trust.",
-          body: "Showing pricing and comparisons up front made the offer easier to understand, and to believe.",
-        },
-      ],
+      reflection:
+        "The page needed to do two jobs: make the offer recognizable as Opendoor and make the process easy to understand. Layout, content, and navigation had to work together, with enough information to explain the offer without overwhelming the next step.",
     },
     // The final-offer video closed the live page; off for now (Micah,
     // 2026-11-08). To bring it back:

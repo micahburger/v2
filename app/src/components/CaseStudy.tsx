@@ -223,15 +223,16 @@ type ResultsBlock = Extract<Block, { kind: "results" }>;
  * The close, three ways (lab "Outcomes", Micah 2026-11-08). The live page
  * ran three learnings as 22px paragraphs, then the numbers buried inside
  * two 36px sentences: five blocks of large type, nothing to scan. Each take
- * puts the numbers first and shrinks each learning to a claim and a line.
+ * puts the numbers first. What was learned is one short reflection
+ * paragraph (2026-11-10; it was three titled maxims before).
  *
  *  - STATS: the three numbers huge in a row, one short label under each,
- *    then the learnings in three quiet columns on the same grid lines.
+ *    then the reflection.
  *  - LEDGER: a two-column table, the ds "table index" register. Section
  *    names on the left in four columns, rows with hairlines on the right:
- *    number then label, learning title then line.
+ *    number then label, then the reflection as one ruled row of prose.
  *  - STATEMENT: the numbers as one large sentence with the figures in the
- *    accent, then the learnings as three ruled columns underneath.
+ *    accent, then the reflection.
  */
 function Results({ block, take }: { block: ResultsBlock; take: LabState["outcomes"] }) {
   if (take === "ledger") {
@@ -248,32 +249,23 @@ function Results({ block, take }: { block: ResultsBlock; take: LabState["outcome
             ))}
           </ul>
         </div>
+        {/* The reflection is one paragraph (2026-11-10), so it takes the
+            rows' column and hairlines as a single row of prose. */}
         <div className="cs-ledger__group grid">
           <h3 className="cs-ledger__title">{block.learningsTitle}</h3>
-          <ul className="cs-ledger__rows">
-            {block.learnings.map((note) => (
-              <li key={note.title} className="cs-ledger__row">
-                <span className="cs-ledger__claim">{note.title}</span>
-                <span>{note.body}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="cs-ledger__rows">
+            <p className="cs-ledger__prose">{block.reflection}</p>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Stats and Statement: the label, then the reflection at lede size.
   const learnings = (
     <div className="cs-learnings">
       <h3 className="cs-label">{block.learningsTitle}</h3>
-      <ul className="cs-learnings__list grid">
-        {block.learnings.map((note) => (
-          <li key={note.title}>
-            <p className="cs-learnings__claim">{note.title}</p>
-            <p>{note.body}</p>
-          </li>
-        ))}
-      </ul>
+      <p className="cs-lede">{block.reflection}</p>
     </div>
   );
 
