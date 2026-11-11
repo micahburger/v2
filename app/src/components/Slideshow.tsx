@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import type { Img } from "../data/caseStudies";
 import { useOnScreen } from "../hooks";
 import { relativeOffset, useCarousel } from "../carousel";
+import CarouselDots from "./CarouselDots";
 
 /**
  * A case study's image set: the homepage's grab-and-swipe carousel
@@ -69,22 +70,7 @@ export default function Slideshow({
           </div>
         </div>
       </div>
-      <div className="carousel__dots" role="tablist" aria-label={`${label} images`}>
-        {images.map((image, i) => (
-          <button
-            key={image.src}
-            type="button"
-            role="tab"
-            aria-selected={i === shown}
-            aria-label={image.alt}
-            className={`carousel__dot ${i === shown ? "is-active" : ""}`}
-            onClick={() => {
-              if (i === shown) return;
-              c.goTo(real === slides.length ? i : c.activeIndex + 1);
-            }}
-          />
-        ))}
-      </div>
+      <CarouselDots labels={images.map((image) => image.alt)} label={label} carousel={c} slideCount={slides.length} />
     </div>
   );
 }

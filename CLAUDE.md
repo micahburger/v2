@@ -157,7 +157,18 @@ port of 2026folio's `useMediaGallery`): autoplay every 4.2s while the row
 is on screen, slow 700ms drift, quick 400ms settle after a throw. A press
 that turns into a drag swallows the click, so the media can still link to
 the project. A two-image set is doubled so the loop has a slide past both
-edges.
+edges. There is no pause on hover; autoplay stops only in hand, off
+screen (under half visible) or with reduced motion.
+
+Dots are one component for every carousel (`CarouselDots.tsx`). The
+active dot is a 24px pill that fills left to right over the 4.2s dwell
+(Micah, 2026-11-11), so a big still slide reads as "this moves, and soon";
+he'd taken the case study slideshows for paused under his pointer. Picked
+over peeking the next slide and a quicker first advance. The fill's
+duration comes from `CAROUSEL_AUTOPLAY_MS` (no CSS mirror); it restarts
+on the same changes that re-arm the timer, via `playing` from
+`useCarousel`. A hidden Browser pane renders no frames, so nothing there
+counts as on screen and no carousel autoplays: test with the pane showing.
 
 The first round of featured carousels (Wash, Strips, Stack) was too much
 and is parked in `app/_archive/`, outside the build.

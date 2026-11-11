@@ -245,11 +245,17 @@ export function useCarousel({ count, active }: { count: number; active: boolean 
   // Restarts its dwell on every change (whoever caused it), so a swipe is
   // never immediately followed by an auto-advance, and holds off entirely
   // while the track is in hand or the row is off screen.
+  //
+  // `playing` is the same condition, handed out so the active dot can show
+  // the dwell counting down (CarouselDots). The dot restarts its fill on
+  // exactly the changes that re-arm this timer (activeIndex, playing), so
+  // the two stay in step without the dot reading the timer itself.
+  const playing = active && count > 1 && !isDragging && !prefersReducedMotion();
   useEffect(() => {
-    if (!active || count <= 1 || isDragging || prefersReducedMotion()) return;
+    if (!playing) return;
     const id = setTimeout(() => step(1, "auto"), CAROUSEL_AUTOPLAY_MS);
     return () => clearTimeout(id);
-  }, [active, count, isDragging, step, activeIndex]);
+  }, [playing, step, activeIndex]);
 
   useEffect(() => clearCommit, [clearCommit]);
 
@@ -259,6 +265,7 @@ export function useCarousel({ count, active }: { count: number; active: boolean 
     index,
     activeIndex,
     phase,
+    playing,
     /** px while in hand, otherwise a whole-width step the settle animates to. */
     offset: isDragging ? `${dragX}px` : settle ? `${settle.dir * -100}%` : "0px",
     source: settle?.source ?? "auto",

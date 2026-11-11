@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { featured, type Featured, type Media, type Slide } from "../data/site";
 import { useOnScreen } from "../hooks";
 import { relativeOffset, useCarousel } from "../carousel";
+import CarouselDots from "./CarouselDots";
 
 const NEW_TAB = { target: "_blank", rel: "noreferrer" } as const;
 
@@ -218,23 +219,7 @@ function Carousel({
         </div>
         {corner && CORNER}
       </a>
-      <div className="carousel__dots" role="tablist" aria-label={`${label} images`}>
-        {images.map((image, i) => (
-          <button
-            key={image.src}
-            type="button"
-            role="tab"
-            aria-selected={i === shown}
-            aria-label={image.alt}
-            className={`carousel__dot ${i === shown ? "is-active" : ""}`}
-            onClick={() => {
-              // In a doubled pair, go to whichever copy of slide i is nearer.
-              if (i === shown) return;
-              c.goTo(real === slides.length ? i : c.activeIndex + 1);
-            }}
-          />
-        ))}
-      </div>
+      <CarouselDots labels={images.map((image) => image.alt)} label={label} carousel={c} slideCount={slides.length} />
     </div>
   );
 }

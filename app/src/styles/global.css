@@ -1098,23 +1098,65 @@ button {
   margin-top: 12px;
 }
 
+/* The active dot is a 24px pill (a 36px button, the same 6px inset) whose
+   fill counts down the autoplay dwell (CarouselDots.tsx says why). The
+   pill's ground is the resting --dot, so it reads as a track; the fill is
+   --dot-active, so it follows every palette and the chapter panels'
+   overrides. The button widens on the shared hover-grow curve: a width
+   change on a 20px button, the one layout animation on the page, kept
+   because an instant 16px jump made the row of dots twitch with every
+   slide. */
 .carousel__dot {
   position: relative;
   width: 20px;
   height: 20px;
+  transition: width var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+.carousel__dot.is-active {
+  width: 36px;
+}
+
+.carousel__dot::after,
+.carousel__fill {
+  position: absolute;
+  inset: 6px;
+  border-radius: 999px;
 }
 
 .carousel__dot::after {
   content: "";
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
   background: var(--dot);
   transition: background-color 0.25s ease;
 }
 
-.carousel__dot.is-active::after {
+/* Full unless it's counting: a still pill is the plain active state. The
+   count is a clip sweeping open left to right, linear because it's a
+   clock, not a move; clip-path rather than scaleX so the round ends keep
+   their shape the whole way. --carousel-dwell is set from
+   CAROUSEL_AUTOPLAY_MS on the dots row, so nothing here mirrors it. */
+.carousel__fill {
+  z-index: 1;
   background: var(--dot-active);
+}
+
+.carousel__fill.is-counting {
+  animation: carousel-dwell var(--carousel-dwell, 4200ms) linear both;
+}
+
+@keyframes carousel-dwell {
+  from {
+    clip-path: inset(0 100% 0 0 round 999px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 999px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel__dot {
+    transition: none;
+  }
 }
 
 @media (hover: hover) {
