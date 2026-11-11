@@ -318,7 +318,10 @@ export const rentspree: CaseStudy = {
       body: [
         "Applications carry most of RentSpree’s transactions and revenue, and most are filled out on a phone over several sittings. Applicants lost their place, found typos only after their credit and background reports came back, and couldn’t tell when the application had actually been sent.",
         "I restructured it into four predictable steps with an overview to return to, added a full review before anything goes to the credit bureau, and moved payment after that review, so paying no longer reads as finishing.",
-        "Version 3.0 is launching as an A/B test.",
+        // Not an A/B test: the whole of 3.0 ships at once. Just the year
+        // (Micah, 2026-11-11): the portfolio gives the high level, and
+        // timing and results are for the conversation.
+        "Version 3.0 launches in 2027.",
       ],
       color: "#FAF7F3",
       ink: "#141414",
@@ -383,11 +386,10 @@ export const rentspree: CaseStudy = {
 // template. The live page's copy, tightened into Micah's voice: its
 // duplicated desktop and mobile paragraphs are one now, and two things are
 // gone, a pasted citation ("micahburger.com+1arcd.ku.edu+1") and a closing
-// line about industry research that wasn't about this project. The live
-// page claims an A/B test lift but gives no numbers, so there's no results
-// block yet: the outcome is stated in words, in the facts and the notes.
-// Add the figures as a `results` block (and the Outcomes lab comes with it)
-// once Micah has them.
+// line about industry research that wasn't about this project. The A/B
+// test's lift is stated in words, in the facts and the notes, with no
+// results block: the portfolio stays high level and the numbers are for
+// the interview (Micah, 2026-11-11).
 //
 // Images (public/img/lincoln), live page order:
 //   hero.jpg            HalfTn-1.png           (live site)
@@ -529,8 +531,8 @@ export const lincoln: CaseStudy = {
 };
 
 // Infinity (2026-11-11): micahburger.com/project/infinity on the Opendoor
-// template, the live copy tightened the same way as Lincoln's. The live
-// page has no outcome figures, so no results block yet.
+// template, the live copy tightened the same way as Lincoln's. No results
+// block, for the same reason as Lincoln's.
 //
 // Images (public/img/infinity), live page order:
 //   hero.jpg            Infinity-skinny2       (live site)

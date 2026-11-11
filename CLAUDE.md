@@ -202,9 +202,14 @@ once v2 replaces it.
   and `Img.still`, a first-frame JPEG that replaces an animated GIF under
   reduced motion (Infinity's four screen recordings). Only five of their
   images were in ds-assets; the rest were downloaded from the live site's
-  wp-content/uploads. Neither live page gives outcome numbers, so neither
-  has a results block yet (Lincoln states its A/B lift in words); add one
-  when Micah has the figures.
+  wp-content/uploads. Neither has a results block, on purpose (Lincoln
+  states its A/B lift in words).
+- **High level, no numbers needed** (Micah, 2026-11-11): the portfolio
+  gives the shape of each project; dates, metrics and results are for the
+  interview. Don't ask for outcome figures or add results blocks to fill a
+  gap. Release timing is a year at most: RentSpree's 3.0 "launches in
+  2027" (it's a full rollout, not an A/B test), here and on
+  applicants.micahburger.com.
 - RentSpree (`/project/rentspree`, 2026-11-10): the 2026 folio's four
   RentSpree chapters (no Menu, no overview, no resume) as `chapter`
   blocks, each a rounded panel in the project's colour on the Night page.
