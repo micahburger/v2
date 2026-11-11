@@ -349,8 +349,12 @@ function Picture({ image, className, eager }: { image: Img; className?: string; 
       alt={image.alt}
       width={image.width}
       height={image.height}
+      // Explicit, so the box holds its shape even if the load fails (a
+      // broken image drops the ratio the attributes would give it).
+      style={{ aspectRatio: `${image.width} / ${image.height}` }}
       loading={eager ? "eager" : "lazy"}
       decoding="async"
+      onError={retryOnce}
     />
   );
   const img = image.still ? (
@@ -366,4 +370,20 @@ function Picture({ image, className, eager }: { image: Img; className?: string; 
   ) : (
     <div className={`cs-frame ${className ?? ""}`}>{img}</div>
   );
+}
+
+/** One more try at an image that failed, with a query so neither the
+ *  browser nor the host's cache hands back the same failure. A one-off
+ *  miss (the live Infinity page lost a phone on 2026-11-11, probably mid
+ *  redeploy) then fixes itself; a file that's really missing fails twice
+ *  and stops, rather than looping. In a <picture> whose <source> matched
+ *  (the reduced-motion still) the source wins and this changes nothing;
+ *  that case is a small JPEG, so it's left alone. */
+function retryOnce(e: React.SyntheticEvent<HTMLImageElement>) {
+  const img = e.currentTarget;
+  if (img.dataset.retried) return;
+  img.dataset.retried = "1";
+  const url = new URL(img.currentSrc || img.src, window.location.href);
+  url.searchParams.set("retry", "1");
+  img.src = url.toString();
 }

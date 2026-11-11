@@ -1586,6 +1586,17 @@ button {
   display: contents;
 }
 
+/* An image that fails to load keeps its box (Picture sets aspect-ratio
+   from width and height, which a broken image otherwise drops) and doesn't
+   print its alt text across the layout: on the live Infinity page a failed
+   load collapsed the phone to a line of alt text and left the notes
+   floating. Screen readers still read the alt; this only hides the
+   fallback text the browser paints. */
+.cs-frame img,
+.cs-cutout img {
+  color: transparent;
+}
+
 /* The slideshow's frame holds an absolutely placed stage, so it takes its
    height from aspect-ratio (set inline) rather than from an image. */
 .cs-frame--stage {
@@ -1672,23 +1683,26 @@ figure {
 /* ---- pair (Lincoln, Infinity: 2026-11-11) ----
    Two pictures side by side under one caption. Phones take the split's
    three columns each, so a recorded screen is the same size as a phone
-   beside notes, centred with two columns of air between and either side
-   (3-5 and 8-10). Wide pairs take half the grid each. The caption starts
-   at the first picture's edge, so it hangs under the pair, not the page. */
+   beside notes. They sit next to each other, a gutter apart, in the
+   middle six columns (4-6 and 7-9): first try was 3-5 and 8-10, and the
+   two columns of air between them read as two separate things with a
+   hole in the middle (Micah). Wide pairs take half the grid each. The
+   caption starts at the first picture's edge, so it hangs under the
+   pair, not the page. */
 .cs-pair {
   row-gap: 0;
 }
 
 .cs-pair--phone > .cs-pair__item:nth-of-type(1) {
-  grid-column: 3 / span 3;
+  grid-column: 4 / span 3;
 }
 
 .cs-pair--phone > .cs-pair__item:nth-of-type(2) {
-  grid-column: 8 / span 3;
+  grid-column: 7 / span 3;
 }
 
 .cs-pair--phone > .cs-pair__caption {
-  grid-column: 3 / span 8;
+  grid-column: 4 / span 6;
 }
 
 .cs-pair--half > .cs-pair__item:nth-of-type(1) {

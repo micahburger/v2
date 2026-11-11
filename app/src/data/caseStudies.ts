@@ -618,9 +618,13 @@ export const infinity: CaseStudy = {
     {
       kind: "heading",
       title: "One experience, on the wall and the phone",
-      lede: "To simplify flows and onboarding, we brought the wall controller and the iOS app under one design language for interactions, visuals and navigation, across every journey.",
     },
     {
+      // The section's own paragraph is the first note rather than a lede
+      // (Micah, 2026-11-11: the spacing looked off). With one short note
+      // beside a phone, the notes column was a few lines floating in the
+      // middle of an empty column; two notes fill it and sit level with the
+      // picture, and the heading leads straight into them.
       kind: "split",
       image: {
         src: inf("mode-menu.jpg"),
@@ -628,9 +632,13 @@ export const infinity: CaseStudy = {
         width: 854,
         height: 1080,
       },
-      imageSide: "right",
+      imageSide: "left",
       size: "phone",
       notes: [
+        {
+          title: "One design language",
+          body: "To simplify flows and onboarding, we brought the wall controller and the iOS app under one design language for interactions, visuals and navigation, across every journey.",
+        },
         {
           title: "Menus as cards",
           body: "To keep homeowners on the main controller screen, menus are cards that slide in over it with a subtle micro-interaction.",
