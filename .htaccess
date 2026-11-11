@@ -1,12 +1,54 @@
-# SPA fallback for client-side routing (PortfolioShell.tsx uses
-# history.pushState + window.location.pathname, not a file-based router).
-# Hostinger serves this repo's root over Apache/LiteSpeed, which has no
-# knowledge of app routes like /messaging or /applicant-experience — without
-# this, a direct load or refresh on one of those returns a real 404 instead
-# of the SPA shell.
+# Hostinger serves this repo's root as the site, so everything committed
+# here is public unless a rule below says otherwise. Two jobs: keep the
+# repo's non-site files out of reach, and set the browser security headers
+# a static site should have. Then the SPA fallback.
+#
+# The same hardening block is in applicants-site and ds-site's .htaccess;
+# change one, change all three (micahburger.com sites, 2026-11-11).
+
+# ---- security headers ----
+# No login, forms or database here, so these are about the browser, not the
+# server: HTTPS only, no guessing a file's type, framing only by Micah's own
+# sites, not leaking full URLs to other sites, and no camera, mic or
+# location for any script.
+#
+# Framing is open to every micahburger.com site, not just this one: the
+# prototype viewer (prototypes.micahburger.com) shows these pages in
+# iframes, and localhost is allowed for running that viewer in dev. That's
+# why it's CSP frame-ancestors and not X-Frame-Options, which can only say
+# "this site" or "nobody". upgrade-insecure-requests is repeated because
+# setting this header replaces the one Hostinger sends.
+#
+# HSTS is a year, without includeSubDomains: this is one subdomain and
+# shouldn't speak for others.
+<IfModule mod_headers.c>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Content-Security-Policy "upgrade-insecure-requests; frame-ancestors 'self' https://micahburger.com https://*.micahburger.com http://localhost:*"
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # ---- not part of the site ----
+  # The source (app/), the build script, the project notes and any
+  # Markdown, scripts, configs, source maps or dotfiles: refused before the
+  # "real files" rule below can serve them. Forbidden rather than 404 to
+  # match what the host already does for .git. .well-known stays open for
+  # the host's SSL certificate checks.
+  RewriteRule ^app(/|$) - [F,L]
+  RewriteRule \.(md|sh|ts|tsx|map|lock)$ - [F,L,NC]
+  RewriteRule (^|/)(package(-lock)?\.json|tsconfig[^/]*\.json|vite\.config\.[a-z]+)$ - [F,L,NC]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule (^|/)\. - [F,L]
+
+  # ---- SPA fallback ----
+  # /project/<slug> and any other app path has no file behind it; without
+  # this a direct load or refresh on one returns a real 404 instead of the
+  # page.
 
   # Real files and directories (JS, CSS, images, fonts, etc.) resolve as-is.
   RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -14,7 +56,7 @@
   RewriteRule ^ - [L]
 
   # Everything else falls back to the SPA shell so the client router can
-  # take over — an internal rewrite, not a redirect, so the URL bar (and
+  # take over: an internal rewrite, not a redirect, so the URL bar (and
   # therefore window.location.pathname) is untouched.
   RewriteRule ^ index.html [L]
 </IfModule>
