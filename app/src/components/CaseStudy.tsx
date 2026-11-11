@@ -32,26 +32,41 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
     e.currentTarget.href = `/${window.location.search}`;
   };
 
+  // The Outcomes lab only has something to switch where there's a results
+  // block (Opendoor); elsewhere the pill would open onto nothing.
+  const hasLab = study.blocks.some((block) => block.kind === "results");
+
   return (
-    <>
+    <div className="cs-page">
+      {/* A pill, not the name (Micah, 2026-11-08): it says what it does.
+          Stands in until a proper case-study nav lets you jump between
+          projects.
+
+          Locked on scroll (Micah, 2026-11-10), the same on every case study,
+          applicants.micahburger.com included: it rests above the title, then
+          sticks 24px from the top as the page goes up under it. It's its own
+          sticky bar, outside the header, because sticky only holds inside
+          its parent; inside the header it would let go as soon as the title
+          scrolled away. .cs-page holds the footer too, so it stays put all
+          the way to the bottom. */}
+      <nav className="cs-bar wrap" aria-label="Site">
+        <a className="cs-home" href="/" onClick={goHome} onAuxClick={goHome}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M19 12H5M11.5 5.5 5 12l6.5 6.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Back to home
+        </a>
+      </nav>
+
       <main className="cs">
         <header className="cs-hero wrap">
-          {/* A pill, not the name (Micah, 2026-11-08): it says what it does.
-              Stands in until a proper case-study nav lets you jump between
-              projects. */}
-          <a className="cs-home" href="/" onClick={goHome} onAuxClick={goHome}>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M19 12H5M11.5 5.5 5 12l6.5 6.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Back to home
-          </a>
           <h1 className="cs-hero__title" tabIndex={-1}>
             {study.title}
           </h1>
@@ -75,8 +90,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
       <SiteFooter />
       <BackToTop />
-      <LabPanel keys={CASE_LAB} lab={lab} setLab={setLab} />
-    </>
+      {hasLab && <LabPanel keys={CASE_LAB} lab={lab} setLab={setLab} />}
+    </div>
   );
 }
 
@@ -147,6 +162,41 @@ function BlockView({ block, outcomes }: { block: Block; outcomes: LabState["outc
 
     case "results":
       return <Results block={block} take={outcomes} />;
+
+    case "chapter":
+      return (
+        <div
+          className="cs-chapter grid"
+          // The panel's own ground and ink, which its dots and CTA are
+          // drawn from too (see .cs-chapter in global.css).
+          style={{ "--chapter-bg": block.color, "--chapter-ink": block.ink } as React.CSSProperties}
+        >
+          <div className="cs-chapter__text">
+            <h2 className="cs-chapter__title">{block.title}</h2>
+            {block.body.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+            {block.cta && (
+              <a className="cs-cta" href={block.cta.href}>
+                {block.cta.label}
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M5 12h14M12.5 5.5 19 12l-6.5 6.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            )}
+          </div>
+          <div className="cs-chapter__media">
+            <Slideshow images={block.images} label={block.title} bare />
+          </div>
+        </div>
+      );
 
     case "video":
       return (

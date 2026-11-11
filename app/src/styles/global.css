@@ -1255,8 +1255,33 @@ button {
    didn't. Screens exported on a dark ground get the homepage's rounded
    media box; transparent phone cut-outs sit straight on the page. */
 
-.cs-hero {
-  padding-top: 180px;
+/* The bar that holds Back to home, locked on scroll (CaseStudy.tsx says why
+   it's outside the header). It rests where the hero's top padding used to
+   put the pill, 180px down, and sticks at --bar-lock from the top once the
+   page has scrolled that far. The lock is a margin, not padding: sticky
+   pins the element's border box, and margin sits outside it, so the bar
+   travels up through those 180px and then holds.
+
+   It spans the content width but only the pill takes the pointer, so the
+   empty run of bar beside it never blocks a carousel or link underneath.
+   z-index clears the carousels and the before/after handle as they scroll
+   up under it. Mirrored on applicants.micahburger.com (css/styles.css,
+   .cs-bar), so the pill sits in the same place on every case study. */
+.cs-page {
+  --bar-rest: 180px;
+  --bar-lock: 24px;
+}
+
+.cs-bar {
+  position: sticky;
+  top: var(--bar-lock);
+  z-index: 20;
+  margin-top: var(--bar-rest);
+  pointer-events: none;
+}
+
+.cs-bar > * {
+  pointer-events: auto;
 }
 
 /* Back to home: a small rounded pill in the --chip fill the round buttons
@@ -1267,7 +1292,6 @@ button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 32px;
   padding: 10px 18px 10px 14px;
   border-radius: 999px;
   background: var(--chip);
@@ -1298,6 +1322,12 @@ button {
   border-radius: 999px;
 }
 
+/* The gap the pill's own bottom margin used to make, before it moved out
+   into .cs-bar. */
+.cs-hero {
+  padding-top: 32px;
+}
+
 /* The homepage statement's size and leading, at most ten columns wide so
    the title breaks into two even lines like the live one. */
 .cs-hero__title {
@@ -1318,6 +1348,97 @@ button {
 
 .cs-block--intro {
   padding-top: 72px;
+}
+
+/* ---- chapter (a RentSpree project; data/caseStudies.ts says why panels) ----
+   The folio's chapter, on a rounded panel: copy in five columns, the
+   screens in the other seven, centred on each other. Consecutive chapters
+   sit a gutter apart, close enough to read as one set of cards, the way
+   the folio's overview lays them out. The panel's radius is the media
+   box's 28px, so the page has one corner.
+
+   Dots and the CTA are drawn from the panel's own ink, not the page's:
+   Night's light dots would vanish on the cream and lilac panels. */
+.cs-block--chapter {
+  padding-top: 72px;
+}
+
+.cs-block--chapter + .cs-block--chapter {
+  padding-top: var(--gutter);
+}
+
+.cs-chapter {
+  --dot: color-mix(in srgb, var(--chapter-ink) 24%, transparent);
+  --dot-active: var(--chapter-ink);
+  align-items: center;
+  padding: 72px 64px;
+  border-radius: 28px;
+  background: var(--chapter-bg);
+  color: var(--chapter-ink);
+}
+
+.cs-chapter__text {
+  grid-column: 1 / span 5;
+}
+
+.cs-chapter__media {
+  grid-column: 6 / -1;
+  min-width: 0;
+}
+
+.cs-chapter__title {
+  margin-bottom: 28px;
+  font-size: clamp(34px, 3.6vw, 52px);
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.cs-chapter__text p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.cs-chapter__text p + p {
+  margin-top: 16px;
+}
+
+/* Onward to the long write-up: the Back to home pill's shape, size and
+   motion, filled with the panel's ink and lettered in its ground (the
+   folio's Menu pill did the same), so it's the one solid thing on the
+   panel. No outline (Micah). The arrow leads the way it's going. */
+.cs-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding: 10px 14px 10px 18px;
+  border-radius: 999px;
+  background: var(--chapter-ink);
+  color: var(--chapter-bg);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+
+.cs-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.32s var(--ease-enter);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cs-cta:hover {
+    scale: var(--hover-grow-scale-button);
+  }
+  .cs-cta:hover svg {
+    transform: translateX(3px);
+  }
+}
+
+.cs-cta:focus-visible {
+  border-radius: 999px;
 }
 
 /* A section title opens a new part of the story, so more room above it
@@ -1423,6 +1544,19 @@ button {
    height from aspect-ratio (set inline) rather than from an image. */
 .cs-frame--stage {
   width: 100%;
+}
+
+/* Screens that bring their own ground (Slideshow's `bare`): no box behind
+   them and no corner to clip them, and each scaled to fit rather than
+   cropped to fill. Still overflow: hidden, so the slides waiting either
+   side of the box stay out of sight. */
+.cs-frame--bare {
+  border-radius: 0;
+  background: none;
+}
+
+.cs-frame--bare .carousel__slide {
+  object-fit: contain;
 }
 
 .cs-caption {
@@ -1743,11 +1877,35 @@ p.cs-body {
 }
 
 @media (max-width: 900px) {
-  .cs-hero {
-    padding-top: 112px;
+  .cs-page {
+    --bar-rest: 112px;
+    --bar-lock: 16px;
   }
-  .cs-home {
-    margin-bottom: 24px;
+  .cs-hero {
+    padding-top: 24px;
+  }
+  /* One column, copy first then the screens, as the folio's chapters
+     read on a phone. The panel keeps its colour edge to edge of the
+     content; less padding so the screens get the width. */
+  /* Two classes, so it beats the phone's .cs-block padding further down. */
+  .cs-hero + .cs-block--chapter {
+    padding-top: 40px;
+  }
+  .cs-chapter {
+    row-gap: 32px;
+    padding: 40px 20px 24px;
+    border-radius: 22px;
+  }
+  .cs-chapter__text,
+  .cs-chapter__media {
+    grid-column: 1 / -1;
+  }
+  .cs-chapter__text {
+    padding-inline: 4px;
+  }
+  .cs-chapter__title {
+    margin-bottom: 20px;
+    font-size: 30px;
   }
   .cs-facts {
     padding: 24px;

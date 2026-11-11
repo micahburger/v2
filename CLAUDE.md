@@ -192,6 +192,22 @@ once v2 replaces it.
   live page's structure and copy on v2's grid, type and palettes, to be
   shifted toward the v2 look next. Lincoln, Infinity and the archive
   projects still link to the live site.
+- RentSpree (`/project/rentspree`, 2026-11-10): the 2026 folio's four
+  RentSpree chapters (no Menu, no overview, no resume) as `chapter`
+  blocks, each a rounded panel in the project's colour on the Night page.
+  Panels rather than full-bleed grounds because stacked down one page the
+  folio's light and dark chapters would break the lighting-mode rule.
+  Screens copied from the folio into `public/img/rentspree`. The
+  applicant chapter's CTA leads to applicants.micahburger.com, which stays
+  its own static site (`../applicants-site`). The Outcomes lab pill only
+  shows on studies with a results block.
+- Back to home is **locked on scroll** on every case study (Micah,
+  2026-11-10): `.cs-bar` is a sticky bar outside the header (sticky only
+  holds inside its parent), resting 180px down and holding 24px from the
+  top (112 / 16 on phones). applicants.micahburger.com mirrors it, and its
+  title, number for number in `css/styles.css` (`.cs-bar`, `.cs-hero`);
+  change one, change both. Its pill links to https://v2.micahburger.com/,
+  to repoint when v2 becomes micahburger.com.
 
 ## Placeholders still in
 

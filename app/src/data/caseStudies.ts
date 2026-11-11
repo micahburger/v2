@@ -74,7 +74,22 @@ export type Block =
       learningsTitle: string;
       learnings: Note[];
     }
-  | { kind: "video"; src: string; poster: string; width: number; height: number; label: string };
+  | { kind: "video"; src: string; poster: string; width: number; height: number; label: string }
+  /** One project from a body of work, as the 2026 folio sets it: a title
+   *  and a few paragraphs beside a grab-and-swipe set of screens, all on a
+   *  rounded panel in the project's own colour (`color`, text in `ink`).
+   *  The screens are exported with their framing and ground composed in,
+   *  so they sit straight on the panel, scaled to fit, never cropped.
+   *  `cta` links on to a longer write-up of the same project. */
+  | {
+      kind: "chapter";
+      title: string;
+      body: string[];
+      color: string;
+      ink: string;
+      images: Img[];
+      cta?: { label: string; href: string };
+    };
 
 export type CaseStudy = {
   slug: string;
@@ -264,7 +279,96 @@ export const opendoor: CaseStudy = {
   ],
 };
 
-export const caseStudies: CaseStudy[] = [opendoor];
+// RentSpree (2026-11-10): the 2026 folio's four RentSpree chapters on one
+// page, without the folio's Menu and overview and without its resume. The
+// folio's deck sets each chapter on its own full screen in its own colour;
+// stacked down one scrolling page those grounds would swing from light to
+// dark and back, which breaks the one-lighting-mode rule. So each chapter
+// is a rounded panel on the Night page instead, like the folio overview's
+// cards opened up: the page stays dark, each project keeps its colour.
+//
+// Copy and screens are the folio's (2026folio-site/app/src/data/projects.ts
+// and its assets/, copied to public/img/rentspree). Every screen is exported
+// onto the same 786px canvas at 2x with its ground composed in; the
+// Assistant's two taller ones are scaled to fit, not cropped.
+//
+// The applicant chapter links on to the long case study, which stays its
+// own static site at applicants.micahburger.com.
+const rs = (file: string) => `/img/rentspree/${file}`;
+const screen = (file: string, alt: string, height = 1450): Img => ({ src: rs(file), alt, width: 1572, height });
+
+export const rentspree: CaseStudy = {
+  slug: "rentspree",
+  name: "RentSpree",
+  title: "Recent product work at RentSpree",
+  blocks: [
+    {
+      kind: "chapter",
+      title: "Applicant experience",
+      body: [
+        "Applying for a rental is long, sensitive, mostly completed on a phone, and ends with a payment. The existing experience felt like one continuous wall of questions with little context about what was left or why information was being requested.",
+        "I restructured the application into clear chapters that follow the applicant’s mental model, created natural save and resume points, and rewrote the experience to explain sensitive asks as they happen. The result is a flow designed around confidence and momentum instead of simply getting applicants through more screens.",
+      ],
+      color: "#FAF7F3",
+      ink: "#141414",
+      images: [
+        screen("applicant-list.png", "Applications list on mobile"),
+        screen("applicant-checklist.png", "Application checklist"),
+        screen("applicant-pets.png", "Household details, pets"),
+      ],
+      cta: { label: "Read the full case study", href: "https://applicants.micahburger.com" },
+    },
+    {
+      kind: "chapter",
+      title: "Requesting an application",
+      body: [
+        "Agents often send the same screening package again and again, but the old flow made them repeat the same multi-step setup every time.",
+        "I collapsed the common path to a few taps: choose the property, invite renters, done. The package stays preselected across properties, while deeper controls sit one tap behind “What’s included” for agents who need to customize or stage reports over time.",
+        "Once requests are out, the applications view makes progress easy to scan, with clear states for each applicant and grouped households for co-applicants and guarantors.",
+      ],
+      color: "#F2E6FB",
+      ink: "#141414",
+      images: [
+        screen("request-invite.png", "Invite your first applicant"),
+        screen("request-included.png", "What’s included in the application package"),
+        screen("request-applications.png", "Applications in progress"),
+      ],
+    },
+    {
+      kind: "chapter",
+      title: "Messaging",
+      body: [
+        "RentSpree connects agents, landlords, and applicants, but the conversation lived in personal texts and email, disconnected from the property and application.",
+        "I designed the messaging platform around that missing context: a responsive three-column hub where every conversation is tied to a property, its participants, and application activity. The foundation was built to support future milestones, templates, notifications, and automated workflows without redesigning the core experience.",
+      ],
+      color: "#222222",
+      ink: "#F5F4F1",
+      images: [
+        screen("messaging-list.png", "Messages list"),
+        screen("messaging-conversation.png", "Conversation hub on desktop"),
+        screen("messaging-detail.png", "Messages on mobile"),
+      ],
+    },
+    {
+      kind: "chapter",
+      title: "Rental Assistant",
+      body: [
+        "Screening an applicant or listing a property meant learning RentSpree’s navigation before getting anything done. I designed a conversational layer that lets agents start those jobs directly.",
+        "The workflows themselves worked: 79% of people who started creating an ApplyLink finished one, while 514 reviewed conversations produced zero compliance failures. But adoption exposed a more interesting problem. After reviewing all 1,083 sessions, I found that more than half of users disappeared when we asked for a property address.",
+        "The next iteration is in the works.",
+      ],
+      color: "#FFFFFF",
+      ink: "#141414",
+      images: [
+        screen("assistant-welcome.png", "Assistant welcome", 1516),
+        screen("assistant-conversation.png", "Assistant conversation", 1524),
+        screen("assistant-address.png", "Assistant address search"),
+      ],
+    },
+  ],
+};
+
+export const caseStudies: CaseStudy[] = [opendoor, rentspree];
 
 /** The case study a path like /project/opendoor (or /project/opendoor/)
  *  asks for, or undefined for any other path. */
