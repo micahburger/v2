@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSectionStage } from "./hooks";
+import { useHomeScroll } from "./homeScroll";
 import { HOME_LAB, useLab } from "./lab";
 import { contact } from "./data/site";
 import LabPanel from "./components/LabPanel";
@@ -31,6 +32,8 @@ export default function App() {
   }, [lab.shift]);
 
   useSectionStage();
+  // Back to home from a case study lands where the visitor left off.
+  useHomeScroll();
 
   return (
     <>

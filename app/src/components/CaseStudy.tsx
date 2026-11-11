@@ -6,6 +6,7 @@ import BeforeAfter from "./BeforeAfter";
 import Slideshow from "./Slideshow";
 import SiteFooter from "./SiteFooter";
 import BackToTop from "./BackToTop";
+import { markReturnHome } from "../homeScroll";
 
 /**
  * A case study page, /project/<slug>: the title, then the study's blocks in
@@ -30,6 +31,10 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
   // query in an effect, after this render.
   const goHome = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.currentTarget.href = `/${window.location.search}`;
+    // A plain click comes back to where the homepage was left (homeScroll.ts);
+    // a middle or modified click opens home in a new tab, at the top.
+    const plain = e.type === "click" && e.button === 0 && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey;
+    if (plain) markReturnHome();
   };
 
   // The Outcomes lab only has something to switch where there's a results

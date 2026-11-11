@@ -217,6 +217,13 @@ once v2 replaces it.
   title, number for number in `css/styles.css` (`.cs-bar`, `.cs-hero`);
   change one, change both. Its pill links to https://v2.micahburger.com/,
   to repoint when v2 becomes micahburger.com.
+- Back to home **returns you to your place** on the homepage (Micah,
+  2026-11-10), via `homeScroll.ts`: the homepage saves its scroll to
+  sessionStorage as it's left, the pill (plain click only) leaves a
+  one-time note, and the homepage restores before first paint, retrying
+  after fonts and load until the visitor moves. Reloads and fresh visits
+  still open at the top. The applicants site's pill doesn't do this: it's
+  another origin and can't leave the note.
 
 ## Placeholders still in
 
