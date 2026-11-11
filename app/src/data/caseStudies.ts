@@ -295,9 +295,13 @@ export const rentspree: CaseStudy = {
     {
       kind: "chapter",
       title: "Applicant experience",
+      // Rewritten 2026-11-10 to set up the long read (its CTA below), which
+      // shares this title: the same three problems, then the three changes,
+      // in the order applicants.micahburger.com tells them.
       body: [
-        "Applying for a rental is long, sensitive, mostly completed on a phone, and ends with a payment. The existing experience felt like one continuous wall of questions with little context about what was left or why information was being requested.",
-        "I restructured the application into clear chapters that follow the applicant’s mental model, created natural save and resume points, and rewrote the experience to explain sensitive asks as they happen. The result is a flow designed around confidence and momentum instead of simply getting applicants through more screens.",
+        "Applications carry most of RentSpree’s transactions and revenue, and most are filled out on a phone over several sittings. Applicants lost their place, found typos only after their credit and background reports came back, and couldn’t tell when the application had actually been sent.",
+        "I restructured it into four predictable steps with an overview to return to, added a full review before anything goes to the credit bureau, and moved payment after that review, so paying no longer reads as finishing.",
+        "Version 3.0 is launching as an A/B test.",
       ],
       color: "#FAF7F3",
       ink: "#141414",

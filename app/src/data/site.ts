@@ -80,19 +80,22 @@ export const featured: Featured[] = [
     // Was the "2026 Mini portfolio" row, linking out to the folio's own
     // site. Since 2026-11-10 the same four chapters are a case study here
     // (/project/rentspree), so the row opens that in place and is named for
-    // it; the Rental application row below is the long read on the first.
+    // it; the Applicant experience row below is the long read on the first.
     id: "rentspree",
     name: "RentSpree",
-    rest: " My recent product work, in four chapters: the applicant experience, requesting an application, messaging and the AI rental assistant.",
+    rest: " Recent product work across the rental workflow, in four projects: the applicant experience, requesting an application, messaging and the Rental Assistant.",
     href: "/project/rentspree",
     media: slides("folio", 4, "RentSpree product work"),
   },
   {
-    id: "rental-application",
-    name: "Rental application",
-    rest: " A case study on redesigning the RentSpree rental application, from the first form field through payment and final submission.",
+    // Named for the page it opens (applicants.micahburger.com, retitled
+    // 2026-11-10) and for the RentSpree chapter that leads into it, so the
+    // one project has one name everywhere.
+    id: "applicant-experience",
+    name: "Applicant experience",
+    rest: " The full RentSpree case study on the rental application: four predictable steps, a review before reports are pulled, and payment moved after that review.",
     href: "https://applicants.micahburger.com",
-    media: slides("rental", 3, "Rental application case study"),
+    media: slides("rental", 3, "Applicant experience case study"),
   },
   {
     id: "lattice",

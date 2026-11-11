@@ -116,7 +116,8 @@ Small round buttons have **no outlines or strokes** (Micah): just a
 dark ones.
 
 Featured order: RentSpree (was the 2026 folio row; since 2026-11-10 it
-opens `/project/rentspree` here), Rental application, Lattice, Opendoor,
+opens `/project/rentspree` here), Applicant experience (was "Rental
+application"; renamed 2026-11-10 to match its page), Lattice, Opendoor,
 Lincoln, Infinity, then an Archive row grouping WWE, BBC, ABA and Rockwell
 (a placeholder until they get a proper home). Featured links to other
 sites open in a new tab, so the homepage stays open as the hub; case
