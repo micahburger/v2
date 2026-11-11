@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Applicant experience · Micah Lindenberger</title>
+<meta name="description" content="Making rental applications easier to finish: a case study on redesigning the RentSpree rental application, from progress and review through payment and submission." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23161516'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%239C8B70'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/styles.css?v=20261111b" />
+<link rel="stylesheet" href="css/product.css?v=20261110b" />
+</head>
+<body>
+
+  <!-- The case study header every micahburger.com case study shares (v2's
+       CaseStudy.tsx): Back to home, locked on scroll, over the title. The
+       sticky hairline bar that used to appear here after the hero is gone:
+       it fought the pill for the top of the screen, and the section pill
+       bottom-right already says which section you're in. -->
+  <nav class="cs-bar cs-wrap" aria-label="Site">
+    <a class="cs-home" href="/">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11.5 5.5 5 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to home
+    </a>
+  </nav>
+  <!-- Since 2026-11-11 this page lives inside v2 (app/public/project/
+       applicant-experience, served as plain files, not through React), so
+       home is "/" and the homepage's scroll memory is on the same origin.
+       This is CaseStudy.tsx's markReturnHome: a plain click leaves the
+       one-time note that sends the homepage back to where it was left
+       (homeScroll.ts, same key). A middle or modified click opens home in
+       a new tab, at the top. -->
+  <script>
+    document.querySelector(".cs-home").addEventListener("click", function (e) {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      try { sessionStorage.setItem("home-scroll-return", "1"); } catch (_) {}
+    });
+  </script>
+
+  <nav class="section-nav">
+    <button type="button" class="section-pill" aria-haspopup="true" aria-label="Jump to section">
+      <span class="pill-count">1 / 7</span>
+      <span class="pill-sep">&middot;</span>
+      <span class="pill-name">Overview</span>
+    </button>
+  </nav>
+
+  <!-- ═══ 1 · HERO ═══════════════════════════════════════════════════════ -->
+  <section id="hero">
+    <header class="cs-hero cs-wrap">
+      <h1 class="cs-hero__title">Making rental applications easier to finish</h1>
+    </header>
+  </section>
+
+  <!-- ═══ 2 · CONTEXT ════════════════════════════════════════════════════
+       Opendoor's opening (see .intro in styles.css): headline, the case for
+       the work, the brief as facts on a card, the collage beside them. -->
+  <section id="thesis">
+    <div class="wrap reveal">
+      <div class="intro">
+        <div class="intro-text">
+          <h2 class="intro-title">A clearer path from application to submission.</h2>
+          <p class="intro-lede">Rental applications ask people to gather personal information, pay for screening reports, and send sensitive details to an agent. RentSpree&rsquo;s previous experience made it difficult to track progress, catch mistakes, and know when the application was actually submitted.</p>
+          <p class="intro-lede">The redesign focused on making those moments clear: helping applicants resume their work, review their details before reports were generated, and understand the difference between paying and submitting. Improving completion also supports a core part of RentSpree&rsquo;s business.</p>
+          <dl class="intro-facts">
+            <div><dt>Role</dt><dd>I led design for the project and built a working prototype with RentSpree&rsquo;s design system and Claude Code so Product, Design, and Engineering could review the complete flow together.</dd></div>
+            <div><dt>Status</dt><dd>The 3.0 redesign launches in 2027. We&rsquo;ll track total completion, completion after payment, and refund requests.</dd></div>
+          </dl>
+        </div>
+        <div class="intro-media">
+          <div class="collage-figure">
+            <div class="thesis-collage">
+              <img class="collage-front" src="img/thesis/applications.png"
+                   alt="Applications list showing three rental applications: not started, in progress, and submitted." />
+              <img class="collage-mid" src="img/thesis/howareyou.png" alt="" aria-hidden="true" />
+              <img class="collage-back" src="img/thesis/start.png" alt="" aria-hidden="true" />
+            </div>
+            <button type="button" class="collage-replay">Replay animation</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 3 · DIAGNOSIS ══════════════════════════════════════════════════ -->
+  <section id="diagnosis">
+    <div class="wrap reveal">
+      <p class="label eyebrow">The problem</p>
+      <h2 class="display section-headline">Where applications break down.</h2>
+      <div class="diagnosis-list">
+        <div class="diagnosis-item">
+          <span class="num">01</span>
+          <div>
+            <h3>Progress was hard to follow.</h3>
+            <p>Applicants often stop to gather documents or confirm details, then come back later. The previous flow didn&rsquo;t show how much was left or where to resume.</p>
+          </div>
+        </div>
+        <div class="diagnosis-item">
+          <span class="num">02</span>
+          <div>
+            <h3>Errors surfaced after reports were generated.</h3>
+            <p>Some applicants found mistakes in details they had entered themselves only after their screening reports had been generated. The previous flow gave them no clear moment to check their own information first.</p>
+          </div>
+        </div>
+        <div class="diagnosis-item">
+          <span class="num">03</span>
+          <div>
+            <h3>Payment and submission were easy to confuse.</h3>
+            <p>Applicants couldn&rsquo;t tell when their application and reports had actually been sent to the agent. The experience could look finished while review and submission steps still remained.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 4 · PROGRESS ═══════════════════════════════════════════════════
+       Each arc: a head (title, one short lede), the live phone, and titled
+       notes beside it (see .arc-block in styles.css). --flip puts the phone
+       on the right so the page alternates. -->
+  <section id="arc-1">
+    <div class="wrap reveal">
+      <div class="arc-block">
+        <header class="arc-head">
+          <h2 class="arc-title">Designed to be picked back up.</h2>
+          <p class="arc-lede">The overview makes completed and remaining sections visible, gives returning applicants a clear place to resume, and lets them edit completed sections directly.</p>
+        </header>
+        <div class="arc-media">
+          <div class="phone-mount" data-screen="overview"
+               data-caption="Click in, then switch between a fresh application and a resumed one."
+               data-states='["Resumed","Not started"]'></div>
+        </div>
+        <ul class="arc-notes">
+          <li><h3>Done, editable, and next</h3><p>A completed section shows a check and an Edit action, so fixing an answer never means walking back through the flow. The current section keeps its number, so what comes next stays clear.</p></li>
+          <li><h3>Continue, not start over</h3><p>Start application becomes Continue when someone returns.</p></li>
+          <li><h3>Know who receives it</h3><p>The agent receiving the application is named at the top. Applicants are sharing sensitive financial information, so they should know who will receive it.</p></li>
+        </ul>
+      </div>
+      <div class="arc-block arc-block--flip">
+        <div class="arc-media">
+          <div class="phone-mount" data-screen="household"
+               data-caption="Tap Yes to see the page expand without adding a section."></div>
+        </div>
+        <ul class="arc-notes">
+          <li><h3>Keeping progress predictable</h3><p>Conditional questions expand inline, so the overview keeps its four main sections. Additional adults receive their own application, and the optional count of occupants under 18 is used only for household size.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 5 · REVIEW ═════════════════════════════════════════════════════ -->
+  <section id="arc-2">
+    <div class="wrap reveal">
+      <div class="arc-block">
+        <header class="arc-head">
+          <h2 class="arc-title">Catching errors before they cost money.</h2>
+          <p class="arc-lede">Support requests showed that some applicants discovered mistakes in their own information only after screening reports had been generated. Field validation could not catch every incorrect detail, so the redesigned flow adds a full review before payment starts the reports.</p>
+        </header>
+        <div class="arc-media">
+          <div class="phone-mount" data-screen="review"></div>
+        </div>
+        <ul class="arc-notes">
+          <li><h3>Small, specific mistakes</h3><p>A misspelled legal name, an outdated address, a transposed digit. The review helps applicants check what they entered; it can&rsquo;t resolve inaccuracies that originate in the reports themselves.</p></li>
+          <li><h3>Edit from the review</h3><p>Every section can be edited directly from the review page.</p></li>
+          <li><h3>Before the reports run</h3><p>Applicants can correct their details before payment triggers report generation.</p></li>
+          <li><h3>Name the recipient</h3><p>&ldquo;Check everything before it goes to Sarah. You can still edit.&rdquo; One line names who will receive the application and says there&rsquo;s still a chance to edit.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 6 · PAYMENT ════════════════════════════════════════════════════
+       #payment-flow-layout is what js/payment-flow.js looks for to find
+       this phone and hide its caption once it's been used. -->
+  <section id="arc-3">
+    <div class="wrap reveal">
+      <div class="arc-block arc-block--flip">
+        <header class="arc-head">
+          <h2 class="arc-title">Making payment make sense.</h2>
+          <p class="arc-lede">An earlier version moved payment to the beginning. Payment conversion increased, but the change did not solve abandonment, and refund requests rose. Applicants could still mistake payment for completion.</p>
+          <p class="arc-lede">The redesigned flow separates the commitments: review application details, pay to generate reports, review those reports, then submit to the agent.</p>
+        </header>
+        <div class="arc-media" id="payment-flow-layout">
+          <div class="phone-mount" data-screen="payment"></div>
+        </div>
+        <ul class="arc-notes">
+          <li><h3>Review, then pay</h3><p>Payment comes after the application review.</p></li>
+          <li><h3>Paying isn&rsquo;t submitting</h3><p>The page says paying starts the reports, and that applicants will review them before sending the application to the agent.</p></li>
+          <li><h3>A clear total</h3><p>The total shows what the fee includes, including the optional reusable package.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ 7 · EVALUATION ═══════════════════════════════════════════════
+       The hypothesis, then the three closing blocks side by side, then the
+       hand-holding-a-phone photo set large underneath, rising up into the
+       copy (see "Close" in styles.css). The hypothesis lived at the end of
+       the payment arc until 2026-11-11; it moved here so the page ends on
+       the bet and how it will be judged, in one piece. -->
+  <section id="close">
+    <div class="wrap reveal">
+      <div class="closing-composite reveal">
+        <div class="closing-copy">
+          <div class="pull-moment closing-hypothesis">
+            <p class="label pull-moment-eyebrow">Hypothesis</p>
+            <p class="pull-moment-statement">If applicants understand what each step commits them to, fewer will mistake paying for submitting, and more will finish the application.</p>
+          </div>
+
+          <div class="closing-blocks">
+            <div class="closing-block">
+              <h2 class="closing-title">How we&rsquo;ll evaluate the redesign</h2>
+              <p class="section-body">The 3.0 redesign launches in 2027. After launch, we&rsquo;ll track three measures. Total completion shows whether more applicants finish. Completion after payment shows whether people who pay go on to submit. Refund requests show whether applicants understood what they were paying for.</p>
+            </div>
+
+            <div class="closing-block">
+              <h2 class="closing-title">A working prototype for shared review</h2>
+              <p class="section-body">Using Claude Code and RentSpree&rsquo;s design system, I built the application as a working prototype instead of a series of static screens. Product, Design, and Engineering could move through the connected flow together and assess its content, navigation, and the transitions from review to payment to submission.</p>
+            </div>
+
+            <div class="closing-block">
+              <h2 class="closing-title">From applicant to tenant</h2>
+              <p class="section-body">A clearer application also gives agents and landlords better information to screen with. Beyond the application, there&rsquo;s a broader opportunity: if applicants choose to save a payment method, it could make deposits and rent easier after approval.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="closing-image" aria-hidden="true"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <a href="https://www.micahburger.com">Micahburger.com</a>
+  </footer>
+
+  <div class="v1-sheet" id="v1-sheet" inert>
+    <button type="button" class="v1-sheet-close" id="v1-sheet-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="v1-sheet-inner">
+      <h2 class="v1-sheet-title">Applicant experience<br>V1</h2>
+      <img class="v1-sheet-image" src="img/v1/old-designs.png" width="1514" height="1485"
+           alt="The original RentSpree application flow: a desktop identity-confirmation screen, then mobile screens for TransUnion screening questions, the reusable-application upsell, the report-pulling loader, and payment." />
+    </div>
+  </div>
+
+  <script src="js/screens.js?v=20261110a"></script>
+  <script src="js/phone.js?v=20261111a"></script>
+  <script src="js/payment-flow.js?v=20260821d"></script>
+  <script src="js/shell.js?v=20261110d"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+  <script src="js/app.js?v=20260821d"></script>
+</body>
+</html>

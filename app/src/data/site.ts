@@ -93,13 +93,17 @@ export const featured: Featured[] = [
     media: slides("folio", 4, "RentSpree product work"),
   },
   {
-    // Named for the page it opens (applicants.micahburger.com, retitled
-    // 2026-11-10) and for the RentSpree chapter that leads into it, so the
-    // one project has one name everywhere.
+    // Named for the page it opens (retitled 2026-11-10) and for the
+    // RentSpree chapter that leads into it, so the one project has one name
+    // everywhere. Since 2026-11-11 the page lives here, as static files in
+    // public/project/applicant-experience (it was its own site at
+    // applicants.micahburger.com, which now redirects), so it opens in
+    // place like the other case studies. The trailing slash matters: the
+    // page's css/, js/ and img/ links are relative to it.
     id: "applicant-experience",
     name: "Applicant experience",
     rest: " The full RentSpree case study on the rental application: four predictable steps, a review before reports are pulled, and payment moved after that review.",
-    href: "https://applicants.micahburger.com",
+    href: "/project/applicant-experience/",
     // Listed by hand rather than slides("rental", 3): the first slide got a
     // new file name with its new picture. Images are cached for a week
     // (max-age=604800), so a browser that had the old rental-1.jpg kept

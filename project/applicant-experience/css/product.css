@@ -1,0 +1,522 @@
+/* ============================================================================
+   PRODUCT — RentSpree screen components. Everything here is scoped under
+   .product and uses --rs-* tokens exclusively (see styles.css for the token
+   block and the register-split rationale). Nothing here references --page-*.
+
+   One exception, not a color: the progressive-disclosure transitions in the
+   household screen reuse --duration-*/--ease-* from the shared motion
+   vocabulary. Those aren't colors, and motion consistency was established as
+   a portfolio-level trait — call it out if that reuse is wrong.
+   ============================================================================ */
+
+/* Base .product layout/color lives in styles.css, next to the token block —
+   see the comment there for why it isn't declared here too. */
+
+/* Standalone presentation chrome — only for the test harness. Once a screen
+   is dropped into a device-frame (Prompt 1), the frame provides the radius
+   and shadow, so this modifier stays off in that context. */
+.product.standalone {
+  border-radius: 44px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.product * { box-sizing: border-box; }
+/* :where() keeps this reset's specificity at zero (just ".product") so every
+   .rs-* component class below — even a bare single class like .rs-btn-primary
+   — can still win the color/font it declares without needing to out-specify
+   "button"/"input" element selectors. Found the hard way: .rs-btn-primary's
+   color was silently losing to this reset because ".product button" (class +
+   element) is more specific than a single class. */
+.product :where(button) { font: inherit; color: inherit; cursor: pointer; }
+.product :where(input) { font: inherit; color: inherit; }
+
+/* ── Status bar ────────────────────────────────────────────────────────── */
+.rs-statusbar {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--rs-ink);
+  transition: background-color .15s ease, color .15s ease;
+}
+/* Sits directly above .rs-hero-header on applications-list — matching its
+   fill so the two read as one continuous moss panel instead of a bone strip
+   sitting on top of a green one. */
+.rs-statusbar--on-hero { background: var(--rs-moss); color: var(--rs-bone); }
+.rs-statusbar-icons { display: flex; align-items: center; gap: 5px; }
+.rs-statusbar-icons svg { display: block; }
+
+/* ── Scroll area / bottom bar ─────────────────────────────────────────── */
+/* overscroll-behavior: contain stops scroll from chaining to the page once
+   this hits its top/bottom — without it, scrolling past the end of a live
+   (activated) phone's content keeps going and scrolls the case-study page
+   underneath it, which reads as the phone "leaking" scroll instead of being
+   its own contained surface. */
+.rs-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+.rs-bottom-bar { flex-shrink: 0; padding: 12px 20px 24px; background: var(--rs-bone); }
+
+.rs-btn-primary {
+  display: block;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  background: var(--rs-ink);
+  color: var(--rs-paper);
+  font-family: var(--rs-font-body);
+  font-size: 16px;
+  font-weight: 700;
+  padding: 16px;
+  text-align: center;
+  transition: opacity .15s ease, transform .1s ease;
+}
+.rs-btn-primary:hover { opacity: .9; }
+.rs-btn-primary:active { transform: scale(.98); opacity: .82; }
+.rs-btn-primary:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-btn-primary:disabled {
+  opacity: .35; cursor: not-allowed; pointer-events: none;
+}
+
+/* ── Icon buttons (nav, circular arrow) ───────────────────────────────── */
+.rs-icon-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 50%; border: none; background: transparent;
+  transition: background-color .15s ease;
+}
+.rs-icon-btn:hover { background: rgba(26, 26, 24, 0.06); }
+.rs-icon-btn:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-icon-btn--light { color: var(--rs-bone); }
+.rs-icon-btn--light:hover { background: rgba(242, 238, 231, 0.15); }
+.rs-icon-btn--dark-fill {
+  width: 30px; height: 30px; border-radius: 50%; background: var(--rs-ink); color: var(--rs-paper); flex-shrink: 0;
+}
+.rs-icon-btn--dark-fill svg { width: 18px; height: 18px; }
+.rs-icon-btn--dark-fill:hover { opacity: .85; background: var(--rs-ink); }
+.rs-icon-btn--circle-bg { background: var(--rs-fog); }
+.rs-icon-btn--circle-bg:hover { background: var(--rs-fog); opacity: .8; }
+
+/* ── Nav bar (back / title / close) ───────────────────────────────────── */
+.rs-navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 16px 8px;
+}
+.rs-navbar-title {
+  font-family: var(--rs-font-body); font-weight: 700; font-size: 15px; color: var(--rs-ink);
+  flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px;
+}
+
+/* ── Floating scroll-to-top pill — long step screens only ─────────────── */
+.rs-scroll-top {
+  position: absolute; left: 16px; bottom: 16px; z-index: 6;
+  width: 40px; height: 40px; border-radius: 50%; border: none;
+  background: var(--rs-ink); color: var(--rs-paper);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.rs-scroll-top.is-visible { opacity: 1; pointer-events: auto; }
+.rs-scroll-top:hover { opacity: .85; }
+
+/* ── Progress bar ──────────────────────────────────────────────────────── */
+.rs-progress-row { display: flex; align-items: center; gap: 12px; padding: 4px 20px 20px; }
+.rs-progress-track { flex: 1; height: 3px; border-radius: 2px; background: rgba(26, 26, 24, 0.12); overflow: hidden; }
+.rs-progress-fill { height: 100%; background: var(--rs-signal); border-radius: 2px; transition: width .2s ease; }
+.rs-progress-label {
+  font-family: var(--rs-font-body); font-size: 11px; font-weight: 600; color: var(--rs-ink); opacity: .62; flex-shrink: 0;
+}
+
+/* ── Headings / eyebrow ────────────────────────────────────────────────── */
+.rs-eyebrow {
+  font-family: var(--rs-font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--rs-ink); opacity: .62; margin: 0 0 6px;
+}
+.rs-h1 {
+  font-family: var(--rs-font-heading); font-weight: 400; font-size: 30px; line-height: 1.1;
+  color: var(--rs-ink); margin: 0 0 6px;
+}
+/* .62 is the floor that clears 4.5:1 against --rs-bone/--rs-paper/--rs-fog for
+   --rs-ink text — .5/.55/.6 (the values these opacity-muted rs- text styles
+   used before) measure 3.2–4.5:1 depending on background, below WCAG AA at
+   these font sizes. Applied wherever muted --rs-ink text sits under ~18px. */
+.rs-subtitle { font-family: var(--rs-font-body); font-size: 14px; color: var(--rs-ink); opacity: .62; margin: 0 0 20px; line-height: 1.5; }
+.rs-page-head { padding: 20px 20px 4px; }
+
+/* ── Hero header (applications-list) ──────────────────────────────────── */
+.rs-hero-header { background: var(--rs-moss); padding: 8px 12px 32px 20px; }
+.rs-hero-header .rs-nav-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 56px; }
+.rs-hero-title { font-family: var(--rs-font-heading); font-weight: 400; font-size: 42px; color: var(--rs-bone); margin: 0; }
+
+/* ── Cards ─────────────────────────────────────────────────────────────── */
+.rs-card {
+  background: var(--rs-paper);
+  border: 1px solid rgba(26, 26, 24, 0.08);
+  border-radius: 16px;
+  padding: 18px;
+  margin: 0 20px 16px;
+}
+.rs-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.rs-card-title { font-family: var(--rs-font-body); font-weight: 700; font-size: 16px; margin: 0; }
+
+.rs-edit-btn {
+  /* Signal-tint fill (same pale blue as a selected radio row) rather than
+     a neutral outline — every Edit action on this screen is the same
+     action, so it reads as one recognizable CTA instead of blending into
+     the row like a secondary/quiet control. Text stays --rs-ink rather
+     than switching to --rs-signal: at 12px that's well under the "large
+     scale only" rule the accent color is held to elsewhere on this
+     screen (see the styleguide's contrast note), and --rs-signal on
+     --rs-signal-tint measures under 4.5:1 at body size anyway. */
+  border: 1px solid transparent; background: var(--rs-signal-tint); border-radius: 999px;
+  /* Fixed height, matching .rs-step-badge's 26px circle exactly — padding
+     plus this font's line-height alone rendered ~31px, 5px taller than the
+     badge, which pushed every row below it down whenever a row picked up
+     an Edit button (i.e. on every overview fresh/resumed toggle). */
+  height: 26px; padding: 0 14px; display: inline-flex; align-items: center;
+  font-family: var(--rs-font-body); font-size: 12px; font-weight: 600; color: var(--rs-ink);
+  transition: filter .15s ease, transform .1s ease;
+}
+.rs-edit-btn:hover { filter: brightness(0.96); }
+.rs-edit-btn:active { transform: scale(.96); }
+.rs-edit-btn:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+
+.rs-row {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 10px 0; border-top: 1px solid rgba(26, 26, 24, 0.07);
+}
+.rs-row:first-of-type { border-top: none; padding-top: 0; }
+.rs-row-label { font-size: 13px; color: var(--rs-ink); opacity: .62; flex-shrink: 0; }
+.rs-row-value { font-size: 14px; font-weight: 600; color: var(--rs-ink); text-align: right; }
+.rs-row-value--stack { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.rs-row-label--strong { opacity: 1; font-weight: 700; }
+.rs-row--link { align-items: center; }
+
+/* ── Overview: agent card ─────────────────────────────────────────────── */
+.rs-agent-card { display: flex; align-items: center; gap: 12px; }
+.rs-avatar {
+  width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; background: var(--rs-fog);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  font-family: var(--rs-font-body); font-size: 13px; font-weight: 700; color: var(--rs-ink); opacity: .7;
+}
+.rs-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rs-agent-meta .rs-agent-label { font-size: 11px; color: var(--rs-ink); opacity: .62; margin: 0 0 2px; }
+.rs-agent-meta .rs-agent-name { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
+.rs-agent-meta .rs-agent-email { font-size: 13px; color: var(--rs-ink); opacity: .62; }
+
+.rs-section-head { padding: 4px 20px 4px; }
+.rs-section-head .rs-h2 { font-family: var(--rs-font-body); font-weight: 700; font-size: 15px; margin: 0 0 4px; }
+.rs-section-head .rs-section-sub { font-size: 13px; color: var(--rs-ink); opacity: .62; margin: 0; }
+
+/* ── Steps list ────────────────────────────────────────────────────────── */
+.rs-steps { padding: 0; }
+.rs-step-row { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-top: 1px solid rgba(26, 26, 24, 0.07); }
+.rs-step-row:first-of-type { border-top: none; }
+.rs-step-badge {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--rs-ink); color: var(--rs-paper); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-family: var(--rs-font-body); font-size: 12px; font-weight: 700;
+}
+.rs-step-label { flex: 1; font-size: 15px; font-weight: 600; }
+
+/* ── Property cards / status pills (applications-list) ────────────────── */
+.rs-list { padding: 24px 20px 8px; display: flex; flex-direction: column; gap: 14px; }
+.rs-property-card {
+  background: var(--rs-fog); border-radius: 16px; padding: 18px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0;
+}
+.rs-property-info { min-width: 0; }
+.rs-property-address { font-size: 15px; font-weight: 700; margin: 0 0 2px; }
+.rs-property-city { font-size: 14px; color: var(--rs-ink); opacity: .62; margin: 0 0 10px; }
+.rs-pill {
+  display: inline-block; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 999px;
+  background: var(--rs-paper); border: 1px solid rgba(26, 26, 24, 0.1); color: var(--rs-ink);
+  transition: background-color var(--duration-slow, .25s) var(--ease-enter, ease),
+              color var(--duration-slow, .25s) var(--ease-enter, ease),
+              border-color var(--duration-slow, .25s) var(--ease-enter, ease);
+}
+.rs-pill--submitted { background: var(--rs-mint); color: var(--rs-moss); border-color: transparent; }
+/* One-shot pulse when a pill flips to Submitted live (applicationsList's
+   post-submit animation) — noticeable without being showy. */
+.rs-pill.is-updated { animation: rsPillPulse .4s var(--ease-enter, ease); }
+@keyframes rsPillPulse {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ── Household: stacked radio rows + progressive disclosure ───────────── */
+.rs-field-group { padding: 0 20px 20px; }
+.rs-field-section-title {
+  font-family: var(--rs-font-heading); font-weight: 400; font-size: 20px; color: var(--rs-ink);
+  margin: 8px 20px 14px;
+}
+.rs-field-label { font-size: 15px; font-weight: 600; margin: 0 0 10px; }
+.rs-field-helper { font-size: 12.5px; color: var(--rs-ink); opacity: .62; margin: -4px 0 12px; line-height: 1.5; }
+
+/* Stacked Yes/No rows — pixel-matched to the 08-19 refs: selected is a pale
+   --rs-signal-tint fill with a solid --rs-ink border, not the pill-toggle
+   pair this replaced. */
+.rs-radio-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+.rs-radio-row {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; padding: 14px 16px; border-radius: 12px;
+  border: 1.5px solid rgba(26, 26, 24, 0.14); background: var(--rs-paper);
+  font-family: var(--rs-font-body); font-size: 15px; font-weight: 500; color: var(--rs-ink);
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.rs-radio-row:hover { border-color: rgba(26, 26, 24, 0.28); }
+.rs-radio-row.is-selected { background: var(--rs-signal-tint); border-color: var(--rs-ink); }
+.rs-radio-row:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-radio-dot {
+  width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid rgba(26, 26, 24, 0.32);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+}
+.rs-radio-row.is-selected .rs-radio-dot { background: var(--rs-ink); border-color: var(--rs-ink); }
+.rs-radio-dot::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--rs-paper);
+  opacity: 0; transition: opacity .1s ease;
+}
+.rs-radio-row.is-selected .rs-radio-dot::after { opacity: 1; }
+
+/* Expand panel — the tan (--rs-fog) card that opens under a "Yes". */
+.rs-expand-panel {
+  background: var(--rs-fog); border-radius: 14px; padding: 14px; margin-top: 4px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.rs-expand-panel-header { display: flex; align-items: center; justify-content: space-between; }
+.rs-expand-panel-header span { font-size: 13px; font-weight: 600; color: var(--rs-ink); opacity: .65; }
+.rs-expand-panel-close {
+  width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(26, 26, 24, 0.08);
+  color: var(--rs-ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background-color .15s ease;
+}
+.rs-expand-panel-close:hover { background: rgba(26, 26, 24, 0.16); }
+.rs-expand-panel-close:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-expand-panel-helper { font-size: 12px; color: var(--rs-ink); opacity: .62; line-height: 1.5; margin: 0; }
+.rs-expand-panel-fields { display: flex; flex-direction: column; gap: 14px; }
+
+.rs-add-row {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  border: 1px solid rgba(26, 26, 24, 0.14); border-radius: 12px; background: var(--rs-paper);
+  padding: 13px; margin-top: 10px; font-family: var(--rs-font-body); font-size: 14px; font-weight: 600; color: var(--rs-ink);
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.rs-add-row:hover { background: rgba(26, 26, 24, 0.03); border-color: rgba(26, 26, 24, 0.28); }
+.rs-add-row:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+
+.rs-field-divider { border: none; border-top: 1px solid rgba(26, 26, 24, 0.1); margin: 8px 20px 24px; }
+
+.rs-reveal {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height var(--duration-slow, .25s) var(--ease-enter, ease), opacity var(--duration-base, .2s) ease;
+}
+.rs-reveal.is-open { opacity: 1; }
+.rs-reveal-inner { padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+
+.rs-input-row { display: flex; flex-direction: column; gap: 4px; }
+.rs-input-row label { font-size: 12px; font-weight: 600; color: var(--rs-ink); opacity: .62; }
+.rs-input-row input {
+  border: 1px solid rgba(26, 26, 24, 0.16); border-radius: 10px; padding: 11px 12px; background: var(--rs-paper); font-size: 14px;
+}
+.rs-input-row input::placeholder { color: var(--rs-ink); opacity: .35; }
+.rs-input-row input:focus { outline: none; border-color: var(--rs-signal); box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.14); }
+
+.rs-input-row--minor { opacity: .8; }
+.rs-input-row--minor label { font-weight: 500; }
+.rs-input-row--minor input { max-width: 120px; }
+
+/* Subordinate stepper — children under 18. Deliberately quieter than the
+   Yes/No rows above it: smaller label, muted opacity, no card background. */
+.rs-stepper-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(26, 26, 24, 0.1); opacity: .85; }
+.rs-stepper-copy .rs-field-label--minor { font-size: 13px; font-weight: 500; margin: 0; }
+.rs-stepper { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+.rs-stepper-btn {
+  width: 30px; height: 30px; border-radius: 50%; border: 1px solid rgba(26, 26, 24, 0.2);
+  background: var(--rs-paper); color: var(--rs-ink); display: flex; align-items: center; justify-content: center;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.rs-stepper-btn:hover:not(:disabled) { background: rgba(26, 26, 24, 0.05); border-color: rgba(26, 26, 24, 0.32); }
+.rs-stepper-btn:disabled { opacity: .35; }
+.rs-stepper-btn:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-stepper-count { font-size: 15px; font-weight: 600; min-width: 16px; text-align: center; }
+
+/* ── Payment: total, package, card fields ─────────────────────────────── */
+.rs-total-row {
+  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+  background: none; border: none; width: 100%; padding: 0; text-align: left;
+}
+.rs-total-row .rs-total-label { font-size: 15px; font-weight: 700; }
+.rs-total-amounts { display: flex; align-items: center; gap: 8px; }
+.rs-total-amounts .rs-total-value { font-size: 16px; font-weight: 700; }
+.rs-total-chevron { transition: transform .2s ease; color: var(--rs-ink); opacity: .5; }
+.rs-total-chevron.is-open { transform: rotate(180deg); }
+
+.rs-total-breakdown {
+  max-height: 0; overflow: hidden;
+  transition: max-height var(--duration-slow, .25s) var(--ease-enter, ease);
+}
+.rs-total-breakdown.is-open { }
+.rs-total-breakdown-inner { padding-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.rs-line-item { display: flex; justify-content: space-between; font-size: 13px; color: var(--rs-ink); opacity: .65; }
+
+.rs-checkbox-row { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.rs-checkbox {
+  width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid rgba(26, 26, 24, 0.28); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; margin-top: 1px; transition: background-color .15s ease, border-color .15s ease;
+}
+.rs-checkbox.is-checked { background: var(--rs-ink); border-color: var(--rs-ink); color: var(--rs-paper); }
+.rs-checkbox svg { opacity: 0; transition: opacity .1s ease; }
+.rs-checkbox.is-checked svg { opacity: 1; }
+.rs-checkbox-copy .rs-checkbox-title { font-size: 14px; font-weight: 700; margin: 0 0 4px; }
+.rs-checkbox-copy .rs-checkbox-desc { font-size: 12.5px; color: var(--rs-ink); opacity: .62; line-height: 1.5; margin: 0; }
+
+.rs-field-block-label { font-size: 15px; font-weight: 700; margin: 0 20px 12px; }
+.rs-payment-fields { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+.rs-payment-fields input {
+  width: 100%; border: 1px solid rgba(26, 26, 24, 0.16); border-radius: 12px; padding: 14px; background: var(--rs-paper); font-size: 14px;
+}
+.rs-payment-fields input::placeholder { color: var(--rs-ink); opacity: .4; }
+.rs-payment-fields input:focus { outline: none; border-color: var(--rs-signal); box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.14); }
+.rs-payment-fields .rs-field-row { display: flex; gap: 10px; }
+
+.rs-save-card-row { padding: 4px 20px 4px; }
+
+/* ── "Add payment method" option + wallet picker sheet ───────────────────── */
+.rs-payment-options { padding: 14px 20px 4px; }
+.rs-payment-option-row {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  border: 1.5px solid rgba(26, 26, 24, 0.14); border-radius: 12px; padding: 14px 16px; background: var(--rs-paper);
+  transition: border-color .15s ease;
+}
+.rs-payment-option-row:hover { border-color: rgba(26, 26, 24, 0.28); }
+.rs-payment-option-row:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-payment-option-icon {
+  width: 40px; height: 40px; border-radius: 10px; background: var(--rs-fog); color: var(--rs-ink);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.rs-payment-option-copy { flex: 1; min-width: 0; }
+.rs-payment-option-title { font-size: 14px; font-weight: 700; margin: 0 0 2px; }
+.rs-payment-option-desc { font-size: 12.5px; color: var(--rs-ink); opacity: .62; margin: 0; }
+/* Standalone selected state — this radio dot isn't nested in a .rs-radio-row,
+   so it needs its own rule rather than relying on the ancestor selector. */
+.rs-radio-dot.is-selected { background: var(--rs-ink); border-color: var(--rs-ink); }
+.rs-radio-dot.is-selected::after { opacity: 1; }
+
+.rs-payment-security {
+  display: flex; align-items: center; gap: 6px; margin: 12px 0 0; font-size: 12px; color: var(--rs-ink); opacity: .55;
+}
+.rs-payment-security svg { flex-shrink: 0; width: 14px; height: 14px; }
+
+/* Sheet slides up from the .product frame's own edge — .product is the
+   position:relative + overflow:hidden viewport, so an absolutely
+   positioned sheet is clipped to the phone, never the browser window. */
+.rs-sheet-root { position: absolute; inset: 0; z-index: 30; pointer-events: none; }
+.rs-sheet-root.is-open { pointer-events: auto; }
+.rs-sheet-backdrop {
+  position: absolute; inset: 0; background: rgba(26, 26, 24, 0.4); opacity: 0;
+  transition: opacity var(--duration-base, .2s) ease;
+}
+.rs-sheet-root.is-open .rs-sheet-backdrop { opacity: 1; }
+.rs-sheet {
+  position: absolute; left: 0; right: 0; bottom: 0; background: var(--rs-paper);
+  border-radius: 20px 20px 0 0; padding: 10px 20px 28px; box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.18);
+  transform: translateY(100%);
+  transition: transform var(--duration-slow, .28s) var(--ease-enter, cubic-bezier(.22, 1, .36, 1));
+}
+.rs-sheet-root.is-open .rs-sheet { transform: translateY(0); }
+.rs-sheet-handle { width: 36px; height: 4px; border-radius: 999px; background: rgba(26, 26, 24, 0.18); margin: 0 auto 14px; }
+.rs-sheet-title { font-size: 15px; font-weight: 700; margin: 0 0 14px; }
+.rs-sheet-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.rs-sheet-option {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 14px 16px;
+  border: 1.5px solid rgba(26, 26, 24, 0.14); border-radius: 12px; background: var(--rs-paper);
+  font-family: var(--rs-font-body); font-size: 15px; font-weight: 600; color: var(--rs-ink);
+  transition: border-color .15s ease;
+}
+.rs-sheet-option:hover { border-color: rgba(26, 26, 24, 0.28); }
+.rs-sheet-option:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-sheet-option-icon { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--rs-ink); }
+.rs-sheet-cancel {
+  width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--rs-fog);
+  font-family: var(--rs-font-body); font-size: 15px; font-weight: 700; color: var(--rs-ink);
+}
+.rs-sheet-cancel:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+
+/* ── Plain step-form fields (Your Details) ─────────────────────────────── */
+.rs-form-fields { padding: 0 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+.rs-form-fields input {
+  width: 100%; border: 1px solid rgba(26, 26, 24, 0.16); border-radius: 12px; padding: 14px;
+  background: var(--rs-paper); font-family: var(--rs-font-body); font-size: 14px; color: var(--rs-ink);
+}
+.rs-form-fields input::placeholder { color: var(--rs-ink); opacity: .4; }
+.rs-form-fields input:focus { outline: none; border-color: var(--rs-signal); box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.14); }
+.rs-field-icon-wrap { position: relative; }
+.rs-field-icon-wrap input { padding-right: 44px; }
+.rs-field-icon-wrap .rs-field-icon {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--rs-ink); opacity: .55; pointer-events: none; display: flex;
+}
+.rs-form-checkbox-row { padding: 2px 0 2px; }
+
+/* ── Loader (Hang tight) — checklist rows build in one at a time ────────── */
+.rs-checklist { padding: 28px 20px 8px; display: flex; flex-direction: column; gap: 12px; }
+.rs-checklist-item {
+  display: flex; align-items: center; gap: 14px;
+  border: 1px solid rgba(26, 26, 24, 0.12); border-radius: 14px; padding: 16px;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity var(--duration-slow, .28s) var(--ease-enter, ease), transform var(--duration-slow, .28s) var(--ease-enter, ease);
+}
+.rs-checklist-item.is-visible { opacity: 1; transform: translateY(0); }
+.rs-checklist-icon {
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.rs-checklist-icon svg { width: 16px; height: 16px; }
+.rs-checklist-icon--pending { background: var(--rs-signal-tint); color: var(--rs-signal); }
+.rs-checklist-icon--done { background: var(--rs-mint); color: var(--rs-moss); }
+.rs-checklist-icon--spin svg { animation: rsSpin 1s linear infinite; }
+.rs-checklist-copy { flex: 1; min-width: 0; }
+.rs-checklist-label { font-size: 15.5px; font-weight: 600; color: var(--rs-ink); margin: 0; line-height: 1.35; }
+.rs-checklist-sub { font-size: 12.5px; color: var(--rs-ink); opacity: .5; margin: 3px 0 0; }
+@keyframes rsSpin { to { transform: rotate(-360deg); } }
+
+/* ── Review reports (credit/background check cards) ─────────────────────── */
+.rs-row-value--score { font-size: 30px; font-weight: 700; line-height: 1; }
+.rs-card-desc { font-size: 13px; color: var(--rs-ink); opacity: .62; line-height: 1.5; margin: 0 0 12px; }
+.rs-note-box { background: var(--rs-fog); border-radius: 10px; padding: 12px 14px; margin: 4px 0 14px; }
+.rs-note-box p { font-size: 13px; color: var(--rs-ink); opacity: .72; line-height: 1.5; margin: 0; }
+.rs-outline-btn {
+  width: 100%; padding: 13px; border-radius: 12px; border: 1px solid rgba(26, 26, 24, 0.16);
+  background: var(--rs-paper); font-family: var(--rs-font-body); font-weight: 600; font-size: 14px; color: var(--rs-ink);
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.rs-outline-btn:hover { background: rgba(26, 26, 24, 0.04); border-color: rgba(26, 26, 24, 0.28); }
+.rs-outline-btn:focus-visible { outline: 2px solid var(--rs-signal); outline-offset: 2px; }
+.rs-reviewed-row { padding: 4px 20px 20px; }
+
+/* ── Toast — slides down from the .product frame's own top edge, same
+   contained-absolute technique as .rs-sheet-root. ──────────────────────── */
+.rs-toast-wrap {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 40;
+  display: flex; justify-content: center; padding: 54px 20px 0; pointer-events: none;
+}
+.rs-toast {
+  pointer-events: auto; display: flex; align-items: center; gap: 8px;
+  background: var(--rs-signal-tint); color: var(--rs-ink); border-radius: 14px; padding: 12px 12px 12px 14px;
+  font-family: var(--rs-font-body); font-size: 13px; font-weight: 600;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
+  opacity: 0; transform: translateY(-130%);
+  transition: opacity var(--duration-slow, .28s) var(--ease-enter, ease), transform var(--duration-slow, .28s) var(--ease-enter, ease);
+}
+.rs-toast.is-visible { opacity: 1; transform: translateY(0); }
+.rs-toast-icon { width: 18px; height: 18px; color: var(--rs-signal); display: flex; flex-shrink: 0; }
+.rs-toast-text { flex: 1; }
+.rs-toast-close {
+  display: flex; align-items: center; justify-content: center; background: none; border: none;
+  padding: 2px; color: var(--rs-ink); opacity: .6; flex-shrink: 0;
+}
+.rs-toast-close svg { width: 16px; height: 16px; }
+.rs-toast-close:hover { opacity: .85; }

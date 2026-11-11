@@ -219,38 +219,49 @@ once v2 replaces it.
   gives the shape of each project; dates, metrics and results are for the
   interview. Don't ask for outcome figures or add results blocks to fill a
   gap. Release timing is a year at most: RentSpree's 3.0 "launches in
-  2027" (it's a full rollout, not an A/B test), here and on
-  applicants.micahburger.com.
+  2027" (it's a full rollout, not an A/B test), here and on the applicant
+  experience page.
 - RentSpree (`/project/rentspree`, 2026-11-10): the 2026 folio's four
   RentSpree chapters (no Menu, no overview, no resume) as `chapter`
   blocks, each a rounded panel in the project's colour on the Night page.
   Panels rather than full-bleed grounds because stacked down one page the
   folio's light and dark chapters would break the lighting-mode rule.
   Screens copied from the folio into `public/img/rentspree`. The
-  applicant chapter's CTA leads to applicants.micahburger.com, which stays
-  its own static site (`../applicants-site`). The Outcomes lab pill only
-  shows on studies with a results block.
+  applicant chapter's CTA leads to the applicant experience page. The
+  Outcomes lab pill only shows on studies with a results block.
+- **Applicant experience** (`/project/applicant-experience/`, moved in
+  2026-11-11): the long RentSpree case study, which was its own static site
+  at applicants.micahburger.com (`../applicants-site`, repo
+  micahburger/Applicants). It came over **as files, not as React**: the
+  site's HTML, CSS, JS and images, byte for byte, in
+  `app/public/project/applicant-experience/`, served as they are. Its links
+  are all relative, so the trailing slash matters (Apache and the dev
+  plugin in `vite.config.ts` both redirect to it). The only edit was Back
+  to home: `/` plus an inline script that leaves homeScroll's return note.
+  Its subpages `screens/` and `styleguide/` came too. The old subdomain
+  301s here (applicants-site's .htaccess); that repo is retired, so make
+  changes here. It has its own CSS and doesn't share global.css.
 - **One case study system** (Micah, 2026-11-10): type, spacing and corners
   are `--cs-*` / `--radius-media|card|phone` tokens in `:root` (phone values
   in the 900px block), used by every case study rule and the homepage media.
-  applicants-site/css/styles.css declares the same names and values and
-  maps Night's colours into its `--page-*` tokens; it's Poppins 400/500
-  throughout now (its RentSpree `.product` screens keep Newsreader and
-  Manrope). Change a value in one, change it in the other.
+  The applicant experience page's own `css/styles.css` declares the same
+  names and values and maps Night's colours into its `--page-*` tokens;
+  it's Poppins 400/500 throughout (its RentSpree `.product` screens keep
+  Newsreader and Manrope). Change a value in one, change it in the other.
 - Back to home is **locked on scroll** on every case study (Micah,
   2026-11-10): `.cs-bar` is a sticky bar outside the header (sticky only
   holds inside its parent), resting 180px down and holding 24px from the
-  top (112 / 16 on phones). applicants.micahburger.com mirrors it, and its
-  title, number for number in `css/styles.css` (`.cs-bar`, `.cs-hero`);
-  change one, change both. Its pill links to https://v2.micahburger.com/,
-  to repoint when v2 becomes micahburger.com.
+  top (112 / 16 on phones). The applicant experience page mirrors it, and
+  its title, number for number in its `css/styles.css` (`.cs-bar`,
+  `.cs-hero`); change one, change both.
 - Back to home **returns you to your place** on the homepage (Micah,
   2026-11-10), via `homeScroll.ts`: the homepage saves its scroll to
   sessionStorage as it's left, the pill (plain click only) leaves a
   one-time note, and the homepage restores before first paint, retrying
   after fonts and load until the visitor moves. Reloads and fresh visits
-  still open at the top. The applicants site's pill doesn't do this: it's
-  another origin and can't leave the note.
+  still open at the top. The applicant experience page does it too, by
+  hand (an inline script with the same sessionStorage key), now that it's
+  on the same origin; it couldn't while it was its own subdomain.
 
 ## Placeholders still in
 

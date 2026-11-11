@@ -6,8 +6,9 @@ set -e
 cd "$(dirname "$0")"
 npm --prefix app run build
 rm -f index.html
-# Everything app/public ships (img/) is cleared too, so an image deleted
-# from the source doesn't linger in what Hostinger serves.
-rm -rf assets img
+# Everything app/public ships (img/, and project/ for the static applicant
+# experience page since 2026-11-11) is cleared too, so a file deleted from
+# the source doesn't linger in what Hostinger serves.
+rm -rf assets img project
 cp -r app/dist/. .
 echo "Built and copied app/dist -> repo root. Review with 'git status' before committing."

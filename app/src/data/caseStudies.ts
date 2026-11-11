@@ -299,8 +299,9 @@ export const opendoor: CaseStudy = {
 // onto the same 786px canvas at 2x with its ground composed in; the
 // Assistant's two taller ones are scaled to fit, not cropped.
 //
-// The applicant chapter links on to the long case study, which stays its
-// own static site at applicants.micahburger.com.
+// The applicant chapter links on to the long case study, a static page in
+// public/project/applicant-experience (its own site at
+// applicants.micahburger.com until 2026-11-11; that address redirects).
 const rs = (file: string) => `/img/rentspree/${file}`;
 const screen = (file: string, alt: string, height = 1450): Img => ({ src: rs(file), alt, width: 1572, height });
 
@@ -314,7 +315,7 @@ export const rentspree: CaseStudy = {
       title: "Applicant experience",
       // Rewritten 2026-11-10 to set up the long read (its CTA below), which
       // shares this title: the same three problems, then the three changes,
-      // in the order applicants.micahburger.com tells them.
+      // in the order the long case study tells them.
       body: [
         "Applications carry most of RentSpree’s transactions and revenue, and most are filled out on a phone over several sittings. Applicants lost their place, found typos only after their credit and background reports came back, and couldn’t tell when the application had actually been sent.",
         "I restructured it into four predictable steps with an overview to return to, added a full review before anything goes to the credit bureau, and moved payment after that review, so paying no longer reads as finishing.",
@@ -330,7 +331,7 @@ export const rentspree: CaseStudy = {
         screen("applicant-checklist.png", "Application checklist"),
         screen("applicant-pets.png", "Household details, pets"),
       ],
-      cta: { label: "Read the full case study", href: "https://applicants.micahburger.com" },
+      cta: { label: "Read the full case study", href: "/project/applicant-experience/" },
     },
     {
       kind: "chapter",

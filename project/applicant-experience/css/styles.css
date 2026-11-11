@@ -1,0 +1,1049 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Manrope:wght@400;500;600;700&display=swap');
+
+/* ============================================================================
+   APPLICANTS — design tokens
+
+   TWO REGISTERS. They must not bleed into each other:
+     --page-*  the portfolio voice. Everything that's Micah talking: hero,
+               headings, body, nav, captions, notes, device bezels, footer.
+     --rs-*    RentSpree, the product being shown. Scoped under `.product`,
+               applied only to the device-viewport contents. Never reference
+               --rs-* outside `.product`, never reference --page-* inside it.
+   No lint config enforces this yet — this comment is the enforcement.
+
+   THE PORTFOLIO REGISTER IS v2's (Micah, 2026-11-10: "we want to make sure
+   we're systematizing my portfolio site"). This page started on lattice's
+   Graphite Night with the Contemporary type set (Instrument Sans headings,
+   Inter body, Plex Mono labels, a 1080px column). Every micahburger.com
+   case study is now one system, and the source of truth is v2's Night
+   case study (v2-site/app/src/styles/global.css):
+     - colours: v2's Night palette, copied into the --page-* names below;
+     - type: Poppins 400/500 only, at the shared --cs-* sizes;
+     - layout and corners: the same --gutter, column and --radius-* values.
+   The --cs-* and --radius-media/card/phone names are declared in v2's :root
+   with the same values; change one, change both. Only the RentSpree
+   register (.product, its own fonts) is this page's alone.
+   ============================================================================ */
+
+:root {
+  /* ── Colour: v2's Night palette, value for value ───────────────────────
+     page = Night's --paper; fg = --black (titles, note titles); soft =
+     --ink (paragraphs); accent = --link (numbers, the stated outcome's
+     highlight); rule = --rule; surface = the 6% lift v2 uses for cards;
+     chip = the 14% lift its small round buttons use. muted is v2's
+     caption (ink at about 70%) as a colour, since this page's labels
+     can't lean on opacity without fading their focus rings too. */
+  --page-bg:      #161417;
+  --page-fg:      #f4f1ec;
+  --page-soft:    #e4ded6;
+  --page-muted:   color-mix(in srgb, #e4ded6 72%, #161417);
+  --page-accent:  #c4ae88;
+  --page-rule:    rgba(244, 241, 236, 0.14);
+  --page-surface: color-mix(in srgb, #e4ded6 6%, #161417);
+  --page-chip:    color-mix(in srgb, #e4ded6 14%, #161417);
+
+  /* ── Type: Poppins, the only face, at 400 and 500 (the two loaded) ────
+     The three family names stay so every rule keeps saying what role its
+     text plays; they all point at the same face now. */
+  --font-heading: 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --font-label:   'Poppins', 'Helvetica Neue', Arial, sans-serif;
+  --tracking-body: 0.2px; /* v2's body letter-spacing */
+
+  /* The shared case study scale (same names and values in v2). */
+  --cs-display: clamp(40px, 5.4vw, 76px); /* page title */
+  --cs-statement: clamp(30px, 3.6vw, 48px); /* a stated outcome */
+  --cs-heading: 38px; /* section titles, 1.25 leading, -0.01em */
+  --cs-lede: 18px; /* intro paragraphs, 1.5 leading */
+  --cs-body: 16px; /* paragraphs and notes, 1.6 leading */
+  --cs-small: 13px; /* captions and labels */
+  --cs-block: 120px; /* between blocks */
+  --cs-part: 160px; /* before a section title: a new part of the story */
+  --radius-media: 28px;
+  --radius-card: 20px;
+  --radius-phone: 36px;
+
+  /* The styleguide page's older names, pointed at the shared scale. */
+  --size-display: var(--cs-statement);
+  --line-display: 1.2;
+  --weight-display: 400;
+  --size-heading: 22px;
+  --line-heading: 1.25;
+  --weight-heading: 500;
+  --size-body: var(--cs-body);
+  --line-body: 1.6;
+  --size-label: var(--cs-small);
+  --weight-label: 500;
+  --tracking-label: 0.02em;
+
+  /* ── Motion — the shared curves (v2's EASE.enter / exit) ────────────── */
+  --ease-enter: cubic-bezier(.22, 1, .36, 1);
+  --ease-exit:  cubic-bezier(.4, 0, 1, 1);
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 250ms;
+  /* The shared hover grow (v2 and the folio): pills 1.12. */
+  --hover-grow-scale-button: 1.12;
+  --hover-grow-duration: 0.32s;
+  --hover-grow-easing: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ── Reveal timing — scroll-triggered fade/rise speeds. Separate scale
+     from the UI-motion durations above (those are for hover/interaction,
+     150–250ms); reveals are content entering on scroll, so they run longer.
+     Medium is the default every .reveal section uses; fast is defined for
+     future use, not applied anywhere yet. */
+  --reveal-fast:   250ms;
+  --reveal-medium: 400ms;
+  --reveal-slow:   700ms;
+
+  /* ── Radii — the shared three above, plus a small one for list rows ── */
+  --radius-sm: 8px;
+  --radius-md: var(--radius-media);
+  --radius-lg: var(--radius-card);
+
+  /* ── Shadows — only the phones cast one (they're objects on the page);
+     chrome like the section pill doesn't, as on v2. ──────────────────── */
+  --shadow-md: 0 20px 60px rgba(0, 0, 0, 0.32);
+  --shadow-lg: 0 30px 80px rgba(0, 0, 0, 0.4);
+
+  /* ── Layered "soft" shadow for the transparent phone cutouts in the
+     thesis collage — a `filter: drop-shadow()` chain (space-separated,
+     not comma-separated like box-shadow) so it reads the PNGs' alpha
+     silhouette rather than their rectangular box. Five progressively
+     bigger/fainter passes stacked from one light source instead of one
+     hard-edged shadow, same umbra+penumbra idea as Josh Comeau's shadow
+     palette technique (joshwcomeau.com/css/designing-shadows) and the
+     Figma "Beautiful Shadows" plugin it inspired — light from the
+     upper-left, so each layer steps down and to the right. */
+  --shadow-collage-stack:
+    drop-shadow(2px 3px 4px rgba(0, 0, 0, 0.10))
+    drop-shadow(5px 8px 9px rgba(0, 0, 0, 0.09))
+    drop-shadow(10px 15px 16px rgba(0, 0, 0, 0.08))
+    drop-shadow(18px 26px 26px rgba(0, 0, 0, 0.07))
+    drop-shadow(30px 42px 40px rgba(0, 0, 0, 0.06));
+
+  /* ── Layout — v2's column: 1220px of content between 30px gutters, so
+     text starts on the same line as the header above it. Media-heavy
+     sections still widen past it (thesis, arc two, close). Sections are
+     padded half a --cs-part top and bottom, so one part starts --cs-part
+     after the last, as a new section title does on v2. ─────────────── */
+  --content-max: 1280px;
+  --gutter: 30px;
+  --space-section: calc(var(--cs-part) / 2);
+}
+
+@media (max-width: 900px) {
+  :root {
+    --cs-display: 32px;
+    --cs-statement: 28px;
+    --cs-heading: 26px;
+    --cs-block: 80px;
+    --cs-part: 112px;
+    --radius-media: 20px;
+    --radius-phone: 28px;
+  }
+}
+
+/* ── RentSpree register — the product being demoed. Scoped to `.product`
+   on the device-viewport element. Nowhere else. ─────────────────────────── */
+.product {
+  --rs-ink:    #1A1A18;
+  --rs-bone:   #F5F1EE; /* pixel-sampled off refs/ exports 08-19 — was #F2EEE7, an eyeball guess */
+  --rs-paper:  #FFFFFF;
+  --rs-moss:   #7C9142;
+  --rs-mint:   #C4E9D2;
+  --rs-signal: #3B5BDB;
+  /* Proposed 7th token, not in the original 6 — the applications-list property
+     cards render as a third neutral, visibly darker than --rs-paper and
+     visibly grayer than --rs-bone. Neither existing token matches without
+     looking wrong. Named to match the moss/mint/bone pattern; flagged in the
+     report back rather than silently folded into --rs-paper. */
+  --rs-fog:    #ECE8DF; /* pixel-sampled, confirms the earlier eyeballed guess almost exactly */
+
+  /* New from the 08-19 refs — a pale blue fill for a selected radio row.
+     Pixel-sampled at #D7E5FF; roughly a ~20% tint of --rs-signal over white,
+     but close enough only in spirit — kept as its own literal token rather
+     than a computed tint so it matches the export exactly. */
+  --rs-signal-tint: #D7E5FF;
+
+  --rs-font-heading: 'Newsreader', Georgia, serif;
+  --rs-font-body:    'Manrope', system-ui, sans-serif;
+
+  /* Layout/color for the scope element itself lives here too, not in
+     product.css — a bare `.product { }` selector declared separately in two
+     stylesheets was silently losing its second declaration in this browser's
+     rendering (full rule dropped from the parsed CSSOM, cause unconfirmed).
+     One rule, one place, no collision possible. */
+  width: 390px;
+  height: 844px;
+  position: relative; /* anchors .rs-scroll-top to the screen, not the page */
+  display: flex;
+  flex-direction: column;
+  background: var(--rs-bone);
+  color: var(--rs-ink);
+  font-family: var(--rs-font-body);
+  font-size: 15px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+/* ── Reset ────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+/* No fixed height on either: a sticky element can only hold inside its
+   parent, and html/body capped at one viewport let the locked Back to home
+   pill (.cs-bar) go after the first screen. With body on min-height alone,
+   desktop was fine, but on a phone html's 100% still left the pill
+   hit-testable at the top while painting it off screen. */
+body { min-height: 100vh; margin: 0; }
+body {
+  background: var(--page-bg);
+  /* v2's body text is its --ink (soft here); the brighter fg is kept for
+     titles and note titles, as on v2. */
+  color: var(--page-soft);
+  font-family: var(--font-body);
+  font-size: var(--size-body);
+  line-height: var(--line-body);
+  letter-spacing: var(--tracking-body);
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Type scale — contemporary, portfolio register only ──────────────────
+   Hero is the one deliberate exception (exceeds --size-display) — deferred
+   until the hero content/copy exists; see the report back for why. ──────── */
+.display {
+  font-family: var(--font-heading);
+  font-size: var(--size-display);
+  line-height: var(--line-display);
+  font-weight: var(--weight-display);
+  color: var(--page-fg);
+  margin: 0;
+  text-wrap: balance;
+}
+.heading {
+  font-family: var(--font-heading);
+  font-size: var(--size-heading);
+  line-height: var(--line-heading);
+  font-weight: var(--weight-heading);
+  color: var(--page-fg);
+  margin: 0;
+}
+.text-body { font-family: var(--font-body); font-size: var(--size-body); line-height: var(--line-body); color: var(--page-fg); margin: 0; }
+.text-soft { color: var(--page-soft); }
+.text-muted { color: var(--page-muted); } /* captions & labels only — see contrast note */
+.label {
+  font-family: var(--font-label);
+  font-size: var(--size-label);
+  font-weight: var(--weight-label);
+  /* v2's .cs-label: sentence case, not the old mono uppercase. */
+  letter-spacing: var(--tracking-label);
+  color: var(--page-muted);
+  margin: 0;
+}
+
+/* ── Accent discipline ─────────────────────────────────────────────────────
+   --page-accent is restricted to large-scale marks: pull lines, section
+   numerals, the active nav mark, the live-phone outline. Never body text,
+   never anything under 18px — enforced by convention, not by a lint rule. */
+.pull-line {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.15;
+  font-weight: var(--weight-display);
+  color: var(--page-accent);
+  margin: 0;
+}
+.section-number {
+  font-family: var(--font-label);
+  font-size: 20px;
+  letter-spacing: var(--tracking-label);
+  color: var(--page-accent);
+}
+.nav-mark.active { color: var(--page-accent); }
+
+/* ── Reading column — 1080px max-width with real gutters ─────────────────
+   Deliberate break from lattice's full-bleed, no-max-width canvas. ──────── */
+.wrap {
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+section {
+  padding-top: var(--space-section);
+  padding-bottom: var(--space-section);
+}
+/* #hero is just the case study header now (.cs-hero below); the room above
+   it is the Back to home bar's, and the thesis section's own top padding is
+   the gap below it. */
+#hero {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+/* ── Device frame / bezel ─────────────────────────────────────────────────
+   Bezel goes lighter than the page, not darker: a black bezel would merge
+   into --page-bg and the phone would read as a floating rectangle instead of
+   a lit panel. --page-surface + a 1px --page-rule edge keeps the frame
+   legible against the page while still reading as part of the dark register. */
+.device-frame {
+  display: inline-block;
+  background: var(--page-surface);
+  border: 1px solid var(--page-rule);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  box-shadow: var(--shadow-md);
+}
+.device-frame .screen {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  line-height: 0;
+}
+.device-frame.is-live {
+  outline: 2px solid var(--page-accent);
+  outline-offset: 4px;
+  border-radius: calc(var(--radius-lg) + 2px);
+}
+
+/* ── Case study header — shared with every micahburger.com case study ─────
+   (Micah, 2026-11-10.) Mirrors v2's CaseStudy.tsx and its "case study"
+   block in global.css, number for number, so this page opens exactly like
+   Opendoor's: Back to home in a small pill, then the title, set left on
+   v2's 1220px content width with 30px gutters. Change one, change both.
+
+   It replaced a centred four-line title with a per-character scramble on
+   hover (GSAP SplitText, js/hero.js): a one-off flourish, where the case
+   studies now share one plain header. Poppins 400/500 is loaded for it
+   alone (the @import at the top); the rest of the page keeps its own type.
+
+   .cs-wrap rather than .wrap: .wrap is this page's 1080px reading column,
+   and the header follows v2's width instead so the pill and title sit at
+   the same x on every case study. */
+.cs-wrap {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+/* Back to home, locked on scroll. It rests 180px down, then sticks 24px
+   from the top as the page goes up under it. The rest is a margin, not
+   padding: sticky pins the border box and the margin sits outside it, so
+   the bar travels up through those 180px and then holds. Only the pill
+   takes the pointer; the empty run of bar beside it never blocks what's
+   underneath. z-index clears the phones and the reveal layers (the section
+   pill, bottom-right, is 40). */
+.cs-bar {
+  position: sticky;
+  top: 24px;
+  z-index: 35;
+  margin-top: 180px;
+  pointer-events: none;
+}
+.cs-bar > * { pointer-events: auto; }
+
+/* v2's --chip on its Night palette: a lift of the page, no outline (Micah
+   doesn't want strokes on these). The arrow nudges left on hover and the
+   pill grows by the shared button token (1.12, ease-enter, 0.32s). */
+.cs-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px 10px 14px;
+  border-radius: 999px;
+  background: var(--page-chip);
+  color: var(--page-fg);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+.cs-home svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.32s var(--ease-enter);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .cs-home:hover { scale: var(--hover-grow-scale-button); }
+  .cs-home:hover svg { transform: translateX(-3px); }
+}
+.cs-home:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+.cs-hero { padding-top: 32px; }
+.cs-hero__title {
+  max-width: 1000px;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--cs-display);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  color: var(--page-soft);
+  text-wrap: balance;
+}
+
+@media (max-width: 900px) {
+  .cs-bar { top: 16px; margin-top: 112px; }
+  .cs-hero { padding-top: 24px; }
+  .cs-hero__title { line-height: 1.12; }
+}
+
+/* ============================================================================
+   SHELL — 8-section scroll structure, pill nav, keyboard nav,
+   scroll-triggered reveal. Wiring lives in js/shell.js.
+   ============================================================================ */
+
+html {
+  scroll-padding-top: 80px; /* the locked Back to home pill (24px down, ~38px tall) plus room, so the chapter-jumper's target isn't hidden under it */
+}
+
+/* ── Reveal-on-scroll — one fade+rise per section, fires once ────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--reveal-medium) var(--ease-enter), transform var(--reveal-medium) var(--ease-enter);
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .closing-hypothesis, .closing-block, .closing-image, .collage-front, .collage-mid, .collage-back { opacity: 1; transform: none; transition: none; }
+  .collage-replay { display: none; }
+}
+
+/* ── Pill nav — collapsed pill + plain jump list, lattice's curves ───────── */
+.section-pill {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* The Back to home pill's look (v2's --chip, Poppins 500 14px, no
+     outline and no shadow: Micah doesn't want strokes on small round
+     buttons), so the two pieces of page chrome are one family. Hover
+     grows it by the shared button token instead of swapping the fill. */
+  border: none;
+  background: var(--page-chip);
+  border-radius: 999px;
+  padding: 10px 18px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-body);
+  color: var(--page-fg);
+  cursor: pointer;
+  transition: scale var(--hover-grow-duration) var(--hover-grow-easing);
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .section-pill:hover { scale: var(--hover-grow-scale-button); }
+}
+.section-pill:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+.section-pill .pill-count { color: var(--page-accent); }
+.section-pill .pill-sep { color: var(--page-muted); }
+
+.section-jumplist {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 40;
+  width: min(260px, calc(100vw - 40px));
+  background: var(--page-surface);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-md);
+  padding: 8px;
+  animation: pillListIn var(--duration-slow) var(--ease-enter);
+}
+.section-jumplist.is-closing { animation: pillListOut var(--duration-fast) var(--ease-exit) forwards; }
+@keyframes pillListIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pillListOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(12px); } }
+.section-jumplist button {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label);
+  font-size: 14px;
+  color: var(--page-soft);
+  cursor: pointer;
+  transition: background-color .15s ease, color .15s ease;
+}
+.section-jumplist button .jump-n { color: var(--page-muted); flex-shrink: 0; }
+.section-jumplist button:hover { background: rgba(255, 255, 255, 0.05); color: var(--page-fg); }
+.section-jumplist button.active { color: var(--page-accent); }
+.section-jumplist button.active .jump-n { color: var(--page-accent); }
+.section-jumplist button:focus-visible { outline: 2px solid var(--page-accent); outline-offset: -2px; }
+
+/* ── Section content patterns ──────────────────────────────────────────── */
+.eyebrow { display: none; }
+.section-headline {
+  margin: 0 0 20px;
+  max-width: 900px;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: var(--cs-heading);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.section-body { font-family: var(--font-body); font-weight: 400; font-size: var(--cs-body); line-height: 1.6; color: var(--page-soft); max-width: 640px; margin: 0; }
+.section-body + .section-body { margin-top: 16px; }
+
+/* ── Context — the opening (Micah, 2026-11-10: "Brief", picked from a lab
+   of three). Opendoor's intro on v2 (.cs-intro in v2's global.css): the
+   headline and the case for the work in six columns with the brief under
+   them as labelled facts on a card a 6% lift lighter than the page, and the
+   collage in the other six, centred on each other. It replaced a headline
+   over two paragraphs beside the collage, which read as cluttered. ──── */
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 48px;
+}
+.intro-text { display: grid; gap: 24px; align-content: start; }
+.intro-title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: var(--cs-heading);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--page-fg);
+  text-wrap: balance;
+}
+/* v2's --cs-lede: the opening paragraphs a step up from body. */
+.intro-lede {
+  margin: 0;
+  max-width: 600px;
+  font-size: var(--cs-lede);
+  line-height: 1.5;
+  color: var(--page-soft);
+}
+/* v2's .cs-facts. */
+.intro-facts {
+  display: grid;
+  gap: 20px;
+  margin: 0;
+  padding: 28px 32px;
+  border-radius: var(--radius-card);
+  background: var(--page-surface);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.intro-facts dt { font-weight: 500; color: var(--page-fg); }
+.intro-facts dd { margin: 0; color: var(--page-soft); }
+.intro-media { display: flex; justify-content: center; min-width: 0; }
+@media (min-width: 1000px) {
+  .intro {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: center;
+  }
+  .intro-text { grid-column: 1 / span 6; padding-right: 40px; }
+  .intro-media { grid-column: 7 / span 6; }
+}
+
+/* ── Thesis collage — flat PNG composite, not a live still-mount, all three
+   full screens at the same width with no clipping, fanned out left-to-right
+   in a single overlapping deck (not a vertical stack) — applications.png on
+   top, howareyou.png and start.png stepping right and behind it at the same
+   scale. Taken clean out of flow (position:absolute on all three, sized by
+   the container) so the deck can bleed past its own row into the
+   hero/diagnosis whitespace above and below; z-index keeps that overflow
+   paint on top of the neighboring sections it bleeds into. PNGs are
+   pre-masked to the phone's rounded silhouette on a transparent ground, so
+   drop-shadow (not box-shadow) reads as "lifted" and each phone casts onto
+   the one behind it. ── */
+.collage-figure { display: flex; flex-direction: column; align-items: center; gap: 16px; min-width: 0; }
+.thesis-collage {
+  --phone-w: 250px;
+  --phone-ratio: 916 / 421; /* source PNGs are 421x916 */
+  --stack-step: 145px; /* horizontal offset between each fanned phone */
+  --collage-w: calc(var(--phone-w) + var(--stack-step) * 2);
+  --collage-fit: min(1, calc((100vw - 2 * var(--gutter)) / var(--collage-w)));
+  position: relative;
+  z-index: 5;
+  width: var(--collage-w);
+  height: calc(var(--phone-w) * var(--phone-ratio));
+  zoom: var(--collage-fit);
+}
+.thesis-collage img {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--phone-w);
+  aspect-ratio: 421 / 916;
+  filter: var(--shadow-collage-stack);
+}
+.thesis-collage .collage-front { z-index: 3; }
+.thesis-collage .collage-mid   { left: var(--stack-step); z-index: 2; }
+.thesis-collage .collage-back  { left: calc(var(--stack-step) * 2); z-index: 1; }
+
+/* Build-in — the three screens arrive one at a time (applications list,
+   then the tenant/cosigner role screen, then the overview), each fading in
+   and sliding a short, subtle distance left into its place in the fan —
+   not sliding in from off screen, just a small nudge from --start-offset
+   right of its own resting spot. No scale: opacity + a pure leftward
+   translateX only. Delays are spaced a full --duration apart (not
+   overlapping, like the short stagger elsewhere on the page) so each
+   screen finishes arriving before the next starts. Keyed off
+   .thesis-collage's own is-visible rather than the section wrap's — it
+   needs to be independently replayable via the button below without also
+   re-triggering the headline/body text's fade+rise, which share the wrap's
+   .reveal.is-visible. See wireCollageReplay() in shell.js for both the
+   scroll-triggered first play and the replay click handler (which must
+   wait out --duration on the way out too — see the comment there). */
+.thesis-collage {
+  /* 2x --reveal-slow (700ms -> 1400ms), scoped here rather than doubling
+     the shared token itself — --reveal-slow drives other reveals on the
+     page that weren't asked to slow down. */
+  --duration: 1.4s;
+  --start-offset: 80px;
+}
+.collage-front, .collage-mid, .collage-back {
+  opacity: 0;
+  transform: translateX(var(--start-offset));
+  transition: opacity var(--duration) var(--ease-enter), transform var(--duration) var(--ease-enter);
+}
+.thesis-collage.is-visible .collage-front { opacity: 1; transform: translateX(0); }
+.thesis-collage.is-visible .collage-mid   { opacity: 1; transform: translateX(0); transition-delay: var(--duration); }
+.thesis-collage.is-visible .collage-back  { opacity: 1; transform: translateX(0); transition-delay: calc(var(--duration) * 2); }
+
+/* Replay link — plain text control, not an accent-colored one: --page-accent
+   is reserved for large-scale marks (see the "Accent discipline" note near
+   .pull-line above), so hover/focus just brightens muted -> soft instead. */
+.collage-replay {
+  font-family: var(--font-label);
+  font-size: var(--cs-small);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--page-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: color .15s ease, text-decoration-color .15s ease;
+}
+.collage-replay:hover, .collage-replay:focus-visible { color: var(--page-soft); text-decoration-color: currentColor; }
+.collage-replay:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 4px; }
+.collage-replay:disabled { cursor: default; opacity: .5; text-decoration-color: transparent; }
+
+/* ── Arcs — progress, review, payment (Micah, 2026-11-10: "Side", picked
+   from a lab of four). Every arc is the same three parts: a head (title and
+   one short lede), the live phone, and a few titled notes, the way
+   Opendoor's study on v2 sets a screen beside its notes. Nothing sits above
+   the phone; the head and notes are one column beside it, centred on its
+   height, so each arc reads as one picture-and-caption unit. --flip puts
+   the phone on the right, so the page alternates.
+
+   It replaced a title and paragraphs over a phone beside long numbered
+   notes (and, in the review arc, a three-column text | phone | notes row),
+   which read as cluttered. Those numbered notes were also sticky; with the
+   notes beside a phone of about their own height there's nowhere for them
+   to travel, so that went too. ────────────────────────────────────── */
+.arc-block {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 40px;
+}
+.arc-block + .arc-block { margin-top: var(--cs-block); }
+.arc-title {
+  margin: 0;
+  max-width: 900px;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: var(--cs-heading);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--page-fg);
+  text-wrap: balance;
+}
+/* v2's .cs-lede: body size, held to a readable measure. */
+.arc-lede {
+  margin: 16px 0 0;
+  max-width: 640px;
+  font-size: var(--cs-body);
+  line-height: 1.6;
+  color: var(--page-soft);
+}
+.arc-media { display: flex; justify-content: center; min-width: 0; }
+/* About Opendoor's phone-screen size (its cut-outs take three columns,
+   ~280px; these carry a bezel and their controls, so a little more).
+   Compounds with the frame's own fit-to-viewport zoom. */
+.arc-media .phone-frame { zoom: calc(0.8 * var(--frame-fit)); }
+/* v2's .cs-notes: titled, not numbered. */
+.arc-notes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 28px;
+  align-content: start;
+}
+.arc-notes h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-heading);
+  font-size: var(--cs-body);
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--page-fg);
+}
+.arc-notes p { margin: 0; font-size: var(--cs-body); line-height: 1.6; color: var(--page-soft); }
+
+@media (min-width: 1000px) {
+  /* The outer 1fr rows soak up the phone's extra height equally, which is
+     what centres the head-and-notes column on it. */
+  .arc-block {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: 1fr auto auto 1fr;
+    column-gap: var(--gutter);
+    row-gap: 0;
+  }
+  .arc-media { grid-column: 1 / span 6; grid-row: 1 / -1; }
+  .arc-head { grid-column: 7 / span 5; grid-row: 2; }
+  .arc-notes { grid-column: 7 / span 5; grid-row: 3; margin-top: 40px; }
+  .arc-block:not(:has(.arc-head)) .arc-notes { margin-top: 0; }
+  .arc-block--flip .arc-media { grid-column: 7 / span 6; }
+  .arc-block--flip .arc-head,
+  .arc-block--flip .arc-notes { grid-column: 2 / span 5; }
+}
+
+/* ── Diagnosis — the one earned numbered list ─────────────────────────── */
+.diagnosis-list { max-width: 720px; }
+.diagnosis-item { display: flex; gap: 24px; padding: 28px 0; border-top: 1px solid var(--page-rule); }
+.diagnosis-item:first-child { border-top: none; padding-top: 4px; }
+.diagnosis-item .num {
+  font-family: var(--font-label); font-size: 20px; color: var(--page-accent); flex-shrink: 0; width: 36px; line-height: 1.3;
+}
+.diagnosis-item h3 { font-family: var(--font-heading); font-weight: 500; font-size: var(--cs-body); line-height: 1.4; color: var(--page-fg); margin: 0 0 6px; } /* v2's .cs-notes__title */
+.diagnosis-item p { font-family: var(--font-body); font-size: var(--cs-body); line-height: 1.6; color: var(--page-soft); margin: 0; }
+
+/* ── Pull line / pull quote ────────────────────────────────────────────── */
+.pull-quote {
+  font-family: var(--font-heading); font-weight: 400; font-size: var(--cs-statement);
+  line-height: 1.2; letter-spacing: -0.015em; color: var(--page-accent); margin: 0; max-width: 780px; text-wrap: balance;
+}
+
+/* ── Divider strip — small type, no heading ───────────────────────────────
+   Was --page-accent at 13px — a full paragraph of body copy, which is
+   exactly what the accent-discipline rule above rules out (never body
+   text, never under 18px). Swapped to --page-soft, same register as
+   .section-body. */
+.divider-strip {
+  border-top: 1px solid var(--page-rule); border-bottom: 1px solid var(--page-rule);
+  padding: 28px 0; margin: 8px 0;
+}
+.divider-strip p {
+  font-family: var(--font-body); font-size: var(--cs-body); line-height: 1.6; color: var(--page-soft);
+  max-width: 680px; margin: 0;
+}
+
+/* ── Pull moment — a large stated outcome with one highlighted clause, in
+   place of a plain boxed card. The eyebrow stays in the standard muted
+   .label register rather than --page-accent: accent stays reserved for the
+   highlighted clause below, the only piece here large enough to clear the
+   "never under 18px" accent-discipline floor (see the note up near
+   --page-accent's definition). */
+.pull-moment { max-width: 925px; margin: 0 auto; }
+.pull-moment-eyebrow { margin: 0 0 16px; }
+.pull-moment-statement {
+  /* v2's .cs-statement: the numbers as one large sentence, the key
+     clause in the accent. */
+  font-family: var(--font-heading); font-weight: 400;
+  font-size: var(--cs-statement); line-height: 1.2; letter-spacing: -0.015em;
+  color: var(--page-fg); margin: 0; text-wrap: balance;
+}
+.pull-moment-highlight { color: var(--page-accent); }
+
+/* ── Close — the hypothesis, the three closing blocks, and the hand photo
+   (Micah, 2026-11-11: "Overlap", picked from a lab of four, then turned
+   upside down). The copy comes first, the blocks side by side, and the
+   photo sits under it, big, its dark top rising up behind the copy so the
+   words and the picture read as one piece.
+
+   Big on purpose ("make it impactful"): about twice the size it was beside
+   the old text column, but no bigger than keeps the whole phone on one
+   desktop screen. The phone fills roughly 9% to 71% of the photo's height,
+   so at 1120px wide (1430 tall) it's about 880px of phone. The photo is
+   wider than the column it overlaps and nudged left, because the phone
+   sits right of centre in the frame; the nudge puts it under the middle of
+   the page.
+
+   It replaced a column of three 38px blocks with the photo overlapping
+   them on the right, and the hypothesis lived at the end of the payment
+   arc; together they read as two separate endings. ───────────────────── */
+.closing-composite {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Above the photo, so the overlap paints the copy over it. */
+.closing-copy {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  gap: 56px;
+}
+.closing-hypothesis { max-width: 980px; margin: 0; }
+.closing-blocks {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+}
+/* 26px, the phone size of --cs-heading: three 38px titles in a third of
+   the column each wrapped to three lines and outweighed the text under
+   them. */
+.closing-title {
+  margin: 0 0 12px;
+  font-family: var(--font-heading);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--page-fg);
+  text-wrap: balance;
+}
+
+/* The photo's ground is near enough the page's to fade into it, so every
+   edge fades rather than showing a box: the top under the copy, the
+   bottom where the arm trails off, and the sides. Two gradients
+   intersected rather than one oval, so the top and bottom can fade over
+   different distances. */
+.closing-image {
+  position: relative;
+  z-index: 0;
+  /* On a phone, edge to edge: the column plus both gutters, so the photo
+     runs past the text margins (the side fades keep it from reading as a
+     box). Capped for tablets, where the desktop size takes over at 1000. */
+  width: min(calc(100% + 2 * var(--gutter)), 560px);
+  margin-top: -40px;
+  aspect-ratio: 1110 / 1417;
+  background-image: url('../img/closing.jpg');
+  background-size: cover;
+  background-position: center;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 26%, #000 68%, transparent 94%),
+    linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 26%, #000 68%, transparent 94%),
+    linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
+          mask-composite: intersect;
+}
+
+@media (min-width: 1000px) {
+  .closing-copy { gap: 72px; }
+  .closing-blocks {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+  /* The photo runs up under the blocks by its empty dark top (the phone
+     starts about 9% down, ~130px at this width) plus a little more, where
+     the top fade has the phone's edge at a third of its strength. Any
+     deeper and the phone's bright screen lands under the middle and right
+     blocks and the text stops reading (tried -300px). translate rather
+     than a margin for the nudge, so the column's centring isn't thrown
+     off. */
+  .closing-image {
+    width: min(1120px, 92vw);
+    margin-top: -170px;
+    translate: -9% 0;
+  }
+}
+
+/* Only with motion allowed: shell.js never adds is-visible under reduced
+   motion, so these opacity-0 starting states would otherwise stick, and
+   coming later in the file they'd beat the reduced-motion reset above. */
+@media (min-width: 1000px) and (prefers-reduced-motion: no-preference) {
+  /* Build-in: the hypothesis, then the three blocks one after another,
+     then the photo rising into place under them. The section's usual
+     whole-wrap fade (.reveal) is neutralised; .closing-composite keeps the
+     reveal wiring only as the trigger. */
+  #close .wrap.reveal,
+  .closing-composite.reveal {
+    opacity: 1; transform: none; transition: none;
+  }
+  .closing-hypothesis,
+  .closing-block,
+  .closing-image {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity var(--reveal-slow) var(--ease-enter), transform var(--reveal-slow) var(--ease-enter);
+  }
+  .closing-image {
+    transform: translateY(80px);
+    transition-duration: 1.2s;
+  }
+  .closing-composite.is-visible .closing-hypothesis,
+  .closing-composite.is-visible .closing-block,
+  .closing-composite.is-visible .closing-image { opacity: 1; transform: none; }
+  .closing-composite.is-visible .closing-block:nth-child(1) { transition-delay: .25s; }
+  .closing-composite.is-visible .closing-block:nth-child(2) { transition-delay: .4s; }
+  .closing-composite.is-visible .closing-block:nth-child(3) { transition-delay: .55s; }
+  .closing-composite.is-visible .closing-image { transition-delay: .35s; }
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.site-footer {
+  display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; align-items: baseline;
+  padding: 40px var(--gutter) 48px; border-top: 1px solid var(--page-rule);
+  font-family: var(--font-label); font-size: var(--cs-small); color: var(--page-muted);
+}
+.site-footer a { color: var(--page-soft); text-decoration: underline; text-underline-offset: 3px; }
+.site-footer a:hover { color: var(--page-fg); }
+.site-footer a:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 3px; }
+
+/* ============================================================================
+   PHONE / STILL — device components for js/phone.js. Bezel is portfolio
+   chrome (--page-*); the mounted screen inside is .product-scoped (--rs-*).
+   ============================================================================ */
+
+.phone-row { display: flex; flex-direction: column; gap: 40px; align-items: center; }
+@media (min-width: 1000px) { .phone-row { flex-direction: row; justify-content: center; align-items: flex-start; } }
+
+/* min-width: 0 overrides the grid/flex default of min-width: auto — without
+   it, a grid track won't shrink below the phone-frame's
+   min-content size (the .product's hard-coded 390px), so at narrow
+   viewports the frame blows out past its column and the whole page gains
+   ~50px of horizontal scroll. Found by measuring document.scrollWidth vs
+   window.innerWidth at 390px — they didn't match. */
+.phone-figure, .still-figure { display: flex; flex-direction: column; align-items: center; gap: 16px; min-width: 0; }
+
+.phone-frame, .still-frame {
+  background: var(--page-surface);
+  border: 1px solid var(--page-rule);
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: var(--shadow-lg);
+  display: inline-block;
+  position: relative;
+  max-width: 100%;
+  transition: outline-color .15s ease;
+  /* `zoom` (not transform:scale) so the shrunk frame's layout box actually
+     shrinks too — a still-mount doesn't leave a phantom 414px gap the way a
+     scale() transform would. Responsive term shrinks the full-size frame
+     (416px including bezel) to fit whatever width .wrap's gutters leave;
+     min(1, …) is a no-op once there's room for it at full size. */
+  --frame-fit: min(1, calc((100vw - 2 * var(--gutter)) / 416px));
+  zoom: var(--frame-fit);
+}
+.phone-frame.is-live { outline: 2px solid var(--page-accent); outline-offset: 4px; }
+/* ~300px per the thesis visual's spec, compounded with the responsive fit
+   above so the small still shrinks further too if the viewport is tight. */
+.frame--sm { zoom: calc(0.72 * var(--frame-fit)); }
+.phone-screen-wrap, .still-screen-wrap {
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  line-height: 0;
+  max-width: 100%;
+}
+.phone-screen-wrap .product, .still-screen-wrap .product { transition: opacity var(--duration-fast) ease; }
+.still-screen-wrap .product { pointer-events: none; }
+
+.phone-activate-overlay {
+  position: absolute; inset: 0; z-index: 4; border-radius: inherit;
+  background: transparent; border: none; padding: 0; margin: 0; cursor: pointer;
+}
+.phone-activate-overlay:focus-visible { outline: 2px solid var(--page-accent); outline-offset: -4px; }
+.phone-frame.is-live .phone-activate-overlay { display: none; }
+
+.phone-caption, .still-caption {
+  /* v2's .cs-caption. */
+  font-family: var(--font-body); font-size: var(--cs-small); line-height: 1.5; color: var(--page-muted);
+  text-align: center; max-width: 340px; margin: 0;
+  transition: opacity var(--duration-base) ease;
+}
+/* Interaction captions like arc-3's "Pay to follow the application..." only
+   need to instruct once — js/payment-flow.js hides it after the first
+   rs-navigate and restores it on Reset. Opacity only (not display:none) so
+   the figure's height doesn't jump when it disappears. */
+.phone-caption.is-hidden { opacity: 0; }
+
+.phone-controls { display: flex; align-items: center; gap: 14px; }
+.phone-reset {
+  background: none; border: none; padding: 4px 8px;
+  font-family: var(--font-label); font-size: var(--cs-small); font-weight: 500; letter-spacing: 0.02em;
+  color: var(--page-muted); cursor: pointer; transition: color .15s ease;
+}
+.phone-reset:hover { color: var(--page-fg); }
+.phone-reset:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+
+.phone-states {
+  /* A filled track, no outline (Micah: no strokes on small round controls). */
+  display: flex; gap: 3px; background: var(--page-surface);
+  border-radius: 999px; padding: 3px;
+}
+.phone-states button {
+  border: none; background: none; padding: 6px 14px; border-radius: 999px;
+  font-family: var(--font-label); font-size: var(--cs-small); font-weight: 500; color: var(--page-muted);
+  cursor: pointer; transition: background-color .15s ease, color .15s ease;
+}
+.phone-states button.active { background: var(--page-fg); color: var(--page-bg); }
+.phone-states button:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 2px; }
+
+/* ── V1 sheet — full-screen takeover reached from the pill's expanded jump
+   list, showing the original RentSpree screens behind this redesign.
+   Portfolio chrome throughout, so --page-* only, same as the rest of this
+   file's rule (see the top of this file for why). ─────────────────────── */
+.v1-sheet {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--page-bg);
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform var(--reveal-slow) var(--ease-enter);
+}
+.v1-sheet.is-open { transform: translateY(0); }
+.v1-sheet-inner {
+  max-width: 1100px; margin: 0 auto;
+  padding: calc(64px + env(safe-area-inset-top, 0px)) var(--gutter) 80px;
+}
+.v1-sheet-title {
+  font-family: var(--font-heading); font-weight: 400; color: var(--page-fg);
+  font-size: var(--cs-heading); line-height: 1.25; letter-spacing: -0.01em; margin: 0 0 40px;
+}
+.v1-sheet-image {
+  display: block; width: 100%; height: auto; border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+.v1-sheet-close {
+  position: fixed; top: var(--gutter); right: var(--gutter); z-index: 210;
+  width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+  background: var(--page-fg); color: var(--page-bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .15s ease, transform .1s ease;
+}
+.v1-sheet-close:hover { opacity: .85; }
+.v1-sheet-close:active { transform: scale(.94); }
+.v1-sheet-close:focus-visible { outline: 2px solid var(--page-accent); outline-offset: 3px; }
+
+/* Trigger — last item in the pill's expanded jump list, set apart from
+   the section buttons above it with a rule rather than folded in as if
+   it were section 08. */
+.section-jumplist .v1-trigger {
+  border-top: 1px solid var(--page-rule); margin-top: 4px; padding-top: 14px;
+  color: var(--page-soft);
+}
+.section-jumplist .v1-trigger:hover { color: var(--page-fg); }
