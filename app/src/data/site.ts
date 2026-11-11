@@ -30,11 +30,13 @@
 //                        screenshots of those live sites (home page first,
 //                        then artist pages / case-study sections / folio
 //                        chapters), until real exports exist
-//   rental-1             except this one (2026-11-10): the hand holding
+//   rental-hand          except this one (2026-11-10): the hand holding
 //                        the phone, applicants-site/img/closing.jpg, set on
 //                        a 1316x740 ground of its own edge colour (#161417)
 //                        with the side edges faded in. It replaced a capture
 //                        of the old scramble title, retired from that page.
+//                        A new name, not rental-1, so week-long image caches
+//                        can't keep serving the old picture.
 
 export type Slide = {
   src: string;
@@ -95,7 +97,18 @@ export const featured: Featured[] = [
     name: "Applicant experience",
     rest: " The full RentSpree case study on the rental application: four predictable steps, a review before reports are pulled, and payment moved after that review.",
     href: "https://applicants.micahburger.com",
-    media: slides("rental", 3, "Applicant experience case study"),
+    // Listed by hand rather than slides("rental", 3): the first slide got a
+    // new file name with its new picture. Images are cached for a week
+    // (max-age=604800), so a browser that had the old rental-1.jpg kept
+    // showing the retired scramble title under the same URL.
+    media: {
+      kind: "carousel",
+      images: [
+        { src: "/img/rental-hand.jpg", alt: "The application overview on a phone, held in a hand" },
+        { src: "/img/rental-2.jpg", alt: "Applicant experience case study, 2 of 3" },
+        { src: "/img/rental-3.jpg", alt: "Applicant experience case study, 3 of 3" },
+      ],
+    },
   },
   {
     id: "lattice",
