@@ -171,8 +171,8 @@ the live site's own, so old `micahburger.com/project/…` links keep working
 once v2 replaces it.
 
 - Content: `app/src/data/caseStudies.ts`, one `CaseStudy` per project, made
-  of typed blocks (intro, heading, split, figure, compare, slideshow,
-  takeaways, outcomes, video). A new case study is new data, not new
+  of typed blocks (intro, heading, split, figure, pair, compare, slideshow,
+  results, video, chapter). A new case study is new data, not new
   components. `stages` marks which blocks start each scroll-shift stage.
 - Rendering: `components/CaseStudy.tsx`, with `BeforeAfter.tsx` (the wipe)
   and `Slideshow.tsx` (the homepage carousel without the link). Styles are
@@ -193,8 +193,18 @@ once v2 replaces it.
   Ledger, Statement). The homepage shows `HOME_LAB`.
 - Opendoor (2026-11-08) is the first and the template: a first pass at the
   live page's structure and copy on v2's grid, type and palettes, to be
-  shifted toward the v2 look next. Lincoln, Infinity and the archive
-  projects still link to the live site.
+  shifted toward the v2 look next. The archive projects (WWE, BBC, ABA,
+  Rockwell) still link to the live site.
+- Lincoln and Infinity (`/project/lincoln`, `/project/infinity`,
+  2026-11-11): the live pages on the Opendoor template, copy tightened,
+  homepage rows opening them in place. They added one block, `pair` (two
+  images side by side: phones at three columns each, or two wide halves),
+  and `Img.still`, a first-frame JPEG that replaces an animated GIF under
+  reduced motion (Infinity's four screen recordings). Only five of their
+  images were in ds-assets; the rest were downloaded from the live site's
+  wp-content/uploads. Neither live page gives outcome numbers, so neither
+  has a results block yet (Lincoln states its A/B lift in words); add one
+  when Micah has the figures.
 - RentSpree (`/project/rentspree`, 2026-11-10): the 2026 folio's four
   RentSpree chapters (no Menu, no overview, no resume) as `chapter`
   blocks, each a rounded panel in the project's colour on the Night page.
@@ -231,7 +241,6 @@ once v2 replaces it.
 - Rental application, 2026 folio and Corner Bodega media are screenshots
   of those live sites; swap for real exports. `bodega-3` and `folio-4`
   caught a mouse pointer.
-- Infinity has only two 16:9 stills in ds-assets.
 - No logo exists for Tip or Skip or Hanson Digital; the card sets the name.
 - The live page's `Section-divider2.jpg` (above the contact block) isn't in
   ds-assets, so it's left out.

@@ -1570,10 +1570,20 @@ button {
   transition: background-color 0.4s ease;
 }
 
+/* The picture case is an animated GIF with a reduced-motion still
+   (Picture in CaseStudy.tsx); the <picture> wrapper is only there to let
+   the browser choose, so it takes no box of its own. */
 .cs-frame > img,
-.cs-cutout > img {
+.cs-cutout > img,
+.cs-frame > picture > img,
+.cs-cutout > picture > img {
   width: 100%;
   height: auto;
+}
+
+.cs-frame > picture,
+.cs-cutout > picture {
+  display: contents;
 }
 
 /* The slideshow's frame holds an absolutely placed stage, so it takes its
@@ -1654,8 +1664,43 @@ figure {
 
 /* Phone screenshots are long, so their frames get a phone's corners
    rather than the 28px of a wide picture. */
-.cs-split--phone .cs-frame {
+.cs-split--phone .cs-frame,
+.cs-pair--phone .cs-frame {
   border-radius: var(--radius-phone);
+}
+
+/* ---- pair (Lincoln, Infinity: 2026-11-11) ----
+   Two pictures side by side under one caption. Phones take the split's
+   three columns each, so a recorded screen is the same size as a phone
+   beside notes, centred with two columns of air between and either side
+   (3-5 and 8-10). Wide pairs take half the grid each. The caption starts
+   at the first picture's edge, so it hangs under the pair, not the page. */
+.cs-pair {
+  row-gap: 0;
+}
+
+.cs-pair--phone > .cs-pair__item:nth-of-type(1) {
+  grid-column: 3 / span 3;
+}
+
+.cs-pair--phone > .cs-pair__item:nth-of-type(2) {
+  grid-column: 8 / span 3;
+}
+
+.cs-pair--phone > .cs-pair__caption {
+  grid-column: 3 / span 8;
+}
+
+.cs-pair--half > .cs-pair__item:nth-of-type(1) {
+  grid-column: 1 / span 6;
+}
+
+.cs-pair--half > .cs-pair__item:nth-of-type(2) {
+  grid-column: 7 / span 6;
+}
+
+.cs-pair--half > .cs-pair__caption {
+  grid-column: 1 / -1;
 }
 
 .cs-notes {
@@ -1973,6 +2018,23 @@ p.cs-body {
   .cs-split--phone .cs-split__media {
     width: min(100%, 300px);
     justify-self: center;
+  }
+  /* Two phones stay side by side: at half the column each they're about
+     the 300px a lone phone gets above, and stacked they'd be two screens
+     of scrolling for one idea. Wide pairs stack, a gutter apart. Doubled
+     with .grid because the phone .grid rule (one column) comes later. */
+  .cs-pair--phone.grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+  }
+  .cs-pair--half {
+    row-gap: 16px;
+  }
+  .cs-pair > .cs-pair__item {
+    grid-column: auto !important;
+  }
+  .cs-pair > .cs-pair__caption {
+    grid-column: 1 / -1 !important;
   }
   .compare__tag {
     top: 12px;

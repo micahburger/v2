@@ -30,6 +30,12 @@
 //                                                   opendoor's blocks)
 // JPEGs re-saved at quality 82, at most 2000px on the long side; the PNGs
 // are cut out on transparency and are copied as they are.
+//
+// Lincoln and Infinity (2026-11-11) follow the same recipe; their sources
+// are listed above each study. Only five of their files were in
+// ~/Desktop/ds-assets, so the rest are the originals from the live site's
+// wp-content/uploads (Micah's go-ahead). Their PNGs were opaque, full-frame
+// exports on #161616, not cut-outs, so they're JPEGs here too.
 
 export type Img = {
   src: string;
@@ -42,6 +48,10 @@ export type Img = {
    *  in a rounded box like the homepage's media. "cutout": a transparent
    *  PNG (a phone), set straight on the page with no box. */
   look?: "framed" | "cutout";
+  /** For an animated GIF: a still of its first frame, shown instead under
+   *  prefers-reduced-motion. A GIF can't be paused from CSS, so the only
+   *  way to stop it is to not show it. */
+  still?: string;
 };
 
 /** A short titled paragraph: a pain point, a feature, a learning. */
@@ -58,6 +68,13 @@ export type Block =
   | { kind: "split"; image: Img; caption?: string; notes: Note[]; imageSide: "left" | "right"; size: "phone" | "half" }
   /** One image across the content width. */
   | { kind: "figure"; image: Img; caption?: string }
+  /** Two images side by side, the way the live Semplice pages paired two
+   *  half-width exports or two phone recordings. "phone": two narrow
+   *  screens, three columns each, centred, with a phone's corners (they
+   *  stay side by side on a phone, where two at half width still read).
+   *  "half": two wide images, six columns each, stacked on a phone.
+   *  Added 2026-11-11 for Lincoln and Infinity. */
+  | { kind: "pair"; images: [Img, Img]; caption?: string; size: "phone" | "half" }
   /** The same screen before and after, wiped between with a handle. */
   | { kind: "compare"; before: Img; after: Img; beforeLabel: string; afterLabel: string; body?: string }
   /** A grab-and-swipe set of images with a note under it. */
@@ -362,7 +379,302 @@ export const rentspree: CaseStudy = {
   ],
 };
 
-export const caseStudies: CaseStudy[] = [opendoor, rentspree];
+// Lincoln (2026-11-11): micahburger.com/project/lincoln on the Opendoor
+// template. The live page's copy, tightened into Micah's voice: its
+// duplicated desktop and mobile paragraphs are one now, and two things are
+// gone, a pasted citation ("micahburger.com+1arcd.ku.edu+1") and a closing
+// line about industry research that wasn't about this project. The live
+// page claims an A/B test lift but gives no numbers, so there's no results
+// block yet: the outcome is stated in words, in the facts and the notes.
+// Add the figures as a `results` block (and the Outcomes lab comes with it)
+// once Micah has them.
+//
+// Images (public/img/lincoln), live page order:
+//   hero.jpg            HalfTn-1.png           (live site)
+//   devices.jpg         Lincoln13-CaseStudy    (ds-assets)
+//   mobile-steps.jpg    Lincoln5-CaseStudy     (live site)
+//   build-summary.jpg   Lincoln7-CaseStudy     (live site)
+//   hover-guide.jpg     Lincoln9-CaseStudy     (live site)
+//   pricing.jpg         Linc-right             (ds-assets)
+//   models.jpg          Linc-left              (ds-assets)
+//   nautilus.jpg        Lincoln14-CaseStudy    (ds-assets)
+//   detail-page.jpg     Lincoln6-CaseStudy     (live site)
+//   components.jpg      Lincoln3-CaseStudy     (live site)
+//   style-guide.jpg     Lincoln1-CaseStudy     (live site)
+// Lincoln10-12 and Lincoln-Gallery in ds-assets aren't on the live page.
+const ln = (file: string) => `/img/lincoln/${file}`;
+const wide = (src: string, alt: string): Img => ({ src, alt, width: 1920, height: 1080 });
+
+export const lincoln: CaseStudy = {
+  slug: "lincoln",
+  name: "Lincoln",
+  title: "Redesign of Lincoln’s Build and Price",
+  blocks: [
+    {
+      kind: "intro",
+      paragraphs: [
+        "Lincoln.com needed a new way to introduce shoppers to Lincoln’s latest luxury lineup. At the center was Build and Price, one of the most visited parts of the site, where shoppers configure their own Lincoln and see what it costs.",
+        "Working with a small digital team, I redesigned Build and Price as a responsive experience that made pricing and the essentials easy to follow, with customizing the car as the hero.",
+      ],
+      facts: [
+        { label: "Objective", text: "Make building and pricing a Lincoln simple on any screen, and as considered as the brand." },
+        { label: "Role", text: "Art direction and product design, shared with Natalie Cho." },
+        {
+          label: "Team",
+          text: "Natalie Cho (art direction, product design), Paul Mathisen (product design), Hassan Karimi (user experience), Heather Tafel (project management).",
+        },
+        {
+          // The live page's claim, without numbers; see the note above.
+          label: "Outcome",
+          text: "In A/B testing against the legacy experience, engagement and vehicle purchase rates rose.",
+        },
+      ],
+      image: {
+        src: ln("hero.jpg"),
+        alt: "Build and Price on a phone, its step menu open, over a Lincoln on a mountain road",
+        width: 854,
+        height: 1080,
+      },
+    },
+    {
+      kind: "figure",
+      image: wide(ln("devices.jpg"), "Build and Price on a laptop and a phone: choosing the exterior paint for a 2017 Lincoln MKZ"),
+      caption: "Build and Price on desktop and mobile.",
+    },
+    {
+      kind: "heading",
+      title: "What buyers needed",
+      lede: "We ran several rounds of user testing to understand what motivates a buyer. Three needs came up.",
+      ruled: true,
+    },
+    {
+      kind: "split",
+      image: {
+        src: ln("pricing.jpg"),
+        alt: "Payment summary for a 2017 Lincoln MKZ Premiere: base MSRP, options, destination charges, incentives, net price and monthly payment",
+        width: 854,
+        height: 1080,
+      },
+      imageSide: "left",
+      size: "phone",
+      notes: [
+        {
+          title: "Clear pricing",
+          body: "Buyers wanted a cost structure they could see through: what the car costs, what each option adds, and what that means each month.",
+        },
+        {
+          title: "Features of their choosing",
+          body: "Buyers valued being able to add the specific features they wanted to their car.",
+        },
+        {
+          title: "Delivery to their door",
+          body: "Once the car was built, buyers wanted the option to schedule delivery to their home.",
+        },
+      ],
+    },
+    {
+      kind: "split",
+      image: {
+        src: ln("models.jpg"),
+        alt: "Choosing a model on desktop: Premiere, Select, Reserve and Black Label, each with its price and fuel economy",
+        width: 854,
+        height: 926,
+      },
+      imageSide: "right",
+      size: "phone",
+      notes: [
+        {
+          title: "Designed around those three",
+          body: "The redesign took on each point of friction: pricing laid out line by line, a clear choice at every step, and delivery at home as part of the journey. In A/B testing against the legacy experience, it raised engagement and vehicle purchase rates.",
+        },
+      ],
+    },
+    {
+      kind: "heading",
+      title: "Start on the web, finish on a phone",
+      lede: "The new Build and Price worked across devices, so a shopper could start a build on the web and carry on with it on mobile.",
+    },
+    {
+      kind: "figure",
+      image: wide(ln("mobile-steps.jpg"), "Three mobile screens: the model, the step menu open, and the payment summary"),
+      caption: "On mobile, a progressive dropdown moves between the steps, so shoppers can go back to add or edit a feature, or change the model, at any point.",
+    },
+    {
+      kind: "figure",
+      image: wide(ln("build-summary.jpg"), "Exterior accessories and the build summary on a laptop, with fuel type and model on a phone"),
+      caption: "Accessories and the build summary on desktop, and the same build on a phone.",
+    },
+    {
+      kind: "heading",
+      title: "A style guide built for accessibility",
+      lede: "A core part of the work was a comprehensive, accessibility-focused style guide, which we turned into a component library for the key screens and the detail pages.",
+      ruled: true,
+    },
+    {
+      kind: "slideshow",
+      label: "Lincoln style guide and components",
+      images: [
+        wide(ln("style-guide.jpg"), "Style guide: type, icons, buttons and the colour palette"),
+        wide(ln("components.jpg"), "Type sizes to the AA standard, and the component library"),
+        wide(ln("hover-guide.jpg"), "Hover style guide for the model, trim and accessory selectors"),
+        wide(ln("nautilus.jpg"), "Introducing the 2019 Lincoln Nautilus, a detail page built from the library"),
+        wide(ln("detail-page.jpg"), "A detail page with a video header: Let Anticipation Give Way to Elation"),
+      ],
+      note: {
+        title: "An interactive guide",
+        body: "I led a junior designer in making the guide interactive, with its animations, hover states and transitions. We worked with marketing, art directors and copywriters to plan a cohesive launch.",
+      },
+    },
+  ],
+};
+
+// Infinity (2026-11-11): micahburger.com/project/infinity on the Opendoor
+// template, the live copy tightened the same way as Lincoln's. The live
+// page has no outcome figures, so no results block yet.
+//
+// Images (public/img/infinity), live page order:
+//   hero.jpg            Infinity-skinny2       (live site)
+//   schedule.jpg        Infinity-Therm-2       (live site)
+//   controller.jpg      Infinity-Therm-3       (live site)
+//   onboarding.jpg      Infinity-Therm-4       (live site)
+//   auto-mode.gif       Infinity-Auto-Mode     (live site)
+//   heat-mode.gif       Infinity-Heat          (live site)
+//   in-home.jpg         Infinity-Therm-10      (live site)
+//   mode-menu.jpg       Infinity-skinny1       (live site)
+//   cooling-mode.gif    Infinity-Cooling-Mode  (live site)
+//   modes.gif           Infinity-modes         (live site)
+//   style-light.jpg     Infinity-Therm-8       (live site)
+//   style-dark.jpg      Infinity-Therm-9       (ds-assets)
+//   wall-light.jpg      Infinity-Therm-5       (live site)
+//   wall-dark.jpg       Infinity-Therm-6       (live site)
+// The GIFs are copied as they are (375x667, looping); each *-still.jpg is
+// its first frame, for reduced motion.
+const inf = (file: string) => `/img/infinity/${file}`;
+const recording = (name: string, alt: string): Img => ({
+  src: inf(`${name}.gif`),
+  still: inf(`${name}-still.jpg`),
+  alt,
+  width: 375,
+  height: 667,
+});
+
+export const infinity: CaseStudy = {
+  slug: "infinity",
+  name: "Infinity",
+  title: "Redesign of Carrier’s Infinity thermostat and app",
+  blocks: [
+    {
+      kind: "intro",
+      paragraphs: [
+        "Carrier Residential needed a homeowner app and wall controller for Infinity, its premium smart home system. Both were dated, and Carrier wanted to compete in the smart home market.",
+        "I led the creative team that redesigned the app and the wall controller together, so homeowners could easily install, monitor and manage their system and their energy use.",
+      ],
+      facts: [
+        { label: "Objective", text: "Modernize the app and wall controller, and put Carrier in a competitive position in the smart home market." },
+        { label: "Role", text: "Led the creative team: art direction, product design and research." },
+        {
+          label: "Team",
+          text: "Jill Haefele (interaction design, strategy, research), Tae Yang (product design, prototyping), Ana Lopez (product design), with Lisa Mitchell, Madeline Winer, Mary Rockwell, Anya Palkowski and Dan Levine.",
+        },
+      ],
+      image: {
+        src: inf("hero.jpg"),
+        alt: "The app’s main screen cooling to 75°, over a photo of a father lifting his child at home",
+        width: 854,
+        height: 1080,
+      },
+    },
+    {
+      kind: "slideshow",
+      label: "Infinity app and wall controller",
+      images: [
+        wide(inf("schedule.jpg"), "Setting a weekly schedule and comfort profiles in the app"),
+        wide(inf("controller.jpg"), "Three wall controller screens"),
+        wide(inf("onboarding.jpg"), "The app’s welcome screen and comfort settings"),
+      ],
+    },
+    {
+      kind: "heading",
+      title: "Learning what homeowners valued",
+      lede: "In discovery I studied the interaction patterns thermostats already used, from dials to sliders, and we interviewed homeowners about the features they valued most in a digital climate control. We then walked people through key tasks in prototypes, refining the design over several rounds of testing.",
+      ruled: true,
+    },
+    {
+      kind: "pair",
+      size: "phone",
+      images: [
+        recording("auto-mode", "Prototype of the main screen in auto mode"),
+        recording("heat-mode", "Prototype of the main screen in heat mode"),
+      ],
+      caption: "Prototypes of the main screen, in auto and heat modes.",
+    },
+    {
+      kind: "figure",
+      image: wide(inf("in-home.jpg"), "The wall controller heating to 80° beside the app’s home screen, in a kitchen"),
+      caption: "The wall controller and the app, designed as one.",
+    },
+    {
+      kind: "heading",
+      title: "One experience, on the wall and the phone",
+      lede: "To simplify flows and onboarding, we brought the wall controller and the iOS app under one design language for interactions, visuals and navigation, across every journey.",
+    },
+    {
+      kind: "split",
+      image: {
+        src: inf("mode-menu.jpg"),
+        alt: "The mode menu sliding up over the main screen: cool, heat, auto, fan and off",
+        width: 854,
+        height: 1080,
+      },
+      imageSide: "right",
+      size: "phone",
+      notes: [
+        {
+          title: "Menus as cards",
+          body: "To keep homeowners on the main controller screen, menus are cards that slide in over it with a subtle micro-interaction.",
+        },
+      ],
+    },
+    {
+      kind: "pair",
+      size: "phone",
+      images: [
+        recording("cooling-mode", "The main screen in cooling mode"),
+        recording("modes", "Switching modes from the main screen"),
+      ],
+      caption: "Cooling mode, and switching modes, on the main screen.",
+    },
+    {
+      kind: "heading",
+      title: "Documented for engineering",
+      lede: "I made sure the team produced clear, concise documentation: a style guide, component and interaction libraries, prototypes and feature flows, to set engineering and QA up for success.",
+      ruled: true,
+    },
+    {
+      kind: "pair",
+      size: "half",
+      images: [
+        wide(inf("style-light.jpg"), "Style guide in light mode: type, UI elements, icons and colours"),
+        wide(inf("style-dark.jpg"), "Style guide in dark mode: type, UI elements, icons and colours"),
+      ],
+      caption: "The style guide, in light and dark.",
+    },
+    {
+      kind: "heading",
+      title: "Light and dark",
+      lede: "We also designed light and dark modes, there for function, but also to give Infinity a premium feel and bring a little elegance into the home.",
+    },
+    {
+      kind: "compare",
+      before: wide(inf("wall-light.jpg"), "The wall controller and the app in light mode, in a living room"),
+      after: wide(inf("wall-dark.jpg"), "The wall controller and the app in dark mode, in the same room"),
+      beforeLabel: "Light",
+      afterLabel: "Dark",
+    },
+  ],
+};
+
+export const caseStudies: CaseStudy[] = [opendoor, rentspree, lincoln, infinity];
 
 /** The case study a path like /project/opendoor (or /project/opendoor/)
  *  asks for, or undefined for any other path. */

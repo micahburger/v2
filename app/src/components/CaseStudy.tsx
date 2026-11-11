@@ -146,6 +146,18 @@ function BlockView({ block, outcomes }: { block: Block; outcomes: LabState["outc
         </figure>
       );
 
+    case "pair":
+      // One figure, two pictures: the caption speaks for both, as the live
+      // pages' single line under a pair did.
+      return (
+        <figure className={`cs-pair cs-pair--${block.size} grid`}>
+          {block.images.map((image) => (
+            <Picture key={image.src} image={image} className="cs-pair__item" />
+          ))}
+          {block.caption && <figcaption className="cs-caption cs-pair__caption">{block.caption}</figcaption>}
+        </figure>
+      );
+
     case "compare":
       return (
         <>
@@ -327,9 +339,11 @@ function Starred({ text }: { text: string }) {
 
 /** One image, framed (a dark-ground export in a rounded box) or a cutout
  *  (a transparent phone, straight on the page). width and height reserve
- *  the box before it loads. */
+ *  the box before it loads. An animated GIF with a `still` swaps to it
+ *  under reduced motion, through <picture>, so the browser picks before
+ *  it fetches and the GIF is never downloaded for those visitors. */
 function Picture({ image, className, eager }: { image: Img; className?: string; eager?: boolean }) {
-  const img = (
+  const tag = (
     <img
       src={image.src}
       alt={image.alt}
@@ -338,6 +352,14 @@ function Picture({ image, className, eager }: { image: Img; className?: string; 
       loading={eager ? "eager" : "lazy"}
       decoding="async"
     />
+  );
+  const img = image.still ? (
+    <picture>
+      <source media="(prefers-reduced-motion: reduce)" srcSet={image.still} />
+      {tag}
+    </picture>
+  ) : (
+    tag
   );
   return image.look === "cutout" ? (
     <div className={`cs-cutout ${className ?? ""}`}>{img}</div>

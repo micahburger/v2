@@ -21,7 +21,10 @@
 //   lattice-1..5         prtfolio images/9, 7, 4, 8, 6.jpg (live order)
 //   opendoor-1..6        ds-assets/projectslideshow4, 5, 6, 2, 3, 9
 //   lincoln-1..5         Lincoln-Gallery, Lincoln13, 10, 14, 11-CaseStudy
-//   infinity-1..2        Carrier-Gallery, Infinity-Therm-9 (all there is)
+//   infinity-1..4        Carrier-Gallery, Infinity-Therm-9, then -10 and -6
+//                        (2026-11-11, from the case study's own images in
+//                        public/img/infinity: the in-home and dark-mode
+//                        shots)
 //   bbc-1..3             BBC-Gallery, BBC-8, BBC-9
 //   rockwell-1..4        Rockwell-Gallery, -3, -4, -5 (cropped from 4:3)
 //   aba-1..6             Aba-Gallery, ABA-1, -8, -10, -13, -6
@@ -129,16 +132,19 @@ export const featured: Featured[] = [
   {
     id: "lincoln",
     name: "Lincoln.com",
-    rest: " sought a fresh experience to engage shoppers with their latest luxury lineup. My mission was to redesign the popular “Build and Price” feature, where users customize and bring their dream Lincoln vehicle to life.",
-    href: "https://micahburger.com/project/lincoln",
+    // Follows the case study's opening, like Opendoor's (2026-11-11).
+    rest: " needed a new way to introduce shoppers to Lincoln’s luxury lineup. I redesigned Build and Price, one of the most visited parts of the site, so shoppers could configure and price their own Lincoln on any screen.",
+    // The v2 case study since 2026-11-11 (was the live Semplice page).
+    href: "/project/lincoln",
     media: slides("lincoln", 5, "Lincoln Build and Price"),
   },
   {
     id: "infinity",
     name: "Infinity Thermostat",
-    rest: " I led a creative team to design a digital thermostat and app for Infinity, Carrier’s premium smart home brand, with the goal of modernizing their legacy app and wall controller for a more seamless digital experience.",
-    href: "https://micahburger.com/project/infinity",
-    media: slides("infinity", 2, "Infinity thermostat and app"),
+    rest: " I led the creative team that redesigned the app and wall controller for Infinity, Carrier’s premium smart home system, so homeowners could easily install, monitor and manage their system and their energy use.",
+    // The v2 case study since 2026-11-11 (was the live Semplice page).
+    href: "/project/infinity",
+    media: slides("infinity", 4, "Infinity thermostat and app"),
   },
   {
     // Placeholder grouping for the older case studies until they get a home
