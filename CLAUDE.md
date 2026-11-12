@@ -273,10 +273,18 @@ once v2 replaces it.
     via `ARCHIVE_LAB`). Each id maps to a component in
     `components/archive/layouts.ts`, typed so a missing one fails the
     build. A new variant is a new component; the data doesn't change.
-  - `index` (the default): rows (ds table index) with a pointer-following
-    lead image, one row open at a time in place (summary left, carousel
-    right), `#<slug>` anchors that open on arrival, carousel with arrows,
-    keys, swipe, `n / N` count and a modal larger view.
+  - Three layouts so far (2026-11-11), each a design system pattern:
+    `index` (default; ds table index: rows, a lead image following the
+    pointer, one row open in place), `titles` (ds text index: big centred
+    names, the others dim and the lead screen rises behind on hover), and
+    `panels` (the RentSpree overview's chapter panels: every project open).
+    Shared parts in `components/archive/`: `useArchiveAccordion` (one open,
+    anchors, scroll under the bar, inert folds), `ArchiveDetail` (summary,
+    carousel, fold, chevron), `ArchiveCarousel` + `Lightbox`.
+  - Index critique applied (Micah): no row thumbnail on desktop (phones
+    only; the hover preview covers it), a chevron instead of plus/cross,
+    and smaller type, set once as `--ax-*` tokens on `.ax` (body 14,
+    small 13, labels 12, hook 18) for every layout.
   - The frame is `CaseShell.tsx`, lifted out of CaseStudy.tsx so the
     Archive and every case study share one bar, title and footer.
   - Images: `public/img/archive/<slug>/<name>{,-640,-192}.webp`, from the

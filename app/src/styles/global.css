@@ -2413,7 +2413,15 @@ p.cs-body {
    carousel's own slide (carousel.ts), and the 0.12s reduced-motion rule at
    the end of the file covers what isn't switched off here. */
 
+/* The Archive's type, shared by every layout (Micah, 2026-11-11: "the
+   type size is too large"). Body copy a step under the case studies'
+   16px, the small headings a step under their 13px, the hook brought down
+   to keep its lead over the body. One place to tune all three layouts. */
 .ax {
+  --ax-hook: 18px;
+  --ax-body: 14px;
+  --ax-small: 13px;
+  --ax-label: 12px;
   padding-top: 48px;
 }
 
@@ -2440,14 +2448,16 @@ p.cs-body {
   scroll-margin-top: 96px;
 }
 
-/* The row button: thumbnail | client over project | disciplines | year |
-   the plus that turns to a cross. Its columns match the open panel's below
-   it (the name starts where the summary does), so opening reads as the row
-   unfolding, not a new layout appearing. */
+/* The row button: client over project | disciplines | year | chevron.
+   Its first column is the open panel's text column (both 5fr of the same
+   width, the same gutter), so the summary starts under the client's name
+   and opening reads as the row unfolding. The thumbnail is phones only
+   (Micah, 2026-11-11): on desktop the hover preview shows the lead image,
+   and both together were one picture too many. */
 .ax-row {
   position: relative;
   display: grid;
-  grid-template-columns: 96px minmax(0, 5fr) minmax(0, 4fr) 64px 24px;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) 64px 24px;
   align-items: center;
   column-gap: var(--gutter);
   width: 100%;
@@ -2495,7 +2505,7 @@ p.cs-body {
 }
 
 .ax-row__thumb {
-  display: block;
+  display: none;
   width: 96px;
   aspect-ratio: 16 / 9;
   border-radius: 8px;
@@ -2520,7 +2530,7 @@ p.cs-body {
 .ax-row__project,
 .ax-row__role,
 .ax-row__year {
-  font-size: 14px;
+  font-size: var(--ax-small);
   line-height: 1.4;
 }
 
@@ -2559,8 +2569,10 @@ p.cs-body {
   height: 20px;
 }
 
+/* A chevron (Micah, 2026-11-11, instead of a plus turning to a cross):
+   down while closed, flipped up while open. */
 .ax-item.is-open .ax-row__icon {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
 }
 
 /* ---- the panel ----
@@ -2583,13 +2595,12 @@ p.cs-body {
   overflow: hidden;
 }
 
-/* The row's own first column (96px, the thumbnail's) and gutter, so the
-   summary starts exactly under the client's name; then text and screens
-   split the rest 5 to 7, the screens a little wider. Not the 12-column
+/* Text and screens split 5 to 7, the screens a little wider; the text
+   column lines up with the row's name column above. Not the 12-column
    .grid: the row isn't on it, and the point is lining up with the row. */
 .ax-detail {
   display: grid;
-  grid-template-columns: 96px minmax(0, 5fr) minmax(0, 7fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   column-gap: var(--gutter);
   align-items: start;
   row-gap: 32px;
@@ -2604,16 +2615,16 @@ p.cs-body {
 }
 
 .ax-detail__text {
-  grid-column: 2;
+  grid-column: 1;
 }
 
 .ax-detail__media {
-  grid-column: 3;
+  grid-column: 2;
   min-width: 0;
 }
 
 .ax-hook {
-  font-size: 22px;
+  font-size: var(--ax-hook);
   line-height: 1.4;
   letter-spacing: -0.005em;
   color: var(--black);
@@ -2621,15 +2632,15 @@ p.cs-body {
 }
 
 .ax-summary {
-  margin-top: 16px;
-  font-size: var(--cs-body);
+  margin-top: 14px;
+  font-size: var(--ax-body);
   line-height: 1.6;
 }
 
 .ax-label {
-  margin-top: 28px;
-  margin-bottom: 8px;
-  font-size: var(--cs-small);
+  margin-top: 24px;
+  margin-bottom: 6px;
+  font-size: var(--ax-label);
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: 0.02em;
@@ -2642,8 +2653,8 @@ p.cs-body {
   gap: 6px;
   padding-left: 18px;
   list-style: disc;
-  font-size: var(--cs-body);
-  line-height: 1.5;
+  font-size: var(--ax-body);
+  line-height: 1.55;
 }
 
 .ax-delivered li::marker {
@@ -2651,13 +2662,13 @@ p.cs-body {
 }
 
 .ax-outcome {
-  font-size: var(--cs-body);
+  font-size: var(--ax-body);
   line-height: 1.5;
   color: var(--black);
 }
 
 .ax-team {
-  font-size: 14px;
+  font-size: var(--ax-small);
   line-height: 1.6;
   opacity: 0.8;
 }
@@ -2923,6 +2934,7 @@ p.cs-body {
     inset: 0 -12px;
   }
   .ax-row__thumb {
+    display: block;
     grid-column: 1;
     grid-row: 1 / span 3;
     width: 72px;
@@ -2973,10 +2985,199 @@ p.cs-body {
   .ax-controls {
     padding-inline: var(--gutter);
   }
-  .ax-hook {
-    font-size: 20px;
-  }
   .ax-lightbox {
     padding: 16px;
+  }
+}
+
+/* ---- ?layout=titles (ArchiveTitles.tsx): the ds text index ----
+   The clients' names, large and centred, project and year quiet under
+   each. On a fine pointer the hovered (or focused) name keeps full
+   strength while the rest drop to 20%, and its lead screen rises behind
+   the type: opacity .9, scale .96 to 1, 400ms on the enter curve, out on
+   the exit curve. The names blend with `difference` so they read over any
+   picture. Opening a name unfolds the same panel the Index uses, its
+   contents set left again. */
+.axt {
+  position: relative;
+  isolation: isolate;
+  margin-top: 64px;
+}
+
+.axt-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.axt-backdrop img {
+  grid-area: 1 / 1;
+  width: min(760px, 70%);
+  height: auto;
+  border-radius: var(--radius-media);
+  opacity: 0;
+  scale: 0.96;
+  transition:
+    opacity 0.18s var(--ease-exit),
+    scale 0.18s var(--ease-exit);
+}
+
+.axt-backdrop img.is-lit {
+  opacity: 0.9;
+  scale: 1;
+  transition:
+    opacity 0.4s var(--ease-enter),
+    scale 0.4s var(--ease-enter);
+}
+
+.axt-list {
+  overflow-anchor: none;
+  text-align: center;
+}
+
+.axt-item {
+  scroll-margin-top: 96px;
+  transition: opacity 0.25s var(--ease-enter);
+}
+
+/* The dimming: everyone but the lit name, only while one is lit. */
+.axt.has-lit .axt-item:not(.is-lit) {
+  opacity: 0.2;
+}
+
+.axt-item__heading {
+  font: inherit;
+}
+
+.axt-title {
+  display: inline-grid;
+  justify-items: center;
+  gap: 6px;
+  /* A button centres its text on its own; a name that wraps should
+     follow the list (centred on desktop, left on phones). */
+  text-align: inherit;
+  padding: 14px 8px;
+  color: var(--black);
+  mix-blend-mode: difference;
+}
+
+.axt-title:focus-visible {
+  outline-offset: 2px;
+  border-radius: var(--radius-card);
+}
+
+.axt-title__client {
+  font-size: clamp(32px, 5.4vw, 76px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.axt-title__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--ax-small);
+  opacity: 0.65;
+}
+
+.axt-title__meta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.32s var(--ease-enter);
+}
+
+.axt-item.is-open .axt-title__meta svg {
+  transform: rotate(180deg);
+}
+
+.axt-item .ax-panel {
+  text-align: left;
+}
+
+.axt-item .ax-detail {
+  padding-top: 24px;
+}
+
+/* ---- ?layout=panels (ArchivePanels.tsx): the RentSpree overview ----
+   The chapter panels from /project/rentspree (.cs-chapter): a rounded
+   panel per project, text on the left, screens on the right, a gutter
+   between panels so they read as one set of cards. One quiet ground for
+   all five (the brief card's 5% wash) rather than per-project colours,
+   which these don't have. */
+.axp-list {
+  display: grid;
+  gap: var(--gutter);
+  margin-top: 64px;
+}
+
+.axp-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 56px;
+  align-items: start;
+  padding: 56px;
+  border-radius: var(--radius-media);
+  background: color-mix(in srgb, var(--ink) 5%, var(--page));
+  scroll-margin-top: 96px;
+}
+
+.axp-panel__media {
+  min-width: 0;
+}
+
+.axp-title {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--black);
+}
+
+.axp-meta {
+  margin-top: 8px;
+  font-size: var(--ax-small);
+  opacity: 0.75;
+}
+
+.axp-roles {
+  margin-top: 2px;
+  margin-bottom: 28px;
+  font-size: var(--ax-small);
+  opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .axt-backdrop img,
+  .axt-backdrop img.is-lit {
+    scale: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .axt {
+    margin-top: 40px;
+  }
+  .axt-title {
+    padding: 10px 4px;
+  }
+  .axt-list {
+    text-align: left;
+  }
+  .axt-title {
+    justify-items: start;
+  }
+  .axp-list {
+    margin-top: 40px;
+    gap: 16px;
+  }
+  .axp-panel {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 28px;
+    padding: 28px 20px;
+  }
+  .axp-panel__media {
+    order: -1;
   }
 }
