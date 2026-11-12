@@ -312,6 +312,34 @@ once v2 replaces it.
 - The live page's `Section-divider2.jpg` (above the contact block) isn't in
   ds-assets, so it's left out.
 
+## Motion framework (2026-11-11)
+
+One system for how things move, in `app/src/styles/global.css`:
+
+- **Tokens** (`:root`, "motion"): `--ease-enter|exit|large|settle` (mirror
+  `motion.ts` EASE), `--dur-fast|base|slow`, the page durations and
+  `--page-shift` / `--reveal-shift`. New motion uses these.
+- **Page transitions**: the browser's cross-document View Transitions (ds
+  Recipe 9), no library. Every page load between the homepage, the case
+  studies, the Archive and the applicant experience page animates: the old
+  page lifts away (280ms, large curve), the new one rises in (520ms, enter
+  curve, 120ms after). `to-home` reverses the direction; an inline
+  `pagereveal` script in `app/index.html` tags it (it must be in `<head>`:
+  a listener in main.tsx ran too late). The Lab pill and back-to-top are
+  pinned (`view-transition-name`). Reduced motion: a 150ms cross-fade.
+  Chrome/Edge 126+ and Safari 18.2+ animate; others just navigate.
+  **Only the built site animates**: Vite's dev server injects the CSS by
+  script, so the new page hasn't opted in when it's revealed. Test
+  transitions on the build (`./deploy.sh`, then serve the repo root).
+  For the snapshot to be the rendered page, the app script is
+  `blocking="render"` (re-added after Vite's build by `renderBlockingEntry`
+  in vite.config.ts) and main.tsx renders with `flushSync`.
+  applicant-experience's own `css/styles.css` carries a copy of the CSS.
+- **Reveal** (`reveal.ts`, armed in `CaseShell`): anything with
+  `data-reveal` fades up once on arrival; already-visible blocks show at
+  once; none under reduced motion. Every case study block and the Archive
+  use it.
+
 ## Things that will bite you
 
 - `motion.ts` is the timing source of truth, but CSS can't import it; some

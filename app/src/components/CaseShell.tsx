@@ -1,4 +1,5 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { useReveal } from "../reveal";
 import { LabKey, LabState } from "../lab";
 import LabPanel from "./LabPanel";
 import SiteFooter from "./SiteFooter";
@@ -33,6 +34,11 @@ export default function CaseShell({
   setLab: <K extends LabKey>(key: K, value: LabState[K]) => void;
   children: ReactNode;
 }) {
+  // The shared scroll reveal (reveal.ts) for everything marked data-reveal
+  // in the page, case study blocks and the Archive's alike.
+  const main = useRef<HTMLElement>(null);
+  useReveal(main);
+
   // The ds's "{Project} · Micah Lindenberger", with a middle dot for the
   // dash (no em dashes anywhere, titles included).
   useEffect(() => {
@@ -83,7 +89,7 @@ export default function CaseShell({
         </a>
       </nav>
 
-      <main className="cs">
+      <main className="cs" ref={main}>
         <header className="cs-hero wrap">
           <h1 className="cs-hero__title" tabIndex={-1}>
             {title}

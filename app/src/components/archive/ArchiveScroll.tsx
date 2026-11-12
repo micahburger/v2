@@ -36,13 +36,11 @@ import { holdAnchor } from "./holdAnchor";
  * opens a list to jump. Anchors: /project/archive#wwe lands
  * on that chapter; jumping writes the chapter's #slug.
  *
- * Reveal: blocks fade up 24px once as they arrive (ds Recipe 4); none
- * under reduced motion, and none until the script has run, so nothing is
- * ever left invisible.
+ * Reveal: blocks marked data-reveal fade up once as they arrive, through
+ * the site's shared reveal (reveal.ts, armed by CaseShell).
  */
 export default function ArchiveScroll({ archive }: { archive: Archive }) {
   const projects = archive.projects;
-  const root = useRef<HTMLElement>(null);
   const chapters = useRef<(HTMLElement | null)[]>([]);
   const [current, setCurrent] = useState(0);
   const [inChapters, setInChapters] = useState(false);
@@ -108,32 +106,8 @@ export default function ArchiveScroll({ archive }: { archive: Archive }) {
     };
   }, []);
 
-  // The reveal: armed only once this runs (so a page without script shows
-  // everything), never under reduced motion.
-  useEffect(() => {
-    const el = root.current;
-    if (!el || prefersReducedMotion() || !("IntersectionObserver" in window)) return;
-    const targets = el.querySelectorAll(".axs-reveal");
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("is-in");
-          io.unobserve(entry.target);
-        }),
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
-    );
-    el.classList.add("is-revealing");
-    targets.forEach((t) => {
-      // Already on screen at load: shown at once, not animated in.
-      if (t.getBoundingClientRect().top < window.innerHeight) t.classList.add("is-in");
-      else io.observe(t);
-    });
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section className="ax ax--scroll axs wrap" aria-label={archive.title} ref={root}>
+    <section className="ax ax--scroll axs wrap" aria-label={archive.title}>
       <p className="ax-intro">{archive.intro}</p>
 
       {/* Contents, on ruled lines (NZero). No chapter numbers here (Micah,
@@ -189,7 +163,7 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
     <article id={project.slug} ref={chapterRef} className="axs-chapter" aria-labelledby={`${project.slug}-title`}>
       {/* The meta row (TIME, Thomson Reuters). No chapter number (Micah,
           2026-11-11); the skipper says where you are. */}
-      <dl className="axs-meta axs-reveal">
+      <dl className="axs-meta" data-reveal>
         <div>
           <dt>Client</dt>
           <dd id={`${project.slug}-title`}>{project.client}</dd>
@@ -209,7 +183,7 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
       </dl>
 
       {/* Statement left, story right. */}
-      <div className="axs-lead axs-reveal">
+      <div className="axs-lead" data-reveal>
         <h2 className="axs-statement">{project.hook}</h2>
         <p className="axs-summary">{project.summary}</p>
       </div>
@@ -224,7 +198,8 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
         </p>
         <ol className="axs-shots">
           {project.images.map((image, k) => (
-            <li key={image.file} className={`axs-shot axs-reveal ${image.height > image.width ? "is-portrait" : ""}`}>
+            <li key={image.file} className={`axs-shot ${image.height > image.width ? "is-portrait" : ""}`}
+              data-reveal>
               <button type="button" className="axs-shot__button" onClick={() => onZoom(k)} aria-label={`View larger: ${image.alt}`}>
                 <img
                   src={archiveSrc(project.slug, image)}
@@ -249,7 +224,7 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
       {/* Key takeaways (TIME): what was designed, as columns under
           hairlines. Unnumbered, with the copy level with the label (Micah,
           2026-11-11). */}
-      <div className="axs-takeaways axs-reveal">
+      <div className="axs-takeaways" data-reveal>
         <h3 className="axs-label">What I designed</h3>
         <ul>
           {project.delivered.map((item) => (
@@ -262,7 +237,7 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
 
       {/* Impact (TIME), only where the source stated one. */}
       {project.outcome && (
-        <div className="axs-impact axs-reveal">
+        <div className="axs-impact" data-reveal>
           <h3 className="axs-impact__title">Outcome</h3>
           <p className="axs-impact__text">{project.outcome}</p>
         </div>

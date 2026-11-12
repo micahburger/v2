@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { flushSync } from "react-dom";
 import App from "./App";
 import CaseStudyPage from "./components/CaseStudy";
 import ArchivePage from "./components/archive/ArchivePage";
@@ -42,4 +43,12 @@ if (study) {
 
 const page = isArchive ? <ArchivePage /> : study ? <CaseStudyPage study={study} /> : <App />;
 
-ReactDOM.createRoot(document.getElementById("root")!).render(<React.StrictMode>{page}</React.StrictMode>);
+// Render synchronously, for page transitions (index.html, global.css):
+// createRoot().render() on its own only schedules the render, and the
+// browser could paint, and take the transition's snapshot of this page,
+// while #root is still empty. flushSync commits the page (layout effects
+// included, so the homepage's scroll memory has already put it back where
+// you were) before this script finishes; index.html marks this script
+// render-blocking, so the first paint waits for it where browsers allow.
+const root = ReactDOM.createRoot(document.getElementById("root")!);
+flushSync(() => root.render(<React.StrictMode>{page}</React.StrictMode>));

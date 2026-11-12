@@ -39,8 +39,27 @@ function publicFolderIndex(): Plugin {
   };
 }
 
+/**
+ * Keeps the app's script render-blocking in the built page. index.html
+ * marks it blocking="render" so the first paint (and a page transition's
+ * snapshot of the page; see the page transitions note in index.html) waits for React to
+ * render; Vite rewrites that tag at build time to point at the hashed
+ * bundle and drops attributes it doesn't know, so this puts it back.
+ */
+function renderBlockingEntry(): Plugin {
+  return {
+    name: "render-blocking-entry",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler: (html) =>
+        html.replace(/<script type="module"(?![^>]*blocking=)([^>]*src="\/assets\/[^"]+\.js")/g, '<script type="module" blocking="render"$1'),
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), publicFolderIndex()],
+  plugins: [react(), publicFolderIndex(), renderBlockingEntry()],
   server: {
     // 4176 is the folio, 5173 is taken by most other prototypes.
     port: 4178,

@@ -38,9 +38,33 @@
   --gutter: 30px;
   --content: 1220px;
 
-  /* Mirrors motion.ts EASE.* — CSS can't import them. */
+  /* ---- motion: the one framework (Micah, 2026-11-11) ----
+     Every curve and the shared durations, in one place. The curves mirror
+     motion.ts EASE.* (CSS can't import them; change one, change both).
+     New motion takes these rather than its own numbers; older rules that
+     still write a curve out by hand use these same values.
+
+     Curves (ds §8): enter for anything arriving (reveals, hovers, a page
+     coming in), exit for anything leaving (always shorter than its
+     enter), large for big moves (page colour, a page going out, auto
+     slides), settle for after a drag or click. */
   --ease-enter: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-large: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-settle: cubic-bezier(0.32, 0.72, 0, 1);
+  /* Durations: fast for colour and micro states, base for small enters,
+     slow for reveals. A page goes out in --dur-page-out and the next comes
+     in over --dur-page-in after --dur-page-overlap, so the two overlap a
+     little and the swap never shows an empty frame. */
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+  --dur-page-out: 280ms;
+  --dur-page-in: 520ms;
+  --dur-page-overlap: 120ms;
+  /* Distances stay small (ds §8): 16px for a page, 24px for a reveal. */
+  --page-shift: 16px;
+  --reveal-shift: 24px;
 
   /* Shared with the 2026 folio, so a hover grows the same on every site. */
   /* Room under the last line of the page so the fixed back-to-top button
@@ -2389,6 +2413,144 @@ p.cs-body {
   opacity: 0.8;
 }
 
+/* ================= page transitions (script half: index.html) =================
+   Moving between the homepage and a case study is a full page load (each
+   page is its own document; see main.tsx). The browser's cross-document
+   View Transitions (the ds Recipe 9) animate that load with no library:
+   it snapshots the old page as it goes and the new one at its first
+   paint, then plays the ::view-transition pseudo-elements below. Chrome
+   and Edge 126+ and Safari 18.2+ animate; anywhere else simply navigates,
+   as before. Both documents have to opt in, so applicant-experience's own
+   stylesheet carries the same block.
+
+   The movement says where you're going (types set by the inline script in index.html):
+     to-case  homepage into a case study, or case study to case study:
+              the old page lifts away, the new one rises into place, like
+              turning forward.
+     to-home  a case study back to the homepage: the reverse, the old
+              page settles down and away and home comes down into place.
+   The old page leaves first and faster (exit), the new one arrives a
+   beat later and slower (enter), overlapping so no frame is empty.
+
+   Pinned: the Lab pill and back-to-top are on every page, so they're
+   named and held in place through the swap instead of moving with it. */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: page-out var(--dur-page-out) var(--ease-large) both;
+}
+
+::view-transition-new(root) {
+  animation: page-in var(--dur-page-in) var(--ease-enter) var(--dur-page-overlap) both;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--page-shift) * -1));
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(var(--page-shift));
+  }
+}
+
+html:active-view-transition-type(to-home)::view-transition-old(root) {
+  animation-name: page-out-back;
+}
+
+html:active-view-transition-type(to-home)::view-transition-new(root) {
+  animation-name: page-in-back;
+}
+
+@keyframes page-out-back {
+  to {
+    opacity: 0;
+    transform: translateY(var(--page-shift));
+  }
+}
+
+@keyframes page-in-back {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--page-shift) * -1));
+  }
+}
+
+.lab {
+  view-transition-name: lab;
+}
+
+.to-top {
+  view-transition-name: to-top;
+}
+
+/* The pinned controls hold still: no cross-fade, no move. */
+::view-transition-group(lab),
+::view-transition-group(to-top),
+::view-transition-old(lab),
+::view-transition-new(lab),
+::view-transition-old(to-top),
+::view-transition-new(to-top) {
+  animation: none;
+}
+
+/* Less motion: a quick cross-fade, nothing travels. (The site-wide
+   reduced-motion rule below doesn't reach these pseudo-elements.) */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 150ms !important;
+    animation-delay: 0ms !important;
+    animation-timing-function: ease !important;
+  }
+  ::view-transition-old(root) {
+    animation-name: page-fade-out !important;
+  }
+  ::view-transition-new(root) {
+    animation-name: page-fade-in !important;
+  }
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ================= reveal (reveal.ts) =================
+   The one scroll reveal (ds Recipe 4), for every case study and the
+   Archive: anything marked data-reveal fades up --reveal-shift once, as
+   it arrives. Armed only once the script runs (.is-revealing on the
+   container), so without script nothing is ever left hidden; blocks
+   already on screen when the page arrives are shown at once, since the
+   page transition is already bringing them in. None under reduced
+   motion. */
+.is-revealing [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-shift));
+  transition:
+    opacity var(--dur-slow) var(--ease-enter),
+    transform var(--dur-slow) var(--ease-enter);
+}
+
+.is-revealing [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
 /* ================= reduced motion ================= */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2762,19 +2924,7 @@ p.cs-body {
   color: var(--black);
 }
 
-/* The reveal (ds Recipe 4): armed by the component, once per block. */
-.axs.is-revealing .axs-reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.4s var(--ease-enter),
-    transform 0.4s var(--ease-enter);
-}
-
-.axs.is-revealing .axs-reveal.is-in {
-  opacity: 1;
-  transform: none;
-}
+/* The reveal is the site's shared one ("reveal" above, reveal.ts). */
 
 /* ---- the chapter skipper (ChapterSkipper.tsx) ----
    The ds section pill, bottom centre: arrows either side of "02 / 05 ·

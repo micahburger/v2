@@ -30,6 +30,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       {study.blocks.map((block, i) => (
         <section
           key={i}
+          // Each block fades up once as it arrives (reveal.ts, via CaseShell).
+          data-reveal
           className={`cs-block cs-block--${block.kind} ${(block.kind === "heading" && block.ruled) || block.kind === "results" ? "cs-block--ruled" : ""} wrap`}
         >
           <BlockView block={block} outcomes={lab.outcomes} />
