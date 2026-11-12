@@ -145,7 +145,7 @@ function applicationsList(highlight) {
           h('button', { class: 'rs-icon-btn rs-icon-btn--light', 'aria-label': 'Back' }, Icon.back()),
           h('button', { class: 'rs-icon-btn rs-icon-btn--light', 'aria-label': 'More' }, Icon.kebab())
         ),
-        h('h1', { class: 'rs-hero-title', text: 'Applications' })
+        h('div', { class: 'rs-hero-title', text: 'Applications' })
       ),
       h('div', { class: 'rs-list' }, PROPERTIES.map(propertyCard))
     ),
@@ -237,7 +237,7 @@ function overview(state) {
       ),
       h('div', { class: 'rs-page-head' },
         h('p', { class: 'rs-eyebrow', text: 'Applying to' }),
-        h('h1', { class: 'rs-h1', text: '789 Birch Blvd, Unit 8' }),
+        h('div', { class: 'rs-h1', text: '789 Birch Blvd, Unit 8' }),
         h('p', { class: 'rs-subtitle', text: 'Austin, TX 73301', style: 'margin-bottom:20px;' })
       ),
       h('div', { class: 'rs-card rs-agent-card' },
@@ -442,7 +442,7 @@ function household() {
   scrollEl.append(
     stepHeader({ title: '789 Birch Blvd, Unit 8', step: 1, total: 4 }),
     h('div', { class: 'rs-page-head' },
-      h('h1', { class: 'rs-h1', text: 'Who will live here' })
+      h('div', { class: 'rs-h1', text: 'Who will live here' })
     ),
     h('p', { class: 'rs-field-section-title', text: 'Pets' }),
     h('div', { class: 'rs-field-group' },
@@ -520,7 +520,7 @@ function review() {
   const scrollEl = h('div', { class: 'rs-scroll' },
       stepHeader({ title: '789 Birch Blvd, Unit 8', step: 1, total: 2 }),
       h('div', { class: 'rs-page-head' },
-        h('h1', { class: 'rs-h1', text: 'Review your application' }),
+        h('div', { class: 'rs-h1', text: 'Review your application' }),
         h('p', { class: 'rs-subtitle', text: 'Check everything before it goes to Sarah. You can still edit.' })
       ),
       h('div', { class: 'rs-card' },
@@ -754,7 +754,7 @@ function payment() {
   const scrollEl = h('div', { class: 'rs-scroll' },
     stepHeader({ title: '789 Birch Blvd, Unit 8', step: 2, total: 2 }),
     h('div', { class: 'rs-page-head' },
-      h('h1', { class: 'rs-h1', text: 'Confirm and pay' }),
+      h('div', { class: 'rs-h1', text: 'Confirm and pay' }),
       h('p', { class: 'rs-subtitle', text: 'Paying starts your reports. You’ll review them before sending your application to the agent.' })
     ),
     h('div', { class: 'rs-card' }, totalRow, breakdown),
@@ -812,7 +812,7 @@ function loader() {
     statusBar(),
     h('div', { class: 'rs-scroll' },
       h('div', { class: 'rs-page-head', style: 'padding-top:28px;' },
-        h('h1', { class: 'rs-h1', text: 'Preparing your reports' }),
+        h('div', { class: 'rs-h1', text: 'Preparing your reports' }),
         h('p', { class: 'rs-subtitle', text: "Your application hasn't been sent to the agent yet." })
       ),
       h('div', { class: 'rs-checklist' }, items.map(item => item.row))
@@ -890,7 +890,7 @@ function reviewReport() {
   const scrollEl = h('div', { class: 'rs-scroll' },
     h('div', { class: 'rs-navbar' }, backBtn, h('span', { class: 'rs-navbar-title', text: '789 Birch Blvd, Unit 8' }), closeBtn),
     h('div', { class: 'rs-page-head' },
-      h('h1', { class: 'rs-h1', text: 'Review your reports' }),
+      h('div', { class: 'rs-h1', text: 'Review your reports' }),
       h('p', { class: 'rs-subtitle', text: 'Check these over, then send them to Sarah to finish.' })
     ),
     h('div', { class: 'rs-card' },
@@ -992,7 +992,7 @@ function yourDetails(mode) {
   const scrollEl = h('div', { class: 'rs-scroll' },
     stepHeader({ title: '789 Birch Blvd, Unit 8', step: 1, total: 4 }),
     h('div', { class: 'rs-page-head' },
-      h('h1', { class: 'rs-h1', text: 'Your details' }),
+      h('div', { class: 'rs-h1', text: 'Your details' }),
       h('p', { class: 'rs-subtitle', text: 'Use your legal name so we can match it to your ID.' })
     ),
     h('div', { class: 'rs-form-fields' },

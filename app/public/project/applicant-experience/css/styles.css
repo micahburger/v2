@@ -1098,3 +1098,20 @@ html {
     opacity: 0;
   }
 }
+
+/* No sideways scroll (QA, 2026-11-11). The thesis collage's back phones
+   start 80px right of their place and slide in only when scrolled to, and
+   between 1000 and 1100px wide the collage box and the closing photo (its
+   -9% nudge) run a little past the window; each let the page scroll
+   sideways (391px wide on a 375px phone, 1110 at 1024). Clipped on the x
+   axis only, so the collage and photo still bleed vertically into the
+   sections around them as designed, and `clip` rather than `hidden` keeps
+   the page scrolling normally with the sticky Back bar working. Set on
+   the two sections that bleed, not on body: on body it only becomes the
+   window's overflow-x: hidden, which leaves the page programmatically
+   scrollable sideways and has been unreliable on iOS Safari; clipping
+   the sections keeps the overflow from ever widening the document. */
+#thesis,
+#close {
+  overflow-x: clip;
+}

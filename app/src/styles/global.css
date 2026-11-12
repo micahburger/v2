@@ -39,9 +39,9 @@
   --content: 1220px;
 
   /* ---- motion: the one framework (Micah, 2026-11-11) ----
-     Every curve and the shared durations, in one place. The curves mirror
-     motion.ts EASE.* (CSS can't import them; change one, change both).
-     New motion takes these rather than its own numbers; older rules that
+     Every curve and the shared durations, in one place. CSS is the only
+     source: motion.ts holds just prefersReducedMotion(), so there's
+     nothing to keep in step on the JS side. New motion takes these rather than its own numbers; older rules that
      still write a curve out by hand use these same values.
 
      Curves (ds §8): enter for anything arriving (reveals, hovers, a page
@@ -62,6 +62,14 @@
   --dur-page-out: 280ms;
   --dur-page-in: 520ms;
   --dur-page-overlap: 120ms;
+  /* The lowest opacity faded small text may use and stay readable
+     (WCAG 4.5:1) on every palette: Clay needs 0.79 of its ink, Paper 0.72;
+     the dark palettes pass far lower. Set after a QA pass (2026-11-11)
+     found the Archive's labels and captions at 0.55 to 0.7 reading 2:1 to
+     3.7:1 on Clay. Faded labels, captions and footer lines use this, not
+     their own opacity. (Hover dimming and disabled controls are exempt.) */
+  --text-muted-opacity: 0.8;
+
   /* Distances stay small (ds §8): 16px for a page, 24px for a reveal. */
   --page-shift: 16px;
   --reveal-shift: 24px;
@@ -1257,7 +1265,7 @@ button {
    palette. */
 
 .footer-muted {
-  opacity: 0.65;
+  opacity: var(--text-muted-opacity);
 }
 
 /* SIGN-OFF: quiet columns, then one enormous word. */
@@ -1985,11 +1993,6 @@ p.cs-body {
   color: var(--black);
 }
 
-.cs-ledger__claim {
-  font-weight: 500;
-  color: var(--black);
-}
-
 /* The reflection under "What I learned": one paragraph, set like a row
    (hairline above, the rows' padding and size) but spanning the column. */
 .cs-ledger__prose {
@@ -2684,7 +2687,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
   font-size: 11px;
   letter-spacing: 0.06em;
   font-variant-numeric: tabular-nums;
-  opacity: 0.6;
+  opacity: var(--text-muted-opacity);
 }
 
 .axs-label {
@@ -2694,7 +2697,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--black);
-  opacity: 0.6;
+  opacity: var(--text-muted-opacity);
 }
 
 /* Contents: one ruled row per chapter (NZero's lines). */
@@ -2724,7 +2727,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
 
 .axs-contents__project,
 .axs-contents__year {
-  opacity: 0.7;
+  opacity: var(--text-muted-opacity);
 }
 
 .axs-contents__year {
@@ -2763,7 +2766,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.55;
+  opacity: var(--text-muted-opacity);
 }
 
 .axs-meta dd {
@@ -2822,11 +2825,11 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
 
 .axs-caption__year {
   font-variant-numeric: tabular-nums;
-  opacity: 0.7;
+  opacity: var(--text-muted-opacity);
 }
 
 .axs-caption__project {
-  opacity: 0.6;
+  opacity: var(--text-muted-opacity);
 }
 
 .axs-shots {
@@ -2854,6 +2857,12 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
   background: var(--media-bg);
 }
 
+/* The number inside the caption takes the caption's fade rather than
+   fading again on top of it (0.8 x 0.8 read 3.2:1 on Clay). */
+.axs-shot__caption .axs-num {
+  opacity: 1;
+}
+
 .axs-shot__caption {
   display: flex;
   gap: 12px;
@@ -2861,7 +2870,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
   margin-top: 12px;
   font-size: var(--ax-label);
   line-height: 1.5;
-  opacity: 0.7;
+  opacity: var(--text-muted-opacity);
 }
 
 /* What I designed, as TIME's "Key takeaways": the label on the left,
@@ -3045,7 +3054,7 @@ html:active-view-transition-type(to-home)::view-transition-new(root) {
 
 .axs-skip__year {
   font-size: var(--ax-small);
-  opacity: 0.6;
+  opacity: var(--text-muted-opacity);
   font-variant-numeric: tabular-nums;
 }
 

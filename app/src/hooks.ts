@@ -52,20 +52,6 @@ export function useOnScreen(ref: RefObject<Element>, threshold = 0.35) {
   return on;
 }
 
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-export function formatMonth(value: string | null) {
-  if (!value) return "Present";
-  const [y, m] = value.split("-").map(Number);
-  return `${MONTHS[m - 1]} ${y}`;
-}
-
-/** `inert` for React 18, whose types don't know the attribute yet. An empty
- *  string is how the DOM spells "on"; leaving it off entirely is "off". */
-export function inertProps(on: boolean): Record<string, string> {
-  return on ? { inert: "" } : {};
-}
-
 /**
  * Which part of the page the visitor is in, written to <html data-stage>
  * for the scroll colour shift (see "section shift" in global.css): the last

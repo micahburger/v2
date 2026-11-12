@@ -157,9 +157,9 @@ export const featured: Featured[] = [
     // retired: the name opens the Archive, each client opens its own
     // project there (/project/archive#<slug>, already expanded), and so does
     // each slide. Collins Aerospace (FPO) joined them then; it was an
-    // unlisted page on the old site. Their fuller image sets (wwe-2..6
-    // etc.) are still in public/img; the Archive has its own in
-    // public/img/archive. Listed newest first, the Archive's own order
+    // unlisted page on the old site. Only each one's first image
+    // (wwe-1 etc.) stays in public/img, for these slides; the Archive has
+    // its own in public/img/archive. Listed newest first, the Archive's own order
     // (2022, 2017, 2016, 2015, 2015).
     id: "archive",
     name: "Archive",
@@ -275,7 +275,7 @@ export const disciplines = [
  *  was dropped (Micah, 2026-11-07). Everything but Home leaves for another
  *  site, so those open in a new tab, like the featured projects. */
 export const footerLinks = [
-  { label: "Home", href: "https://micahburger.com/" },
+  { label: "Home", href: "/" },
   { label: "Shop", href: "https://cornerbodega.pub/", external: true },
   { label: "Insta", href: "https://www.instagram.com/micahburger/", external: true },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/micahburger/", external: true },
