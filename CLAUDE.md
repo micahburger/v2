@@ -342,8 +342,16 @@ One system for how things move, in `app/src/styles/global.css`:
 
 ## Things that will bite you
 
-- `motion.ts` is the timing source of truth, but CSS can't import it; some
-  values are mirrored in `global.css` with a comment saying which.
+- Timing lives in CSS (the motion tokens in `:root`); `motion.ts` is only
+  `prefersReducedMotion()` since 2026-11-11.
+- **Adding a case study means three more places**: its share entry and
+  1200×630 card in `src/data/share.ts` + `public/og/` (the build writes
+  `project/<slug>.html` with its link-preview tags, which `.htaccess` serves
+  for `/project/<slug>`), and a line in `public/sitemap.xml`. The applicant
+  experience is plain HTML and keeps its own copy of the tags.
+- Old WordPress addresses (`/work`, `/featured-illustrations`,
+  `/project/lattice`, `/footer/*`, `wp-*`) answer 410 Gone, showing the
+  homepage; the five archived studies 301 to their Archive anchor.
 - Weights: only Poppins 400/500, Satoshi 700 (the name eyebrow, from Fontshare)
   and Plex Mono 400 (lab panel) are loaded. Another weight gets synthesised.
 - Logos in the hover card must have transparent backgrounds: the black is

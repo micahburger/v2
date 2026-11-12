@@ -25,9 +25,6 @@
 //   offer-breakdown.png    offerbreakdown.png
 //   novo-1..6.jpg          designsystem_novo3, designsystem_novo2, dark,
 //                          colors2, colors4, cards (the live slideshow order)
-//   final-offer.mp4        final offer video.mp4   (not on the page for
-//   final-offer-poster.jpg a frame of it            now; see the end of
-//                                                   opendoor's blocks)
 // JPEGs re-saved at quality 82, at most 2000px on the long side; the PNGs
 // are cut out on transparency and are copied as they are.
 //
@@ -279,8 +276,9 @@ export const opendoor: CaseStudy = {
       reflection:
         "The page needed to do two jobs: make the offer recognizable as Opendoor and make the process easy to understand. Layout, content, and navigation had to work together, with enough information to explain the offer without overwhelming the next step.",
     },
-    // The final-offer video closed the live page; off for now (Micah,
-    // 2026-11-08). To bring it back:
+    // The final-offer video ("final offer video.mp4" on the live site)
+    // closed the old page. Off since 2026-11-08 and its 12MB file deleted
+    // 2026-11-11 (Micah); the "video" block still works if it comes back:
     // { kind: "video", src: od("final-offer.mp4"), poster: od("final-offer-poster.jpg"),
     //   width: 1280, height: 924, label: "The final offer, from the email to the offer page" },
   ],

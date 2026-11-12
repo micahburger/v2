@@ -1,0 +1,94 @@
+<!doctype html>
+<!-- The default palette and shift, so the first paint is already Clay
+     instead of the bare :root cream fading over once main.tsx runs. main.tsx
+     overwrites both from the query string (readLab) before React renders. -->
+<html lang="en" data-palette="clay" data-shift="dusk">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- A case study (/project/…) is always Night with no scroll shift, set
+         here before the first paint: set later, the page would paint Clay
+         and then fade to black over html's 0.9s background transition.
+         The Archive is the exception (2026-11-11): it follows the
+         homepage's colour, which rides in on ?palette= (Clay when there's
+         none), so the colour carries through; no shift there either. Keep
+         the list in step with LAB.palette in src/lab.ts. -->
+    <script>
+      (function () {
+        var path = location.pathname, root = document.documentElement;
+        if (path.indexOf("/project/") !== 0) return;
+        root.dataset.shift = "off";
+        if (/^\/project\/archive\/?$/.test(path)) {
+          var pick = new URLSearchParams(location.search).get("palette");
+          root.dataset.palette = ["clay", "paper", "graphite", "forest"].indexOf(pick) >= 0 ? pick : "clay";
+        } else {
+          root.dataset.palette = "night";
+        }
+      })();
+    </script>
+    <!-- Page transitions, the script half (the CSS half is "page
+         transitions" in src/styles/global.css). Tags the cross-document View
+         Transition with the way you're going, so the CSS moves the right
+         way: to-home arriving on the homepage from a case study, to-case
+         anything else (into a case study, or one to another). Read from
+         where the visit came from: the Navigation API's activation entry
+         (Chrome, Edge), else the referrer (same origin only); with neither,
+         the default (to-case's movement) plays.
+
+         Inline, here in <head>, because `pagereveal` fires just before the
+         new page's first paint, which can come before the app's module has
+         run: a listener in main.tsx missed it (tested 2026-11-11). -->
+    <script>
+      addEventListener("pagereveal", function (event) {
+        var vt = event.viewTransition;
+        if (!vt || !vt.types) return;
+        var from = "";
+        try {
+          var nav = window.navigation;
+          var url = new URL((nav && nav.activation && nav.activation.from && nav.activation.from.url) || document.referrer);
+          if (url.origin === location.origin) from = url.pathname;
+        } catch (e) {}
+        var home = function (p) { return p === "/" || p === ""; };
+        if (from) vt.types.add(home(location.pathname) && !home(from) ? "to-home" : "to-case");
+      });
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Title, description and link-preview tags: filled in from
+         src/data/share.ts by the shareHead plugin in vite.config.ts (the
+         homepage's here; each case study's in its own built copy). -->
+    <title>RentSpree · Micah Lindenberger</title>
+    <meta name="description" content="Recent product work at RentSpree across the rental workflow: the applicant experience, requesting an application, messaging and the Rental Assistant." />
+    <link rel="canonical" href="https://micahburger.com/project/rentspree" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Micah Lindenberger" />
+    <meta property="og:url" content="https://micahburger.com/project/rentspree" />
+    <meta property="og:title" content="RentSpree · Micah Lindenberger" />
+    <meta property="og:description" content="Recent product work at RentSpree across the rental workflow: the applicant experience, requesting an application, messaging and the Rental Assistant." />
+    <meta property="og:image" content="https://micahburger.com/og/rentspree.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
+    <!-- Only the weights the CSS actually asks for. A weight that isn't loaded
+         gets synthesised by the browser (smeared bold, slanted fake italic),
+         so adding a weight in CSS means adding it here too. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- The live site's faces: Poppins for everything, Satoshi 700 for the
+         name in the header (Fontshare, not Google). Plex Mono is only the
+         lab panel's labels. -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet" />
+    <script type="module" blocking="render" crossorigin src="/assets/index-BaGeCtRp.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BECg9tql.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- blocking="render": the first paint waits for the app, so a page
+         transition's snapshot of this page is the page, not an empty #root
+         (main.tsx says more). Browsers that don't know
+         the attribute ignore it. -->
+  </body>
+</html>

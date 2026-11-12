@@ -29,6 +29,11 @@
   Header always set Content-Security-Policy "upgrade-insecure-requests; frame-ancestors 'self' https://micahburger.com https://*.micahburger.com http://localhost:*"
 </IfModule>
 
+# A retired address (the 410s below) still shows a person the homepage,
+# with the 410 status for crawlers, instead of the server's bare error
+# page. The app reads the path, finds no case study, and renders home.
+ErrorDocument 410 /index.html
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
@@ -58,21 +63,21 @@
   RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive?%{QUERY_STRING}#$1 [R=301,NE,QSD,L]
   RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive#$1 [R=301,NE,L]
 
-  # ---- the rest of the old WordPress site ----
-  # Everything else its sitemap listed (checked 2026-11-11). Lincoln,
-  # Infinity and Opendoor kept their paths here, so they need nothing.
-  # /work was the old site's project grid, which the homepage now is;
-  # /featured-illustrations has no page here yet, so it lands home too;
-  # Lattice's old page goes to the Lattice site the homepage links; and
-  # /footer/* were Semplice's footer templates, which got indexed. Query
-  # strings carry over on their own (no # to fight with here).
-  RewriteRule ^(work|featured-illustrations|footer(/.*)?)/?$ / [R=301,L]
-  RewriteRule ^project/lattice/?$ https://lattice2026.micahburger.com/ [R=301,L]
-
-  # WordPress's own addresses: gone for good, and said so (410), rather
-  # than answered with the homepage by the fallback below. Bots keep trying
-  # wp-login.php and xmlrpc.php for years after a site leaves WordPress;
-  # a 410 is cheap and tells crawlers to drop the old upload URLs.
+  # ---- the rest of the old WordPress site: gone ----
+  # Everything else its sitemap listed (checked 2026-11-11), and
+  # WordPress's own addresses, answer 410 Gone: the page existed and won't
+  # be back, so search engines drop it rather than keep retrying as they
+  # would a 404. Lincoln, Infinity and Opendoor kept their paths here, so
+  # they need nothing.
+  #
+  # /work (the old project grid), /featured-illustrations, /project/lattice
+  # and /footer/* (Semplice's footer templates, which got indexed) were
+  # redirected for a day, then retired outright: Micah doesn't want the new
+  # site pointing at them (2026-11-11). Bots keep trying wp-login.php and
+  # xmlrpc.php for years after a site leaves WordPress; this answers them
+  # without serving the app's page as if it were real.
+  RewriteRule ^(work|featured-illustrations|project/lattice)/?$ - [G,L]
+  RewriteRule ^footer(/|$) - [G,L]
   RewriteRule ^(wp-admin|wp-includes|wp-content|wp-json)(/|$) - [G,L]
   RewriteRule ^(wp-login|xmlrpc|wp-cron|wp-signup|wp-trackback)\.php$ - [G,L]
 
@@ -85,6 +90,13 @@
   RewriteCond %{REQUEST_FILENAME} -f [OR]
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteRule ^ - [L]
+
+  # A case study with its own built copy of the page (project/<slug>.html:
+  # the same app, with that study's title and link-preview tags in the
+  # <head>; see src/data/share.ts) gets that copy. Internal, like the
+  # fallback below, so the address stays /project/<slug>.
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^(project/[a-z0-9-]+)/?$ $1.html [L]
 
   # Everything else falls back to the SPA shell so the client router can
   # take over: an internal rewrite, not a redirect, so the URL bar (and

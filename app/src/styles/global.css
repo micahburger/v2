@@ -15,11 +15,16 @@
   --paper: #f5f1eb;
   --ink: #443736;
   --black: #000000;
-  --link: #5a98b1;
+  /* Darkened from the live site's #5a98b1 (Micah, 2026-11-11): that
+     measured 2.84:1 on the page and 2.02:1 in the footer, where the scroll
+     shift has deepened the page. #1f5870 keeps the hue and clears 4.5:1
+     at every stage (6.94 at the top, 4.94 at the footer). */
+  --link: #1f5870;
   /* The contact sentence's links: same hue as --link, pushed further from
      the page (darker on light palettes, lighter on dark) so two links in
-     a 38px sentence don't read as more of the sentence. */
-  --link-strong: #2f7491;
+     a 38px sentence don't read as more of the sentence. Moved with --link
+     to stay darker than it (was #2f7491). */
+  --link-strong: #17465a;
   --rule: rgba(68, 55, 54, 0.25);
   --media-bg: #e9e4dc;
   --dot: rgba(68, 55, 54, 0.22);

@@ -2,6 +2,7 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { SHARE_HOME, SHARE_PAGES, shareHead as headFor } from "./src/data/share";
 
 /**
  * Dev only: serve a folder in public/ that has its own index.html the way
@@ -58,8 +59,39 @@ function renderBlockingEntry(): Plugin {
   };
 }
 
+/**
+ * Puts each page's title, description and link-preview tags in the HTML
+ * itself (src/data/share.ts says why: preview crawlers don't run the app).
+ * The homepage's go into index.html, in dev too. At build, each case study
+ * gets a copy of the finished index.html with its own tags instead, as
+ * project/<slug>.html; .htaccess serves that for /project/<slug>. Same
+ * app, same bundle: only the <head> differs.
+ */
+function shareHead(): Plugin {
+  const MARK = "<!-- share-head -->";
+  return {
+    name: "share-head",
+    // After Vite's own HTML plugin, which only adds index.html to the
+    // bundle in its generateBundle; before that there's nothing to copy.
+    enforce: "post",
+    transformIndexHtml: {
+      order: "post",
+      handler: (html) => html.replace(MARK, headFor(SHARE_HOME)),
+    },
+    generateBundle(_, bundle) {
+      const index = bundle["index.html"];
+      if (!index || index.type !== "asset") return;
+      const html = String(index.source);
+      const home = headFor(SHARE_HOME);
+      for (const [slug, page] of Object.entries(SHARE_PAGES)) {
+        this.emitFile({ type: "asset", fileName: `project/${slug}.html`, source: html.replace(home, headFor(page)) });
+      }
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), publicFolderIndex(), renderBlockingEntry()],
+  plugins: [react(), publicFolderIndex(), renderBlockingEntry(), shareHead()],
   server: {
     // 4176 is the folio, 5173 is taken by most other prototypes.
     port: 4178,
