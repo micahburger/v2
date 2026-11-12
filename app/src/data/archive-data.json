@@ -1,6 +1,6 @@
 {
   "title": "Archive",
-  "intro": "Earlier projects, kept here as short previews rather than full case studies. Open one for the gist, a few screens and the team behind it.",
+  "intro": "Earlier projects, kept here as short previews rather than full case studies. Open one for the gist and a few screens.",
   "projects": [
     {
       "slug": "fpo",
@@ -16,7 +16,6 @@
         "A component library that kept design, engineering and QA in step"
       ],
       "outcome": "Pilots rated FPO 4.8 out of 5 for usefulness.",
-      "team": "Anya Palkowski (product manager), Micah Lindenberger (art direction, product design, research), Jill Haefele (interaction design, strategy, research), Ali Sugarman (user research), Tae Yang (product design, prototyping), Lisa Mitchell (project manager)",
       "images": [
         { "file": "app-overview", "width": 1600, "height": 900, "alt": "The app in portrait and landscape on dark tablets: lateral, vertical and combined route options above a map of the flight path" },
         { "file": "route-options", "width": 771, "height": 1019, "alt": "Portrait view comparing three optimized routes, each with minutes and pounds of fuel saved, above a map with a dotted reroute" },
@@ -39,7 +38,6 @@
         "A style guide and image-crop specs for WWE's editorial and photo teams"
       ],
       "outcome": "The landing pages became destination hubs for fans and increased time on page.",
-      "team": "Chris Delia (creative director), Micah Lindenberger (senior product design), Konstantinos Riginos (product design), Rosemary Douglas (senior UX), Lauren Manning (creative strategy)",
       "images": [
         { "file": "superstar-page", "width": 1600, "height": 900, "alt": "John Cena's superstar page: a full-bleed match photo, his portrait card with a quote, and a row of related video and story cards" },
         { "file": "themed-feeds", "width": 1600, "height": 900, "alt": "Three show pages side by side, each themed for its brand: Raw in red, SmackDown in blue and NXT in yellow" },
@@ -62,7 +60,6 @@
         "Feature pages for the busiest sections: events, CLE courses, legal news and the store"
       ],
       "outcome": "The redesign increased time spent on the site and membership renewals.",
-      "team": "Adam M Morris (associate design director), Micah Lindenberger (senior product design), Robert Gorrell (creative strategy lead), Shaili Das (senior UX), Layna Olmsted (UX), Michael Duke (technology director)",
       "images": [
         { "file": "design-system", "width": 1600, "height": 900, "alt": "A wall of redesigned ABA pages in deep red, bright blue, teal and white, showing the range of the design system" },
         { "file": "diversity-feature", "width": 1600, "height": 900, "alt": "A feature page on a laptop: a DIVERSITY headline over a photo of a speaker, with related stories along the bottom" },
@@ -85,7 +82,6 @@
         "A smart queue that let editors add and update news chapters through the day"
       ],
       "outcome": null,
-      "team": "Micah Lindenberger (lead designer), Moritz Kettler (creative strategy, project lead), Mike Kenney (UX director), Jake Hutchinson and Tom Muller (product design), Hollie Lubbock (interaction design), Shelby Dunlap (project manager)",
       "images": [
         { "file": "newstream", "width": 1600, "height": 900, "alt": "BBC News Stream on an iPad and an iPhone: a world news story with a play button, and a 10-story newstream ready to start" },
         { "file": "story-cards", "width": 1600, "height": 900, "alt": "Three versions of the same story card on iPad, from a full-bleed video to a card with headlines underneath" },
@@ -108,7 +104,6 @@
         "Project detail pages that lead with photography and story"
       ],
       "outcome": null,
-      "team": "Mariana Bukvick (creative director), Conway Liao (UX), Matt Chiemiel (content strategy), Micah Lindenberger (senior product design), JaeWon (product design)",
       "images": [
         { "file": "hospitality-grid", "width": 1600, "height": 900, "alt": "The We Know Hospitality page on an iPad: a black grid of hotel brand logos and project photos" },
         { "file": "detail-page", "width": 1600, "height": 1187, "alt": "The Aloft project detail page on a light ground, with its story, photos of a guest room and bar, and a mobile version beside it" },

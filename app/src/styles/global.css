@@ -2667,12 +2667,6 @@ p.cs-body {
   color: var(--black);
 }
 
-.ax-team {
-  font-size: var(--ax-small);
-  line-height: 1.6;
-  opacity: 0.8;
-}
-
 /* ---- the carousel (ArchiveCarousel.tsx) ----
    carousel.ts's stage and track in a 16:9 rounded frame on the page's own
    ground. Screens are contained, not cropped, so a portrait phone or a
@@ -2812,23 +2806,24 @@ p.cs-body {
   height: auto;
 }
 
-/* ---- larger view (Lightbox.tsx, a modal <dialog>) ---- */
+/* ---- larger view (Lightbox.tsx, a modal <dialog>) ----
+   Just the screen, as large as the window allows (never past its own
+   1600px), on a dim blurred ground. The whole view is one button that
+   closes it (Micah: "1 click close"), hence the zoom-out cursor
+   everywhere; no arrows, count, caption or Close pill. */
 .ax-lightbox {
   width: 100vw;
   max-width: 100vw;
   height: 100dvh;
   max-height: 100dvh;
-  padding: 24px var(--gutter);
+  padding: 0;
   border: 0;
   background: transparent;
-  color: var(--ink);
+  cursor: zoom-out;
 }
 
 .ax-lightbox[open] {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  justify-items: center;
-  gap: 20px;
   animation: ax-fade 0.2s var(--ease-enter);
 }
 
@@ -2837,54 +2832,33 @@ p.cs-body {
   backdrop-filter: blur(6px);
 }
 
-.ax-lightbox__figure {
+.ax-lightbox__hit {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  justify-items: center;
-  align-content: center;
-  gap: 12px;
+  place-items: center;
+  width: 100%;
+  height: 100%;
   min-height: 0;
-  max-width: min(1600px, 100%);
+  padding: 32px var(--gutter);
+  cursor: zoom-out;
 }
 
-.ax-lightbox__figure img {
-  min-height: 0;
-  max-width: 100%;
+/* Focus shows on the screen itself, not as a ring round the window. */
+.ax-lightbox__hit:focus-visible {
+  outline: none;
+}
+
+.ax-lightbox__hit:focus-visible img {
+  outline: 2px solid var(--black);
+  outline-offset: 4px;
+}
+
+.ax-lightbox__hit img {
+  max-width: min(1600px, 100%);
   max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
   border-radius: var(--radius-card);
-}
-
-.ax-lightbox__caption {
-  max-width: 640px;
-  font-size: var(--cs-small);
-  line-height: 1.4;
-  text-align: center;
-  opacity: 0.75;
-}
-
-.ax-lightbox__bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Back to home's pill, saying Close. */
-.ax-lightbox__close {
-  margin-left: 12px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: var(--chip);
-  color: var(--black);
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.ax-lightbox__close:focus-visible {
-  border-radius: 999px;
 }
 
 @keyframes ax-fade {
@@ -2985,7 +2959,7 @@ p.cs-body {
   .ax-controls {
     padding-inline: var(--gutter);
   }
-  .ax-lightbox {
+  .ax-lightbox__hit {
     padding: 16px;
   }
 }
@@ -3061,6 +3035,14 @@ p.cs-body {
   text-align: inherit;
   padding: 14px 8px;
   color: var(--black);
+}
+
+/* Only the lit name blends, and as white: white with `difference` reads
+   over any picture, light or dark. Blending all the time worked on Night
+   but, once the Archive took the homepage's colours (2026-11-11), turned
+   dark names on Clay or Paper into a washed-out grey. */
+.axt-item.is-lit .axt-title {
+  color: #fff;
   mix-blend-mode: difference;
 }
 
@@ -3187,7 +3169,7 @@ p.cs-body {
    which piece came from where). Ruled meta row and mono labels (Code and
    Theory's TIME and Thomson Reuters pages), statement beside story, the
    delivered list as numbered columns under hairlines, a large "Outcome",
-   the team on ruled lines (NZero), and screens stacked beside a caption
+   contents on ruled lines (NZero), and screens stacked beside a caption
    that sticks while they pass (negeurra.com). Native scrolling throughout,
    as theirs is. Mono is the --font-label face (Plex Mono 400, loaded);
    everything else Poppins 400 on the --ax-* sizes. */
@@ -3225,7 +3207,7 @@ p.cs-body {
 
 .axs-contents a {
   display: grid;
-  grid-template-columns: 48px minmax(0, 4fr) minmax(0, 5fr) auto;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto;
   align-items: baseline;
   column-gap: var(--gutter);
   padding: 14px 0;
@@ -3266,7 +3248,7 @@ p.cs-body {
    between two hairlines. */
 .axs-meta {
   display: grid;
-  grid-template-columns: minmax(0, 0.6fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.6fr) minmax(0, 1.6fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.6fr) minmax(0, 1.6fr);
   column-gap: var(--gutter);
   padding: 28px 0;
   border-top: 1px solid var(--rule);
@@ -3287,11 +3269,6 @@ p.cs-body {
   font-size: var(--ax-body);
   line-height: 1.45;
   color: var(--black);
-}
-
-.axs-meta dd.axs-num {
-  font-size: var(--ax-body);
-  opacity: 1;
 }
 
 /* Statement left, story right (TIME's "Reinventing an icon…"). */
@@ -3386,7 +3363,10 @@ p.cs-body {
 }
 
 /* What I designed, as TIME's "Key takeaways": the label on the left,
-   numbered columns under hairlines on the right. */
+   columns under hairlines on the right. No numbers (Micah, 2026-11-11),
+   and the copy's first line sits level with the label: both start the
+   same 16px under the hairline, and the label takes the copy's line
+   height so their first lines share a top. */
 .axs-takeaways {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -3396,10 +3376,11 @@ p.cs-body {
 
 .axs-takeaways .axs-label {
   grid-column: 1 / span 3;
-  padding-top: 18px;
+  padding-top: 16px;
+  line-height: calc(var(--ax-body) * 1.6);
 }
 
-.axs-takeaways ol {
+.axs-takeaways ul {
   grid-column: 4 / -1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3412,7 +3393,6 @@ p.cs-body {
 }
 
 .axs-takeaways p {
-  margin-top: 14px;
   font-size: var(--ax-body);
   line-height: 1.6;
   color: var(--black);
@@ -3440,32 +3420,6 @@ p.cs-body {
   font-size: var(--ax-hook);
   line-height: 1.5;
   color: var(--black);
-}
-
-/* The team on ruled lines (NZero): every line of text sits on a hairline
-   that runs the full width, the label on the first. The lines are a
-   background repeating at the line height, so they follow the text
-   however it wraps. */
-.axs-ruled {
-  --ruled-line: 32px;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  column-gap: var(--gutter);
-  margin-top: 72px;
-  border-top: 1px solid var(--rule);
-  background-image: linear-gradient(to bottom, transparent calc(var(--ruled-line) - 1px), var(--rule) calc(var(--ruled-line) - 1px));
-  background-size: 100% var(--ruled-line);
-}
-
-.axs-ruled .axs-label {
-  grid-column: 1 / span 3;
-  line-height: var(--ruled-line);
-}
-
-.axs-ruled p {
-  grid-column: 8 / span 5;
-  font-size: var(--ax-body);
-  line-height: var(--ruled-line);
 }
 
 /* The reveal (ds Recipe 4): armed by the component, once per block. */
@@ -3627,11 +3581,11 @@ p.cs-body {
    above its screens instead of sticking beside them, takeaways stack. */
 @media (max-width: 900px) {
   .axs-contents a {
-    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     row-gap: 2px;
   }
   .axs-contents__project {
-    grid-column: 2 / -1;
+    grid-column: 1 / -1;
     grid-row: 2;
   }
   .axs-chapter {
@@ -3648,15 +3602,13 @@ p.cs-body {
   .axs-lead,
   .axs-gallery,
   .axs-takeaways,
-  .axs-impact,
-  .axs-ruled {
+  .axs-impact {
     grid-template-columns: minmax(0, 1fr);
   }
   .axs-lead > *,
   .axs-gallery > *,
   .axs-takeaways > *,
-  .axs-impact > *,
-  .axs-ruled > * {
+  .axs-impact > * {
     grid-column: 1 !important;
   }
   .axs-lead {
@@ -3677,16 +3629,13 @@ p.cs-body {
     row-gap: 16px;
     margin-top: 64px;
   }
-  .axs-takeaways ol {
+  .axs-takeaways ul {
     grid-template-columns: minmax(0, 1fr);
     row-gap: 20px;
   }
   .axs-impact {
     row-gap: 12px;
     margin-top: 56px;
-  }
-  .axs-ruled {
-    margin-top: 48px;
   }
   .axs-skip {
     bottom: 16px;

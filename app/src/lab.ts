@@ -44,25 +44,29 @@ export const LAB = {
     { id: "ledger", label: "Ledger" },
     { id: "statement", label: "Statement" },
   ],
-  // The Archive's layouts (/project/archive, 2026-11-11), each a pattern
-  // from the design system: Index (table index, the default), Titles (text
+  // The Archive's layouts (/project/archive, 2026-11-11). Scroll leads, so
+  // it's the default (Micah: "default to scroll as the main option"): a
+  // long read with a chapter skipper, from his references (Code and
+  // Theory's TIME and Thomson Reuters pages, NZero, negeurra.com). The
+  // others are design system patterns: Index (table index), Titles (text
   // index), Panels (the RentSpree overview's chapter panels). A new take is
   // a new entry here plus a component in components/archive/layouts.ts; the
   // content (archive-data.json) stays as it is.
   layout: [
+    { id: "scroll", label: "Scroll" },
     { id: "index", label: "Index" },
     { id: "titles", label: "Titles" },
     { id: "panels", label: "Panels" },
-    // A long read with a chapter skipper (Micah's references: Code and
-    // Theory's TIME and Thomson Reuters pages, NZero, negeurra.com).
-    { id: "scroll", label: "Scroll" },
   ],
 } as const;
 
 /** Which lab rows each page shows; the rest don't apply there. */
 export const HOME_LAB: LabKey[] = ["palette", "shift", "clients", "history"];
 export const CASE_LAB: LabKey[] = ["outcomes"];
-export const ARCHIVE_LAB: LabKey[] = ["layout"];
+// The Archive takes the homepage's colour too (Micah, 2026-11-11: "I like
+// the idea of the color carrying through"), unlike the case studies, which
+// stay on Night.
+export const ARCHIVE_LAB: LabKey[] = ["palette", "layout"];
 
 export type LabKey = keyof typeof LAB;
 export type LabState = { [K in LabKey]: (typeof LAB)[K][number]["id"] };

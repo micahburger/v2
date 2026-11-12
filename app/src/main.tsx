@@ -26,8 +26,13 @@ const isArchive = /^\/project\/archive\/?$/.test(window.location.pathname);
 // were exported on that black, and a shift would pull the page off it. The
 // lab query still rides along on its links, so going home restores the
 // visitor's palette.
-if (study || isArchive) {
+if (study) {
   document.documentElement.dataset.palette = "night";
+  document.documentElement.dataset.shift = "off";
+} else if (isArchive) {
+  // The Archive follows the lab's colour (the homepage's, carried in on
+  // the query) with no shift; ArchivePage keeps it in sync after this.
+  document.documentElement.dataset.palette = readLab().palette;
   document.documentElement.dataset.shift = "off";
 } else {
   const initial = readLab();

@@ -7,12 +7,23 @@
     <meta charset="UTF-8" />
     <!-- A case study (/project/…) is always Night with no scroll shift, set
          here before the first paint: set later, the page would paint Clay
-         and then fade to black over html's 0.9s background transition. -->
+         and then fade to black over html's 0.9s background transition.
+         The Archive is the exception (2026-11-11): it follows the
+         homepage's colour, which rides in on ?palette= (Clay when there's
+         none), so the colour carries through; no shift there either. Keep
+         the list in step with LAB.palette in src/lab.ts. -->
     <script>
-      if (location.pathname.indexOf("/project/") === 0) {
-        document.documentElement.dataset.palette = "night";
-        document.documentElement.dataset.shift = "off";
-      }
+      (function () {
+        var path = location.pathname, root = document.documentElement;
+        if (path.indexOf("/project/") !== 0) return;
+        root.dataset.shift = "off";
+        if (/^\/project\/archive\/?$/.test(path)) {
+          var pick = new URLSearchParams(location.search).get("palette");
+          root.dataset.palette = ["clay", "paper", "graphite", "forest"].indexOf(pick) >= 0 ? pick : "clay";
+        } else {
+          root.dataset.palette = "night";
+        }
+      })();
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Micah Lindenberger</title>
@@ -33,8 +44,8 @@
       rel="stylesheet"
     />
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet" />
-    <script type="module" crossorigin src="/assets/index-DNpAXZXk.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-DHY8bVNR.css">
+    <script type="module" crossorigin src="/assets/index-CtsqEexP.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BrnXkvDs.css">
   </head>
   <body>
     <div id="root"></div>

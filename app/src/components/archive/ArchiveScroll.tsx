@@ -17,8 +17,9 @@ import type { ArchiveLayoutProps } from "./layouts";
  *    things delivered as numbered columns under hairlines, like their
  *    "Key takeaways"; the outcome as a large word on the left with its
  *    sentence on the right, like their "Impact".
- *  - NZero: a small uppercase heading and its text sitting on ruled
- *    lines, for the team credit and the contents list at the top.
+ *  - NZero: rows sitting on ruled lines, for the contents list at the
+ *    top. (A team credit on ruled lines closed each chapter until Micah
+ *    cut the team sections, 2026-11-11.)
  *  - Ne Geurra (negeurra.com), for how it scrolls: plain native scrolling,
  *    no smoothing. Each piece's small caption sticks at the top while its
  *    large pictures run past beside it, and the next caption pushes it off.
@@ -134,7 +135,8 @@ export default function ArchiveScroll({ archive }: ArchiveLayoutProps) {
     <section className="ax ax--scroll axs wrap" aria-label={archive.title} ref={root}>
       <p className="ax-intro">{archive.intro}</p>
 
-      {/* Contents, on ruled lines (NZero). */}
+      {/* Contents, on ruled lines (NZero). No chapter numbers here (Micah,
+          2026-11-11): the client, project and year are the row. */}
       <ol className="axs-contents" aria-label="Chapters">
         {projects.map((p, i) => (
           <li key={p.slug}>
@@ -145,7 +147,6 @@ export default function ArchiveScroll({ archive }: ArchiveLayoutProps) {
                 jump(i);
               }}
             >
-              <span className="axs-num">{pad(i + 1)}</span>
               <span className="axs-contents__client">{p.client}</span>
               <span className="axs-contents__project">{p.project}</span>
               <span className="axs-contents__year">( {p.year} )</span>
@@ -173,7 +174,6 @@ export default function ArchiveScroll({ archive }: ArchiveLayoutProps) {
   );
 }
 
-const pad = (n: number) => String(n).padStart(2, "0");
 
 type ChapterProps = {
   project: ArchiveProject;
@@ -186,12 +186,9 @@ type ChapterProps = {
 function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
   return (
     <article id={project.slug} ref={chapterRef} className="axs-chapter" aria-labelledby={`${project.slug}-title`}>
-      {/* The meta row (TIME, Thomson Reuters). */}
+      {/* The meta row (TIME, Thomson Reuters). No chapter number (Micah,
+          2026-11-11); the skipper says where you are. */}
       <dl className="axs-meta axs-reveal">
-        <div>
-          <dt>Chapter</dt>
-          <dd className="axs-num">{pad(n)}</dd>
-        </div>
         <div>
           <dt>Client</dt>
           <dd id={`${project.slug}-title`}>{project.client}</dd>
@@ -219,7 +216,6 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
       {/* Screens beside a sticky caption (Ne Geurra). */}
       <div className="axs-gallery">
         <p className="axs-caption" aria-hidden="true">
-          <span className="axs-num">{pad(n)}</span>
           <span>
             {project.client} <span className="axs-caption__year">( {project.year} )</span>
           </span>
@@ -249,17 +245,18 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
         </ol>
       </div>
 
-      {/* Key takeaways (TIME): what was designed, as numbered columns. */}
+      {/* Key takeaways (TIME): what was designed, as columns under
+          hairlines. Unnumbered, with the copy level with the label (Micah,
+          2026-11-11). */}
       <div className="axs-takeaways axs-reveal">
         <h3 className="axs-label">What I designed</h3>
-        <ol>
-          {project.delivered.map((item, k) => (
+        <ul>
+          {project.delivered.map((item) => (
             <li key={item}>
-              <span className="axs-num">{pad(k + 1)}</span>
               <p>{item}</p>
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
 
       {/* Impact (TIME), only where the source stated one. */}
@@ -269,12 +266,6 @@ function Chapter({ project, n, onZoom, chapterRef }: ChapterProps) {
           <p className="axs-impact__text">{project.outcome}</p>
         </div>
       )}
-
-      {/* Team on ruled lines (NZero). */}
-      <div className="axs-ruled axs-reveal">
-        <h3 className="axs-label">Team</h3>
-        <p>{project.team}</p>
-      </div>
     </article>
   );
 }

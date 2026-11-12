@@ -196,7 +196,8 @@ once v2 replaces it.
   carries the lab query string along (`linkTo` in FeaturedProjects.tsx);
   every other project link still opens a new tab.
 - Always on the Night palette (#161417, the ground the Opendoor screens
-  were exported on) with the shift off, whatever the homepage's lab says:
+  were exported on) with the shift off, whatever the homepage's lab says
+  (the Archive is the exception: it follows the palette):
   set before first paint in `app/index.html`, then in `main.tsx`. Framed
   images then have no visible edge.
 - The case study lab shows only its own rows (`CASE_LAB` in `lab.ts`):
@@ -270,7 +271,12 @@ once v2 replaces it.
     don't retell; an outcome only when the old page stated one; anything
     the source doesn't say is `[TBD]`, shown as is. Years are Micah's (none of the old pages gave one); rows run newest first.
   - Layouts are a lab key, `?layout=` (`LAB.layout` in lab.ts, Archive-only
-    via `ARCHIVE_LAB`). Each id maps to a component in
+    via `ARCHIVE_LAB`). **Scroll is the default** (Micah, 2026-11-11). The
+    Archive also takes the **Colour** lab row and follows the homepage's
+    palette (carried in on `?palette=`, Clay when absent), set before first
+    paint in `app/index.html` and synced in `ArchivePage`; the case
+    studies stay on Night. Archive styles use palette tokens only, so they
+    hold on light and dark palettes (Titles blends only the lit name). Each id maps to a component in
     `components/archive/layouts.ts`, typed so a missing one fails the
     build. A new variant is a new component; the data doesn't change.
   - Three layouts so far (2026-11-11), each a design system pattern:

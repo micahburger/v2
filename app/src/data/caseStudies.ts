@@ -423,10 +423,6 @@ export const lincoln: CaseStudy = {
         { label: "Objective", text: "Make building and pricing a Lincoln simple on any screen, and as considered as the brand." },
         { label: "Role", text: "Art direction and product design, shared with Natalie Cho." },
         {
-          label: "Team",
-          text: "Natalie Cho (art direction, product design), Paul Mathisen (product design), Hassan Karimi (user experience), Heather Tafel (project management).",
-        },
-        {
           // The live page's claim, without numbers; see the note above.
           label: "Outcome",
           text: "In A/B testing against the legacy experience, engagement and vehicle purchase rates rose.",
@@ -575,10 +571,6 @@ export const infinity: CaseStudy = {
       facts: [
         { label: "Objective", text: "Modernize the app and wall controller, and put Carrier in a competitive position in the smart home market." },
         { label: "Role", text: "Led the creative team: art direction, product design and research." },
-        {
-          label: "Team",
-          text: "Jill Haefele (interaction design, strategy, research), Tae Yang (product design, prototyping), Ana Lopez (product design), with Lisa Mitchell, Madeline Winer, Mary Rockwell, Anya Palkowski and Dan Levine.",
-        },
       ],
       image: {
         src: inf("hero.jpg"),

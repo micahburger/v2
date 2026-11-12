@@ -6,7 +6,8 @@ import ArchiveCarousel from "./ArchiveCarousel";
  * arrangement only and the words and screens look the same in all of them.
  *
  *  - ArchiveSummary: hook, summary, what I designed, outcome (only when
- *    there is one), team. Type comes from the --ax-* tokens on .ax.
+ *    there is one). No team credit (Micah, 2026-11-11: not needed). Type
+ *    comes from the --ax-* tokens on .ax.
  *  - ArchiveMedia: the carousel, or (before it's wanted) an empty box of
  *    exactly its size, so nothing reflows when it arrives.
  *  - ArchiveDetail: the two side by side, the open state of Index and Titles.
@@ -33,9 +34,6 @@ export function ArchiveSummary({ project }: { project: ArchiveProject }) {
           <p className="ax-outcome">{project.outcome}</p>
         </>
       )}
-
-      <h3 className="ax-label">Team</h3>
-      <p className="ax-team">{project.team}</p>
     </>
   );
 }

@@ -11,9 +11,10 @@
 // Copy rules (Micah's brief): summarize, don't retell. A client, year and
 // role list; a one-line hook; two or three sentences of summary; at most
 // three things delivered; an outcome ONLY when the source page states one
-// (WWE, ABA and FPO do; BBC and Rockwell don't, so theirs is null); one
-// line of team credit. A fact the source doesn't give is "[TBD]", shown as
-// is, never guessed.
+// (WWE, ABA and FPO do; BBC and Rockwell don't, so theirs is null). A fact
+// the source doesn't give is "[TBD]", shown as is, never guessed. No team
+// credit: there was one line each until Micah cut the team sections
+// across the pages (2026-11-11).
 //
 // Years are Micah's (2026-11-11), since none of the old pages gave one: the
 // first four were at Code and Theory (BBC and Rockwell 2015, ABA 2016, WWE
@@ -21,9 +22,7 @@
 // an index with a year column reads.
 //
 // Sources, read 2026-11-11: micahburger.com/project/{wwe,bbc,rockwell,aba,
-// fpo}. FPO's page lists two teams; the "Design Team" is used, since the
-// second ("Project Team") repeats the Infinity page's and looks like a
-// leftover from that template.
+// fpo}.
 //
 // Images (public/img/archive/<slug>/), the 4 or 5 strongest per project,
 // lead image first. Downloaded from the live site's wp-content/uploads
@@ -70,7 +69,6 @@ export type ArchiveProject = {
   delivered: string[];
   /** Only when the source states one. */
   outcome: string | null;
-  team: string;
   /** Lead image first. */
   images: ArchiveImage[];
 };

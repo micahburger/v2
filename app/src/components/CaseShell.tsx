@@ -12,8 +12,9 @@ import { markReturnHome } from "../homeScroll";
  *
  * Lifted out of CaseStudy.tsx on 2026-11-11 so the Archive (/project/archive)
  * wears exactly the Opendoor page's header, navigation and footer rather
- * than a copy of them. Always on the Night palette with no scroll shift
- * (index.html and main.tsx set that for every /project/ path).
+ * than a copy of them. No scroll shift on any of them; the case studies
+ * are always Night, while the Archive follows the lab's colour (index.html
+ * and main.tsx set both before the first paint).
  */
 export default function CaseShell({
   name,
