@@ -58,6 +58,24 @@
   RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive?%{QUERY_STRING}#$1 [R=301,NE,QSD,L]
   RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive#$1 [R=301,NE,L]
 
+  # ---- the rest of the old WordPress site ----
+  # Everything else its sitemap listed (checked 2026-11-11). Lincoln,
+  # Infinity and Opendoor kept their paths here, so they need nothing.
+  # /work was the old site's project grid, which the homepage now is;
+  # /featured-illustrations has no page here yet, so it lands home too;
+  # Lattice's old page goes to the Lattice site the homepage links; and
+  # /footer/* were Semplice's footer templates, which got indexed. Query
+  # strings carry over on their own (no # to fight with here).
+  RewriteRule ^(work|featured-illustrations|footer(/.*)?)/?$ / [R=301,L]
+  RewriteRule ^project/lattice/?$ https://lattice2026.micahburger.com/ [R=301,L]
+
+  # WordPress's own addresses: gone for good, and said so (410), rather
+  # than answered with the homepage by the fallback below. Bots keep trying
+  # wp-login.php and xmlrpc.php for years after a site leaves WordPress;
+  # a 410 is cheap and tells crawlers to drop the old upload URLs.
+  RewriteRule ^(wp-admin|wp-includes|wp-content|wp-json)(/|$) - [G,L]
+  RewriteRule ^(wp-login|xmlrpc|wp-cron|wp-signup|wp-trackback)\.php$ - [G,L]
+
   # ---- SPA fallback ----
   # /project/<slug> and any other app path has no file behind it; without
   # this a direct load or refresh on one returns a real 404 instead of the

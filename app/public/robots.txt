@@ -1,0 +1,6 @@
+# Everything here is meant to be found. The sitemap lists the pages; the
+# old WordPress addresses redirect or answer 410 (see .htaccess).
+User-agent: *
+Disallow:
+
+Sitemap: https://micahburger.com/sitemap.xml

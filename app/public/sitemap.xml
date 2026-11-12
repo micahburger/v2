@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Every page a visitor can land on (2026-11-11). Add a case study here when one is added to src/data/caseStudies.ts or public/project/. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://micahburger.com/</loc></url>
+  <url><loc>https://micahburger.com/project/rentspree</loc></url>
+  <url><loc>https://micahburger.com/project/applicant-experience/</loc></url>
+  <url><loc>https://micahburger.com/project/opendoor</loc></url>
+  <url><loc>https://micahburger.com/project/lincoln</loc></url>
+  <url><loc>https://micahburger.com/project/infinity</loc></url>
+  <url><loc>https://micahburger.com/project/archive</loc></url>
+</urlset>
