@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ArchiveProject } from "../../data/archive";
 import { prefersReducedMotion } from "../../motion";
+import { holdAnchor } from "./holdAnchor";
 
 /**
  * One-open-at-a-time projects for the Archive layouts that open a project
@@ -92,7 +93,7 @@ export function useArchiveAccordion(projects: ArchiveProject[]) {
   // from), brought into view once laid out. The browser's own jump to the
   // anchor can't do it: the list isn't in the DOM yet when it tries.
   useLayoutEffect(() => {
-    if (open) scrollToItem(open, false);
+    if (open) return holdAnchor(() => scrollToItem(open, false));
     // First render only.
   }, []);
 

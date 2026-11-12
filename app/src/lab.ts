@@ -53,6 +53,9 @@ export const LAB = {
     { id: "index", label: "Index" },
     { id: "titles", label: "Titles" },
     { id: "panels", label: "Panels" },
+    // A long read with a chapter skipper (Micah's references: Code and
+    // Theory's TIME and Thomson Reuters pages, NZero, negeurra.com).
+    { id: "scroll", label: "Scroll" },
   ],
 } as const;
 

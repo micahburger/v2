@@ -4,6 +4,7 @@ import { useSeen } from "../../hooks";
 import { prefersReducedMotion } from "../../motion";
 import { ArchiveMedia, ArchiveSummary } from "./ArchiveDetail";
 import type { ArchiveLayoutProps } from "./layouts";
+import { holdAnchor } from "./holdAnchor";
 
 /**
  * ?layout=panels (2026-11-11): the RentSpree overview's way of showing
@@ -26,7 +27,9 @@ export default function ArchivePanels({ archive }: ArchiveLayoutProps) {
   const projects = archive.projects;
 
   useLayoutEffect(() => {
-    scrollToHash(projects, false);
+    if (projects.some((p) => p.slug === decodeURIComponent(window.location.hash.slice(1)))) {
+      return holdAnchor(() => scrollToHash(projects, false));
+    }
   }, [projects]);
 
   useEffect(() => {

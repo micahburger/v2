@@ -277,7 +277,14 @@ once v2 replaces it.
     `index` (default; ds table index: rows, a lead image following the
     pointer, one row open in place), `titles` (ds text index: big centred
     names, the others dim and the lead screen rises behind on hover), and
-    `panels` (the RentSpree overview's chapter panels: every project open).
+    `panels` (the RentSpree overview's chapter panels: every project open),
+    and `scroll` (one long read, a chapter per project: a ruled meta row
+    and "key takeaways" columns from Code and Theory's TIME/Thomson Reuters
+    pages, NZero's ruled lines, and negeurra.com's sticky caption beside
+    stacked screens; native scrolling, no smoothing library; a bottom-centre
+    chapter skipper, `ChapterSkipper.tsx`, after the ds section pill).
+    `holdAnchor.ts` re-lands a #slug after fonts and load (text re-wraps
+    above it) until the visitor moves; every layout uses it.
     Shared parts in `components/archive/`: `useArchiveAccordion` (one open,
     anchors, scroll under the bar, inert folds), `ArchiveDetail` (summary,
     carousel, fold, chevron), `ArchiveCarousel` + `Lightbox`.
