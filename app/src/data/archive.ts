@@ -13,7 +13,12 @@
 // three things delivered; an outcome ONLY when the source page states one
 // (WWE, ABA and FPO do; BBC and Rockwell don't, so theirs is null); one
 // line of team credit. A fact the source doesn't give is "[TBD]", shown as
-// is, never guessed. None of the five pages states a year.
+// is, never guessed.
+//
+// Years are Micah's (2026-11-11), since none of the old pages gave one: the
+// first four were at Code and Theory (BBC and Rockwell 2015, ABA 2016, WWE
+// 2017), FPO at Raytheon (2022). Projects are listed newest first, the way
+// an index with a year column reads.
 //
 // Sources, read 2026-11-11: micahburger.com/project/{wwe,bbc,rockwell,aba,
 // fpo}. FPO's page lists two teams; the "Design Team" is used, since the

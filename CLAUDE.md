@@ -268,7 +268,7 @@ once v2 replaces it.
   - Content lives in `data/archive-data.json` alone (typed by
     `data/archive.ts`, which also lists image sources and picks). Summarize,
     don't retell; an outcome only when the old page stated one; anything
-    the source doesn't say is `[TBD]`, shown as is (every year, for now).
+    the source doesn't say is `[TBD]`, shown as is. Years are Micah's (none of the old pages gave one); rows run newest first.
   - Layouts are a lab key, `?layout=` (`LAB.layout` in lab.ts, Archive-only
     via `ARCHIVE_LAB`). Each id maps to a component in
     `components/archive/layouts.ts`, typed so a missing one fails the

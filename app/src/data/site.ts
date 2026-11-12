@@ -159,26 +159,27 @@ export const featured: Featured[] = [
     // each slide. Collins Aerospace (FPO) joined them then; it was an
     // unlisted page on the old site. Their fuller image sets (wwe-2..6
     // etc.) are still in public/img; the Archive has its own in
-    // public/img/archive.
+    // public/img/archive. Listed newest first, the Archive's own order
+    // (2022, 2017, 2016, 2015, 2015).
     id: "archive",
     name: "Archive",
     rest: " Earlier work for ",
     href: "/project/archive",
     group: [
+      { label: "Collins Aerospace", href: "/project/archive#fpo" },
       { label: "WWE", href: "/project/archive#wwe" },
+      { label: "the American Bar Association", href: "/project/archive#aba" },
       { label: "BBC News", href: "/project/archive#bbc" },
       { label: "Rockwell Group", href: "/project/archive#rockwell" },
-      { label: "the American Bar Association", href: "/project/archive#aba" },
-      { label: "Collins Aerospace", href: "/project/archive#fpo" },
     ],
     media: {
       kind: "carousel",
       images: [
+        { src: "/img/fpo-1.jpg", alt: "Collins Aerospace Flight Profile Optimizer", href: "/project/archive#fpo" },
         { src: "/img/wwe-1.jpg", alt: "WWE.com redesign", href: "/project/archive#wwe" },
+        { src: "/img/aba-1.jpg", alt: "American Bar Association design language", href: "/project/archive#aba" },
         { src: "/img/bbc-1.jpg", alt: "BBC News Stream", href: "/project/archive#bbc" },
         { src: "/img/rockwell-1.jpg", alt: "Rockwell Group hospitality portfolio", href: "/project/archive#rockwell" },
-        { src: "/img/aba-1.jpg", alt: "American Bar Association design language", href: "/project/archive#aba" },
-        { src: "/img/fpo-1.jpg", alt: "Collins Aerospace Flight Profile Optimizer", href: "/project/archive#fpo" },
       ],
     },
   },
