@@ -44,11 +44,17 @@ export const LAB = {
     { id: "ledger", label: "Ledger" },
     { id: "statement", label: "Statement" },
   ],
+  // The Archive's layouts (/project/archive, 2026-11-11). One so far: the
+  // interactive index. A new take is a new entry here plus a component in
+  // components/archive/layouts.ts; the content (archive-data.json) stays as
+  // it is.
+  layout: [{ id: "index", label: "Index" }],
 } as const;
 
 /** Which lab rows each page shows; the rest don't apply there. */
 export const HOME_LAB: LabKey[] = ["palette", "shift", "clients", "history"];
 export const CASE_LAB: LabKey[] = ["outcomes"];
+export const ARCHIVE_LAB: LabKey[] = ["layout"];
 
 export type LabKey = keyof typeof LAB;
 export type LabState = { [K in LabKey]: (typeof LAB)[K][number]["id"] };

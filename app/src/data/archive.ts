@@ -1,0 +1,90 @@
+// The Archive (/project/archive, 2026-11-11): five earlier case studies kept
+// as short previews instead of standalone pages, as the old WordPress site
+// (micahburger.com) is retired. Carrier (Infinity) and Lincoln stay full
+// case studies in caseStudies.ts and aren't here.
+//
+// The content is archive-data.json, and only that: every ?layout= variant
+// reads the same file through this module, so a new layout is a new
+// component, never a second copy of the words. This file types the JSON and
+// works out image URLs; it holds no copy of its own.
+//
+// Copy rules (Micah's brief): summarize, don't retell. A client, year and
+// role list; a one-line hook; two or three sentences of summary; at most
+// three things delivered; an outcome ONLY when the source page states one
+// (WWE, ABA and FPO do; BBC and Rockwell don't, so theirs is null); one
+// line of team credit. A fact the source doesn't give is "[TBD]", shown as
+// is, never guessed. None of the five pages states a year.
+//
+// Sources, read 2026-11-11: micahburger.com/project/{wwe,bbc,rockwell,aba,
+// fpo}. FPO's page lists two teams; the "Design Team" is used, since the
+// second ("Project Team") repeats the Infinity page's and looks like a
+// leftover from that template.
+//
+// Images (public/img/archive/<slug>/), the 4 or 5 strongest per project,
+// lead image first. Downloaded from the live site's wp-content/uploads
+// (that site is going away, so nothing here hotlinks it), converted to
+// WebP at three sizes by name:
+//   <file>.webp       1600px on the long side, q82: the carousel and the
+//                     larger view (the carousel tops out near 760px wide,
+//                     so this covers it at 2x and the lightbox on a laptop)
+//   <file>-640.webp   640px wide: the hover preview (300px at 2x)
+//   <file>-192.webp   192px wide: the row thumbnail (96px at 2x)
+// Sources by slug, in order:
+//   wwe       WWE-4, WWE-10, WWE-3, WWE-11, WWE-9
+//   bbc       BBC-3, BBC-4, BBC-6, BBC-Skinny-2, BBC-8
+//   rockwell  Rockwell-2, Rockwell-5, Rockwell-3, Rockwell-skinny2
+//   aba       ABA-2, ABA-10, ABA-11, ABA-7, ABA-3
+//   fpo       FPO-Intro4, FPO-Portrait2, Flight-phase-overview,
+//             Focus-Feature-4, fpo-dispatcher-4
+// Left out as near-duplicates or weaker: WWE-7/5/6/13 and the WWE skinny
+// set, BBC-7 (BBC-8 again) and BBC-Skinny-4, Rockwell-6 (Rockwell-2 on a
+// laptop) and Rockwell-skinny1, ABA-9/5/8/4 and the ABA skinny set, FPO's
+// Grid-4, experience map (unreadable small), feature-features2, style guide
+// (very tall) and onboarding.
+
+import data from "./archive-data.json";
+
+export type ArchiveImage = {
+  file: string;
+  alt: string;
+  /** Intrinsic size of the full image, so its box is held before it loads. */
+  width: number;
+  height: number;
+};
+
+export type ArchiveProject = {
+  /** Also the anchor: /project/archive#<slug> opens this one. */
+  slug: string;
+  client: string;
+  project: string;
+  year: string;
+  role: string[];
+  hook: string;
+  summary: string;
+  /** Three at most. */
+  delivered: string[];
+  /** Only when the source states one. */
+  outcome: string | null;
+  team: string;
+  /** Lead image first. */
+  images: ArchiveImage[];
+};
+
+export type Archive = {
+  title: string;
+  intro: string;
+  projects: ArchiveProject[];
+};
+
+export const archive: Archive = data;
+
+export type ImageSize = "full" | "preview" | "thumb";
+
+/** The URL of one size of an archive image (see the size list above). */
+export function archiveSrc(slug: string, image: ArchiveImage, size: ImageSize = "full") {
+  const suffix = size === "preview" ? "-640" : size === "thumb" ? "-192" : "";
+  return `/img/archive/${slug}/${image.file}${suffix}.webp`;
+}
+
+/** True for a placeholder the brief asked to leave visible ("[TBD]"). */
+export const isTbd = (value: string) => value.trim() === "[TBD]";

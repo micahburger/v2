@@ -151,26 +151,34 @@ export const featured: Featured[] = [
     media: slides("infinity", 4, "Infinity thermostat and app"),
   },
   {
-    // Placeholder grouping for the older case studies until they get a home
-    // of their own (Micah, 2026-11-07: "time to figure out how to group"
-    // them). One slide per project, each linking to its case study; their
-    // fuller image sets (wwe-2..6 etc.) are still in public/img for later.
+    // The older case studies, gathered (Micah, 2026-11-07: "time to figure
+    // out how to group" them). Since 2026-11-11 they live on one page here,
+    // /project/archive, as previews, and the old WordPress pages are being
+    // retired: the name opens the Archive, each client opens its own
+    // project there (/project/archive#<slug>, already expanded), and so does
+    // each slide. Collins Aerospace (FPO) joined them then; it was an
+    // unlisted page on the old site. Their fuller image sets (wwe-2..6
+    // etc.) are still in public/img; the Archive has its own in
+    // public/img/archive.
     id: "archive",
     name: "Archive",
     rest: " Earlier work for ",
+    href: "/project/archive",
     group: [
-      { label: "WWE", href: "https://micahburger.com/project/wwe" },
-      { label: "BBC News", href: "https://micahburger.com/project/bbc" },
-      { label: "the American Bar Association", href: "https://micahburger.com/project/aba" },
-      { label: "Rockwell Group", href: "https://micahburger.com/project/rockwell" },
+      { label: "WWE", href: "/project/archive#wwe" },
+      { label: "BBC News", href: "/project/archive#bbc" },
+      { label: "Rockwell Group", href: "/project/archive#rockwell" },
+      { label: "the American Bar Association", href: "/project/archive#aba" },
+      { label: "Collins Aerospace", href: "/project/archive#fpo" },
     ],
     media: {
       kind: "carousel",
       images: [
-        { src: "/img/wwe-1.jpg", alt: "WWE.com redesign", href: "https://micahburger.com/project/wwe" },
-        { src: "/img/bbc-1.jpg", alt: "BBC News Stream", href: "https://micahburger.com/project/bbc" },
-        { src: "/img/aba-1.jpg", alt: "American Bar Association design language", href: "https://micahburger.com/project/aba" },
-        { src: "/img/rockwell-1.jpg", alt: "Rockwell Group hospitality portfolio", href: "https://micahburger.com/project/rockwell" },
+        { src: "/img/wwe-1.jpg", alt: "WWE.com redesign", href: "/project/archive#wwe" },
+        { src: "/img/bbc-1.jpg", alt: "BBC News Stream", href: "/project/archive#bbc" },
+        { src: "/img/rockwell-1.jpg", alt: "Rockwell Group hospitality portfolio", href: "/project/archive#rockwell" },
+        { src: "/img/aba-1.jpg", alt: "American Bar Association design language", href: "/project/archive#aba" },
+        { src: "/img/fpo-1.jpg", alt: "Collins Aerospace Flight Profile Optimizer", href: "/project/archive#fpo" },
       ],
     },
   },

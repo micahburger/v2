@@ -7,6 +7,7 @@ const TITLES: Record<LabKey, string> = {
   clients: "Clients",
   history: "History",
   outcomes: "Outcomes",
+  layout: "Layout",
 };
 
 /**

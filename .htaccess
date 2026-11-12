@@ -45,6 +45,19 @@
   RewriteCond %{REQUEST_URI} !^/\.well-known/
   RewriteRule (^|/)\. - [F,L]
 
+  # ---- retired case studies ----
+  # WWE, BBC, Rockwell, ABA and FPO were their own pages on the old
+  # WordPress site at these same paths; since 2026-11-11 they're previews on
+  # /project/archive, each under its own anchor. Once this site is
+  # micahburger.com, an old link lands on that project, already open. NE
+  # keeps the # from being escaped. A query has to go before the #, and
+  # Apache's own carry-over puts it after (where it reads as part of the
+  # anchor), so with a query it's written in by hand and the automatic copy
+  # dropped (QSD).
+  RewriteCond %{QUERY_STRING} .
+  RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive?%{QUERY_STRING}#$1 [R=301,NE,QSD,L]
+  RewriteRule ^project/(wwe|bbc|rockwell|aba|fpo)/?$ /project/archive#$1 [R=301,NE,L]
+
   # ---- SPA fallback ----
   # /project/<slug> and any other app path has no file behind it; without
   # this a direct load or refresh on one returns a real 404 instead of the

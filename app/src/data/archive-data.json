@@ -1,0 +1,120 @@
+{
+  "title": "Archive",
+  "intro": "Earlier projects, kept here as short previews rather than full case studies. Open one for the gist, a few screens and the team behind it.",
+  "projects": [
+    {
+      "slug": "wwe",
+      "client": "WWE",
+      "project": "WWE.com redesign",
+      "year": "[TBD]",
+      "role": ["Senior product design", "Design system", "Responsive web"],
+      "hook": "A ground-up, responsive redesign of WWE.com, the hub for millions of wrestling fans.",
+      "summary": "The old site had fragmented content, wasn't responsive and couldn't produce usable analytics. We rebuilt it around video and storytelling, with immersive landing pages for legacy matches, superstars and championships, and a clearer path into WWE Network. The goal was longer viewing sessions and more Network subscriptions.",
+      "delivered": [
+        "Landing pages that mix panoramic visuals, timelines, video highlights and stats",
+        "A responsive component library, themed for Raw, SmackDown, NXT and WrestleMania",
+        "A style guide and image-crop specs for WWE's editorial and photo teams"
+      ],
+      "outcome": "The landing pages became destination hubs for fans and increased time on page.",
+      "team": "Chris Delia (creative director), Micah Lindenberger (senior product design), Konstantinos Riginos (product design), Rosemary Douglas (senior UX), Lauren Manning (creative strategy)",
+      "images": [
+        { "file": "superstar-page", "width": 1600, "height": 900, "alt": "John Cena's superstar page: a full-bleed match photo, his portrait card with a quote, and a row of related video and story cards" },
+        { "file": "themed-feeds", "width": 1600, "height": 900, "alt": "Three show pages side by side, each themed for its brand: Raw in red, SmackDown in blue and NXT in yellow" },
+        { "file": "video-player", "width": 1600, "height": 900, "alt": "The video player on a match highlight, with a scrolling list of related videos beside it" },
+        { "file": "wwe-network", "width": 1600, "height": 900, "alt": "WWE Network marketing pages: a sign-up hero, a wall of event posters and the Network on a TV" },
+        { "file": "style-guide", "width": 1600, "height": 900, "alt": "Style guide sheet: Tungsten and Gotham type specimens, UI icons and buttons, and the black, grey and red palette" }
+      ]
+    },
+    {
+      "slug": "bbc",
+      "client": "BBC News",
+      "project": "BBC News Stream",
+      "year": "[TBD]",
+      "role": ["Lead designer", "Interaction design", "iPhone and iPad"],
+      "hook": "A video-led news app for iPhone and iPad, made to reach a new audience.",
+      "summary": "The BBC News digital team wanted a video-first experience that would bring in, and hold, a new audience. Within the BBC News guidelines, we explored two directions that shaped the news around the time of day: the commute, lunch, longer evening stories and breaking news. We tested and iterated on browsing habits and autoplay.",
+      "delivered": [
+        "Two design directions for iPhone and iPad, tested against how people browse",
+        "Active and passive viewing modes, with passive playing the news hands-free",
+        "A smart queue that let editors add and update news chapters through the day"
+      ],
+      "outcome": null,
+      "team": "Micah Lindenberger (lead designer), Moritz Kettler (creative strategy, project lead), Mike Kenney (UX director), Jake Hutchinson and Tom Muller (product design), Hollie Lubbock (interaction design), Shelby Dunlap (project manager)",
+      "images": [
+        { "file": "newstream", "width": 1600, "height": 900, "alt": "BBC News Stream on an iPad and an iPhone: a world news story with a play button, and a 10-story newstream ready to start" },
+        { "file": "story-cards", "width": 1600, "height": 900, "alt": "Three versions of the same story card on iPad, from a full-bleed video to a card with headlines underneath" },
+        { "file": "phone-feed", "width": 1600, "height": 900, "alt": "An iPhone showing the scrolling story feed, with a video card for an environment story floating above it" },
+        { "file": "news-queue", "width": 854, "height": 1080, "alt": "Phone screen preparing the news for 8:45am: a ring counting 8 stories and a switch to turn on audio" },
+        { "file": "ipad-story", "width": 1600, "height": 900, "alt": "A single story open on iPad: a video still with the headline, play time and two related stories below" }
+      ]
+    },
+    {
+      "slug": "rockwell",
+      "client": "Rockwell Group",
+      "project": "Hospitality portfolio",
+      "year": "[TBD]",
+      "role": ["Senior product design", "Visual design", "Responsive web"],
+      "hook": "A new way to explore Rockwell Group's hotel and hospitality work.",
+      "summary": "Rockwell Group, an interior design firm, wanted its hospitality projects to invite exploration across many hotel brands. I redesigned the hospitality page, the entry point to its restaurants, lobbies, stages and other spaces, around a modular grid. Stark, minimal styling kept the imagery and stories in front.",
+      "delivered": [
+        "A modular grid of brands that works at every breakpoint",
+        "A dark landing page that hands off to light detail pages, for contrast",
+        "Project detail pages that lead with photography and story"
+      ],
+      "outcome": null,
+      "team": "Mariana Bukvick (creative director), Conway Liao (UX), Matt Chiemiel (content strategy), Micah Lindenberger (senior product design), JaeWon (product design)",
+      "images": [
+        { "file": "hospitality-grid", "width": 1600, "height": 900, "alt": "The We Know Hospitality page on an iPad: a black grid of hotel brand logos and project photos" },
+        { "file": "detail-page", "width": 1600, "height": 1187, "alt": "The Aloft project detail page on a light ground, with its story, photos of a guest room and bar, and a mobile version beside it" },
+        { "file": "site-menu", "width": 1600, "height": 900, "alt": "The site menu open on a laptop and a phone: What we make, Our curiosities, What's going on, We're Rockwell Group" },
+        { "file": "brand-grid-mobile", "width": 854, "height": 1080, "alt": "The brand grid on a phone, stacking Le Meridien, Fairmont, NeueHouse and TAO tiles" }
+      ]
+    },
+    {
+      "slug": "aba",
+      "client": "American Bar Association",
+      "project": "americanbar.org redesign",
+      "year": "[TBD]",
+      "role": ["Senior product design", "Visual design", "Design system"],
+      "hook": "One modern look for the ABA's 30-plus websites, made to appeal to the next generation of lawyers.",
+      "summary": "The ABA's digital board needed a consistent look across more than 30 sites, and a fresher one for younger lawyers. I explored how color, type, illustration and data visualization could modernize a respected institution, and with a team of three designed the pages that became the new brand's design system. Navigation centered on a feed of story cards, so people could find content faster.",
+      "delivered": [
+        "A brand design system of type, color, interaction animation and layouts",
+        "A responsive library of feed components that editors use to build each section",
+        "Feature pages for the busiest sections: events, CLE courses, legal news and the store"
+      ],
+      "outcome": "The redesign increased time spent on the site and membership renewals.",
+      "team": "Adam M Morris (associate design director), Micah Lindenberger (senior product design), Robert Gorrell (creative strategy lead), Shaili Das (senior UX), Layna Olmsted (UX), Michael Duke (technology director)",
+      "images": [
+        { "file": "design-system", "width": 1600, "height": 900, "alt": "A wall of redesigned ABA pages in deep red, bright blue, teal and white, showing the range of the design system" },
+        { "file": "diversity-feature", "width": 1600, "height": 900, "alt": "A feature page on a laptop: a DIVERSITY headline over a photo of a speaker, with related stories along the bottom" },
+        { "file": "mobile-feeds", "width": 1600, "height": 900, "alt": "Three phone screens of the story feed: a blue section header, The Latest, and a featured list" },
+        { "file": "event-cards", "width": 1600, "height": 900, "alt": "Three phone screens of feed cards: a cybersecurity story in orange, a CLE course in green and upcoming events by date" },
+        { "file": "data-story", "width": 1600, "height": 900, "alt": "An article on laptop and phone with a pull quote, a photo and blue line and scatter charts of deal sizes" }
+      ]
+    },
+    {
+      "slug": "fpo",
+      "client": "Collins Aerospace",
+      "project": "Flight Profile Optimizer",
+      "year": "[TBD]",
+      "role": ["Design lead", "Product design", "Research"],
+      "hook": "A tablet app that suggests faster, greener and cheaper routes to pilots in flight.",
+      "summary": "Collins licensed NASA's TASAR algorithm, which had saved fuel and time in trials with Alaska Airlines, and needed to turn it into an app pilots would actually use across its EFB products. As design lead I shaped the layout, look and feel and interactions, and managed a second designer. We validated the designs in 31 interviews and usability tests before development.",
+      "delivered": [
+        "An app that works in portrait and landscape, with a split-screen mode for running two apps",
+        "An experience map of in-flight rerouting between pilots, dispatchers and air traffic control",
+        "A component library that kept design, engineering and QA in step"
+      ],
+      "outcome": "Pilots rated FPO 4.8 out of 5 for usefulness.",
+      "team": "Anya Palkowski (product manager), Micah Lindenberger (art direction, product design, research), Jill Haefele (interaction design, strategy, research), Ali Sugarman (user research), Tae Yang (product design, prototyping), Lisa Mitchell (project manager)",
+      "images": [
+        { "file": "app-overview", "width": 1600, "height": 900, "alt": "The app in portrait and landscape on dark tablets: lateral, vertical and combined route options above a map of the flight path" },
+        { "file": "route-options", "width": 771, "height": 1019, "alt": "Portrait view comparing three optimized routes, each with minutes and pounds of fuel saved, above a map with a dotted reroute" },
+        { "file": "flight-phases", "width": 1600, "height": 900, "alt": "Diagram of a flight from takeoff to landing, marking where lateral, vertical and combined reroute suggestions appear" },
+        { "file": "weather-layers", "width": 1600, "height": 695, "alt": "Map layer menus in their default and selected states, with convective weather and restricted airspace shapes" },
+        { "file": "dispatcher-view", "width": 1600, "height": 602, "alt": "Future vision for dispatchers: a fleet map and flight list, with a pilot's reroute request waiting for approval" }
+      ]
+    }
+  ]
+}

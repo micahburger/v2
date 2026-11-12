@@ -17,8 +17,12 @@ function linkTo(href: string | undefined) {
   // The query is read at the click, not at render: the lab writes it to the
   // URL in an effect, after the render that would otherwise bake in the
   // previous pick. (Middle clicks don't fire click, hence auxclick too.)
+  // The query goes before any #anchor (/project/archive?…#wwe): after it, the
+  // browser would read it as part of the anchor and the page would get no
+  // query and a fragment it can't find.
+  const [path, anchor] = href.split("#");
   const withQuery = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.currentTarget.href = `${href}${window.location.search}`;
+    e.currentTarget.href = `${path}${window.location.search}${anchor ? `#${anchor}` : ""}`;
   };
   return { href, onClick: withQuery, onAuxClick: withQuery };
 }
@@ -100,15 +104,17 @@ function Row({ project }: { project: Featured }) {
 }
 
 /** "A, B, C and D." with each name linked, for a row that gathers several
- *  projects (Archive). */
+ *  projects (Archive). Links follow the same rule as a row's name: a page
+ *  on this site (the Archive's anchors, since 2026-11-11) opens in place,
+ *  anything else in a new tab. */
 function GroupLinks({ links }: { links: { label: string; href: string }[] }) {
   return (
     <>
       {links.map((link, i) => (
         <span key={link.href}>
-          <a className="u-line" href={link.href} {...NEW_TAB}>
+          <a className="u-line" {...linkTo(link.href)}>
             {link.label}
-            <span className="visually-hidden"> (opens in a new tab)</span>
+            {!isLocal(link.href) && <span className="visually-hidden"> (opens in a new tab)</span>}
           </a>
           {i < links.length - 2 ? ", " : i === links.length - 2 ? " and " : "."}
         </span>

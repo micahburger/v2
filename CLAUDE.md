@@ -262,6 +262,31 @@ once v2 replaces it.
   still open at the top. The applicant experience page does it too, by
   hand (an inline script with the same sessionStorage key), now that it's
   on the same origin; it couldn't while it was its own subdomain.
+- **Archive** (`/project/archive`, 2026-11-11): WWE, BBC, Rockwell, ABA and
+  FPO (Collins Aerospace), retired as standalone pages, kept as previews.
+  Carrier/Infinity and Lincoln stay full case studies and aren't in it.
+  - Content lives in `data/archive-data.json` alone (typed by
+    `data/archive.ts`, which also lists image sources and picks). Summarize,
+    don't retell; an outcome only when the old page stated one; anything
+    the source doesn't say is `[TBD]`, shown as is (every year, for now).
+  - Layouts are a lab key, `?layout=` (`LAB.layout` in lab.ts, Archive-only
+    via `ARCHIVE_LAB`). Each id maps to a component in
+    `components/archive/layouts.ts`, typed so a missing one fails the
+    build. A new variant is a new component; the data doesn't change.
+  - `index` (the default): rows (ds table index) with a pointer-following
+    lead image, one row open at a time in place (summary left, carousel
+    right), `#<slug>` anchors that open on arrival, carousel with arrows,
+    keys, swipe, `n / N` count and a modal larger view.
+  - The frame is `CaseShell.tsx`, lifted out of CaseStudy.tsx so the
+    Archive and every case study share one bar, title and footer.
+  - Images: `public/img/archive/<slug>/<name>{,-640,-192}.webp`, from the
+    old site's uploads (not hotlinked).
+  - The old `/project/{wwe,bbc,rockwell,aba,fpo}` paths 301 to
+    `/project/archive#<slug>` (.htaccess), for when this site becomes
+    micahburger.com.
+  - Testing note: a hidden Browser pane renders no frames, so the panel's
+    fold, smooth scroll and anything waiting on requestAnimationFrame stall
+    there. Show the pane, or force frames with screenshots.
 
 ## Placeholders still in
 
