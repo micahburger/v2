@@ -37,7 +37,7 @@
         "A responsive component library, themed for Raw, SmackDown, NXT and WrestleMania",
         "A style guide and image-crop specs for WWE's editorial and photo teams"
       ],
-      "outcome": "The landing pages became destination hubs for fans and increased time on page.",
+      "outcome": null,
       "images": [
         { "file": "superstar-page", "width": 1600, "height": 900, "alt": "John Cena's superstar page: a full-bleed match photo, his portrait card with a quote, and a row of related video and story cards" },
         { "file": "themed-feeds", "width": 1600, "height": 900, "alt": "Three show pages side by side, each themed for its brand: Raw in red, SmackDown in blue and NXT in yellow" },
@@ -59,7 +59,7 @@
         "A responsive library of feed components that editors use to build each section",
         "Feature pages for the busiest sections: events, CLE courses, legal news and the store"
       ],
-      "outcome": "The redesign increased time spent on the site and membership renewals.",
+      "outcome": null,
       "images": [
         { "file": "design-system", "width": 1600, "height": 900, "alt": "A wall of redesigned ABA pages in deep red, bright blue, teal and white, showing the range of the design system" },
         { "file": "diversity-feature", "width": 1600, "height": 900, "alt": "A feature page on a laptop: a DIVERSITY headline over a photo of a speaker, with related stories along the bottom" },

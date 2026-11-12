@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
-import { archiveSrc, type ArchiveProject } from "../../data/archive";
+import { archiveSrc, type Archive, type ArchiveProject } from "../../data/archive";
 import { prefersReducedMotion } from "../../motion";
 import Lightbox from "./Lightbox";
 import ChapterSkipper from "./ChapterSkipper";
 import { holdAnchor } from "./holdAnchor";
-import type { ArchiveLayoutProps } from "./layouts";
+
 
 /**
- * ?layout=scroll (2026-11-11): the Archive as one long read, a chapter per
- * project, with a chapter skipper. Built from Micah's references, loosely
+ * The Archive (2026-11-11): one long read, a chapter per project, with a
+ * chapter skipper. Its only layout since Micah chose it over Index, Titles
+ * and Panels the same day. Built from Micah's references, loosely
  * ("it does not need to be overly structured"):
  *
  *  - Code and Theory's TIME and Thomson Reuters pages: each chapter opens
@@ -32,14 +33,14 @@ import type { ArchiveLayoutProps } from "./layouts";
  *
  * The skipper (ChapterSkipper) follows the ds section pill: it appears once
  * the first chapter is up, says where you are, steps back and forward, and
- * opens a list to jump. Anchors: /project/archive?layout=scroll#wwe lands
+ * opens a list to jump. Anchors: /project/archive#wwe lands
  * on that chapter; jumping writes the chapter's #slug.
  *
  * Reveal: blocks fade up 24px once as they arrive (ds Recipe 4); none
  * under reduced motion, and none until the script has run, so nothing is
  * ever left invisible.
  */
-export default function ArchiveScroll({ archive }: ArchiveLayoutProps) {
+export default function ArchiveScroll({ archive }: { archive: Archive }) {
   const projects = archive.projects;
   const root = useRef<HTMLElement>(null);
   const chapters = useRef<(HTMLElement | null)[]>([]);

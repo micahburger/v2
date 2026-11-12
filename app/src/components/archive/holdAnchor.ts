@@ -4,7 +4,7 @@
  *
  * The first scroll happens as soon as the layout exists, but the page can
  * still change height above the target afterwards: the web fonts arrive
- * and the text above re-wraps (on ?layout=scroll that moved a chapter
+ * and the text above re-wraps (on the Archive that moved a chapter
  * ~130px off its mark), and images finish loading. So, like the
  * homepage's scroll memory (homeScroll.ts), it scrolls again once the
  * fonts are in and once the page has loaded, and stops trying the moment

@@ -5,7 +5,7 @@ import Arrow from "./Arrow";
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
- * The chapter skipper for ?layout=scroll: the ds "section pill nav"
+ * The Archive's chapter skipper: the ds "section pill nav"
  * (long-form register), on v2's chips. A pill at the bottom centre (the Lab
  * pill has the left corner, back-to-top the right) reading "02 / 05 · WWE",
  * with arrows for the chapter before and after. Pressing the label opens

@@ -61,9 +61,14 @@ export default function CaseShell({
           its own sticky bar, outside the header, because sticky only holds
           inside its parent; inside the header it would let go as soon as the
           title scrolled away. .cs-page holds the footer too, so it stays put
-          all the way to the bottom. */}
+          all the way to the bottom.
+
+          It reads just "Back" (Micah, 2026-11-11; it was "Back to home").
+          Screen readers still get where it goes from the aria-label, which
+          starts with the visible word so voice control ("click Back")
+          still finds it. The applicant experience page matches. */}
       <nav className="cs-bar wrap" aria-label="Site">
-        <a className="cs-home" href="/" onClick={goHome} onAuxClick={goHome}>
+        <a className="cs-home" href="/" aria-label="Back to home" onClick={goHome} onAuxClick={goHome}>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path
               d="M19 12H5M11.5 5.5 5 12l6.5 6.5"
@@ -74,7 +79,7 @@ export default function CaseShell({
               strokeLinejoin="round"
             />
           </svg>
-          Back to home
+          Back
         </a>
       </nav>
 

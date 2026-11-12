@@ -3,15 +3,16 @@
 // (micahburger.com) is retired. Carrier (Infinity) and Lincoln stay full
 // case studies in caseStudies.ts and aren't here.
 //
-// The content is archive-data.json, and only that: every ?layout= variant
-// reads the same file through this module, so a new layout is a new
+// The content is archive-data.json, and only that: the page (ArchiveScroll)
+// reads it through this module, so a different layout later would be a new
 // component, never a second copy of the words. This file types the JSON and
 // works out image URLs; it holds no copy of its own.
 //
 // Copy rules (Micah's brief): summarize, don't retell. A client, year and
 // role list; a one-line hook; two or three sentences of summary; at most
-// three things delivered; an outcome ONLY when the source page states one
-// (WWE, ABA and FPO do; BBC and Rockwell don't, so theirs is null). A fact
+// three things delivered; an outcome ONLY when the source page states one.
+// FPO's is the only one shown: WWE's and ABA's pages stated one too, but
+// Micah dropped those sections (2026-11-11); BBC and Rockwell never had one. A fact
 // the source doesn't give is "[TBD]", shown as is, never guessed. No team
 // credit: there was one line each until Micah cut the team sections
 // across the pages (2026-11-11).
@@ -27,12 +28,10 @@
 // Images (public/img/archive/<slug>/), the 4 or 5 strongest per project,
 // lead image first. Downloaded from the live site's wp-content/uploads
 // (that site is going away, so nothing here hotlinks it), converted to
-// WebP at three sizes by name:
-//   <file>.webp       1600px on the long side, q82: the carousel and the
-//                     larger view (the carousel tops out near 760px wide,
-//                     so this covers it at 2x and the lightbox on a laptop)
-//   <file>-640.webp   640px wide: the hover preview (300px at 2x)
-//   <file>-192.webp   192px wide: the row thumbnail (96px at 2x)
+// <file>.webp at 1600px on the long side, q82: the page shows screens up to
+// about 800px wide, so this covers that at 2x and the larger view on a
+// laptop. (640px and 192px copies served the Index layout's hover preview
+// and row thumbnails; they went with it.)
 // Sources by slug, in order:
 //   wwe       WWE-4, WWE-10, WWE-3, WWE-11, WWE-9
 //   bbc       BBC-3, BBC-4, BBC-6, BBC-Skinny-2, BBC-8
@@ -81,13 +80,7 @@ export type Archive = {
 
 export const archive: Archive = data;
 
-export type ImageSize = "full" | "preview" | "thumb";
-
-/** The URL of one size of an archive image (see the size list above). */
-export function archiveSrc(slug: string, image: ArchiveImage, size: ImageSize = "full") {
-  const suffix = size === "preview" ? "-640" : size === "thumb" ? "-192" : "";
-  return `/img/archive/${slug}/${image.file}${suffix}.webp`;
+/** The URL of an archive image. */
+export function archiveSrc(slug: string, image: ArchiveImage) {
+  return `/img/archive/${slug}/${image.file}.webp`;
 }
-
-/** True for a placeholder the brief asked to leave visible ("[TBD]"). */
-export const isTbd = (value: string) => value.trim() === "[TBD]";

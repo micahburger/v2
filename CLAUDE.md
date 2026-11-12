@@ -249,7 +249,7 @@ once v2 replaces it.
   names and values and maps Night's colours into its `--page-*` tokens;
   it's Poppins 400/500 throughout (its RentSpree `.product` screens keep
   Newsreader and Manrope). Change a value in one, change it in the other.
-- Back to home is **locked on scroll** on every case study (Micah,
+- The Back pill (it read "Back to home" until 2026-11-11) is **locked on scroll** on every case study (Micah,
   2026-11-10): `.cs-bar` is a sticky bar outside the header (sticky only
   holds inside its parent), resting 180px down and holding 24px from the
   top (112 / 16 on phones). The applicant experience page mirrors it, and
@@ -268,45 +268,39 @@ once v2 replaces it.
   Carrier/Infinity and Lincoln stay full case studies and aren't in it.
   - Content lives in `data/archive-data.json` alone (typed by
     `data/archive.ts`, which also lists image sources and picks). Summarize,
-    don't retell; an outcome only when the old page stated one; anything
-    the source doesn't say is `[TBD]`, shown as is. Years are Micah's (none of the old pages gave one); rows run newest first.
-  - Layouts are a lab key, `?layout=` (`LAB.layout` in lab.ts, Archive-only
-    via `ARCHIVE_LAB`). **Scroll is the default** (Micah, 2026-11-11). The
-    Archive also takes the **Colour** lab row and follows the homepage's
-    palette (carried in on `?palette=`, Clay when absent), set before first
-    paint in `app/index.html` and synced in `ArchivePage`; the case
-    studies stay on Night. Archive styles use palette tokens only, so they
-    hold on light and dark palettes (Titles blends only the lit name). Each id maps to a component in
-    `components/archive/layouts.ts`, typed so a missing one fails the
-    build. A new variant is a new component; the data doesn't change.
-  - Three layouts so far (2026-11-11), each a design system pattern:
-    `index` (default; ds table index: rows, a lead image following the
-    pointer, one row open in place), `titles` (ds text index: big centred
-    names, the others dim and the lead screen rises behind on hover), and
-    `panels` (the RentSpree overview's chapter panels: every project open),
-    and `scroll` (one long read, a chapter per project: a ruled meta row
-    and "key takeaways" columns from Code and Theory's TIME/Thomson Reuters
-    pages, NZero's ruled lines, and negeurra.com's sticky caption beside
-    stacked screens; native scrolling, no smoothing library; a bottom-centre
-    chapter skipper, `ChapterSkipper.tsx`, after the ds section pill).
-    `holdAnchor.ts` re-lands a #slug after fonts and load (text re-wraps
-    above it) until the visitor moves; every layout uses it.
-    Shared parts in `components/archive/`: `useArchiveAccordion` (one open,
-    anchors, scroll under the bar, inert folds), `ArchiveDetail` (summary,
-    carousel, fold, chevron), `ArchiveCarousel` + `Lightbox`.
-  - Index critique applied (Micah): no row thumbnail on desktop (phones
-    only; the hover preview covers it), a chevron instead of plus/cross,
-    and smaller type, set once as `--ax-*` tokens on `.ax` (body 14,
-    small 13, labels 12, hook 18) for every layout.
-  - The frame is `CaseShell.tsx`, lifted out of CaseStudy.tsx so the
-    Archive and every case study share one bar, title and footer.
-  - Images: `public/img/archive/<slug>/<name>{,-640,-192}.webp`, from the
-    old site's uploads (not hotlinked).
+    don't retell; anything the source doesn't say is `[TBD]`, shown as is.
+    Years are Micah's (none of the old pages gave one); projects run newest
+    first. Only FPO shows an Outcome (WWE's and ABA's were cut); no team
+    credits anywhere on the site (cut 2026-11-11).
+  - **One layout: the long read** (`ArchiveScroll.tsx`). Index, Titles and
+    Panels were tried as `?layout=` lab options the same day and removed
+    when Micah chose Scroll; an old `?layout=` link still opens the page
+    (the lab drops the param). A chapter per project: a ruled meta row
+    (client, project, year, role) and "What I designed" columns from Code
+    and Theory's TIME/Thomson Reuters pages, a contents list on NZero's
+    ruled lines, and negeurra.com's caption sticking beside stacked
+    screens. Native scrolling, no smoothing library. No chapter numbers
+    shown; the bottom-centre `ChapterSkipper.tsx` (after the ds section
+    pill) counts and jumps. A screen opens `Lightbox.tsx`, which is just
+    the screen and closes with one click anywhere.
+  - `holdAnchor.ts` re-lands a #slug after fonts and load (text re-wraps
+    above it) until the visitor moves.
+  - **Colour:** the Archive's lab row is Colour only; it follows the
+    homepage's palette (carried in on `?palette=`, Clay when absent), set
+    before first paint in `app/index.html` and synced in `ArchivePage`.
+    The case studies stay on Night. Archive styles use palette tokens only.
+  - Type is set once as `--ax-*` tokens on `.ax` (body 14, small 13,
+    labels 12, statements 18), Micah's "too large" note.
+  - The frame is `CaseShell.tsx`, shared with every case study: bar, title,
+    footer. Its pill reads **"Back"** (aria-label "Back to home"), here and
+    on the applicant experience page.
+  - Images: `public/img/archive/<slug>/<name>.webp` (1600px), from the old
+    site's uploads (not hotlinked).
   - The old `/project/{wwe,bbc,rockwell,aba,fpo}` paths 301 to
     `/project/archive#<slug>` (.htaccess), for when this site becomes
     micahburger.com.
-  - Testing note: a hidden Browser pane renders no frames, so the panel's
-    fold, smooth scroll and anything waiting on requestAnimationFrame stall
+  - Testing note: a hidden Browser pane renders no frames, so smooth
+    scroll, the reveal and anything waiting on requestAnimationFrame stall
     there. Show the pane, or force frames with screenshots.
 
 ## Placeholders still in

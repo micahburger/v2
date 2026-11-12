@@ -44,20 +44,9 @@ export const LAB = {
     { id: "ledger", label: "Ledger" },
     { id: "statement", label: "Statement" },
   ],
-  // The Archive's layouts (/project/archive, 2026-11-11). Scroll leads, so
-  // it's the default (Micah: "default to scroll as the main option"): a
-  // long read with a chapter skipper, from his references (Code and
-  // Theory's TIME and Thomson Reuters pages, NZero, negeurra.com). The
-  // others are design system patterns: Index (table index), Titles (text
-  // index), Panels (the RentSpree overview's chapter panels). A new take is
-  // a new entry here plus a component in components/archive/layouts.ts; the
-  // content (archive-data.json) stays as it is.
-  layout: [
-    { id: "scroll", label: "Scroll" },
-    { id: "index", label: "Index" },
-    { id: "titles", label: "Titles" },
-    { id: "panels", label: "Panels" },
-  ],
+  // (The Archive had a Layout row here, 2026-11-11: Scroll, Index, Titles
+  // and Panels. Micah settled on Scroll the same day and the rest went;
+  // see components/archive/ArchiveScroll.tsx.)
 } as const;
 
 /** Which lab rows each page shows; the rest don't apply there. */
@@ -66,7 +55,7 @@ export const CASE_LAB: LabKey[] = ["outcomes"];
 // The Archive takes the homepage's colour too (Micah, 2026-11-11: "I like
 // the idea of the color carrying through"), unlike the case studies, which
 // stay on Night.
-export const ARCHIVE_LAB: LabKey[] = ["palette", "layout"];
+export const ARCHIVE_LAB: LabKey[] = ["palette"];
 
 export type LabKey = keyof typeof LAB;
 export type LabState = { [K in LabKey]: (typeof LAB)[K][number]["id"] };
@@ -97,6 +86,8 @@ export function useLab() {
     // Old links may still carry ?footer= or ?links=; both left the lab.
     params.delete("footer");
     params.delete("links");
+    // And ?layout=, the Archive's, settled on Scroll (2026-11-11).
+    params.delete("layout");
     (Object.keys(lab) as LabKey[]).forEach((key) => params.set(key, lab[key]));
     window.history.replaceState(null, "", `${window.location.pathname}?${params}${window.location.hash}`);
   }, [lab]);
