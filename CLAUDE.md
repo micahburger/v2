@@ -24,9 +24,9 @@ the Lattice2.0 repo from that site's own GIT page) and `applicants/`
 may clear the rest, which is why those three are listed there. Never
 commit files at those paths, and never empty `public_html` by hand.
 
-The WordPress site was moved, not deleted, to `wp-old/` beside
-`public_html` (unreachable from the web), with its database untouched.
-CDN is off for micahburger.com. Hostinger's deploy adds and updates files
+The old WordPress site is gone (files and database deleted 2026-11-13).
+Its eight case studies were kept first as full-page PDFs, outside any
+repo, in `../old-site-case-studies/`. CDN is off for micahburger.com. Hostinger's deploy adds and updates files
 but has left removed ones in place before, so orphaned old bundles can
 linger; they're harmless.
 
