@@ -6,3 +6,15 @@ app/dist/
 app/*.tsbuildinfo
 app/vite.config.js
 app/vite.config.d.ts
+
+# ---- on the server, not in the repo ----
+# Once this repo deploys to micahburger.com (2026-11-13), its public_html
+# also holds other sites' folders: lattice2026.micahburger.com's and
+# applicants.micahburger.com's document roots live inside it, plus
+# Hostinger's own .private. Hostinger's Git publisher keeps whatever this
+# file matches ("Preserving paths matched by .gitignore" in its log) and
+# may clear the rest, so listing them here is what stops a deploy of this
+# repo from wiping those sites. Never commit anything at these paths.
+/lattice2026/
+/applicants/
+/.private/
