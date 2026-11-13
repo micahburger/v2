@@ -38,6 +38,19 @@ ErrorDocument 410 /index.html
   RewriteEngine On
   RewriteBase /
 
+  # ---- the old address ----
+  # This repo deploys to two hPanel sites: micahburger.com, which it has
+  # been since 2026-11-13, and v2.micahburger.com, where it was built. Both
+  # read this file, so this one rule sends every v2. request to the same
+  # path (and query, which Apache carries over) on the real domain, and
+  # links handed out during the build keep working. It goes first so that
+  # nothing below answers on v2. itself. .well-known stays open so the
+  # subdomain's SSL certificate keeps renewing, or the redirect would stop
+  # being reachable over https.
+  RewriteCond %{HTTP_HOST} ^v2\.micahburger\.com$ [NC]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^(.*)$ https://micahburger.com/$1 [R=301,L]
+
   # ---- not part of the site ----
   # The source (app/), the build script, the project notes and any
   # Markdown, scripts, configs, source maps or dotfiles: refused before the

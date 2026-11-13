@@ -1,13 +1,34 @@
 # micahburger.com v2
 
-A rebuild of Micah Lindenberger's homepage (micahburger.com, currently on
-Semplice/WordPress), meant to become the hub that links to every case study
-and prototype: Corner Bodega, the rental application case study, Lattice,
-the 2026 mini portfolio, plus the older case studies still on the live site.
+Micah Lindenberger's homepage, rebuilt from the old Semplice/WordPress
+site: the hub that links to every case study and prototype (Corner Bodega,
+the rental application case study, Lattice, the 2026 mini portfolio) and
+holds the older case studies itself.
 
-Live at **https://v2.micahburger.com** (Hostinger, set up 2026-11-06).
-Repo: github.com/micahburger/v2. hPanel's Git deploy pulls `main` into
-`public_html` on every push.
+Live at **https://micahburger.com** since 2026-11-13. It was built at
+v2.micahburger.com (from 2026-11-06), which now 301s every path to the
+same path on micahburger.com (the first rule in `.htaccess`).
+Repo: github.com/micahburger/v2.
+
+## Hosting (read before touching hPanel)
+
+Two hPanel sites deploy this repo's `main`, both with Git auto-deploy on
+and root `public_html`: **micahburger.com** (the real one) and
+**v2.micahburger.com** (only there for the redirect). One push updates both.
+
+micahburger.com's `public_html` is shared. Two other sites' document roots
+live inside it: `lattice2026/` (lattice2026.micahburger.com, deployed by
+the Lattice2.0 repo from that site's own GIT page) and `applicants/`
+(applicants.micahburger.com, the retired redirect), plus Hostinger's
+`.private/`. Hostinger's publisher keeps paths `.gitignore` matches and
+may clear the rest, which is why those three are listed there. Never
+commit files at those paths, and never empty `public_html` by hand.
+
+The WordPress site was moved, not deleted, to `wp-old/` beside
+`public_html` (unreachable from the web), with its database untouched.
+CDN is off for micahburger.com. Hostinger's deploy adds and updates files
+but has left removed ones in place before, so orphaned old bundles can
+linger; they're harmless.
 
 Vite + React 18 + TypeScript, same setup as `../2026folio-site`.
 
@@ -178,8 +199,8 @@ and is parked in `app/_archive/`, outside the build.
 `/project/<slug>` renders a case study instead of the homepage (`main.tsx`
 reads the path once; moving between pages is a plain page load, and
 `.htaccess` already sends every unknown path to `index.html`). The path is
-the live site's own, so old `micahburger.com/project/…` links keep working
-once v2 replaces it.
+the old WordPress site's own, so old `micahburger.com/project/…` links kept
+working when v2 replaced it.
 
 - Content: `app/src/data/caseStudies.ts`, one `CaseStudy` per project, made
   of typed blocks (intro, heading, split, figure, pair, compare, slideshow,
@@ -297,8 +318,8 @@ once v2 replaces it.
   - Images: `public/img/archive/<slug>/<name>.webp` (1600px), from the old
     site's uploads (not hotlinked).
   - The old `/project/{wwe,bbc,rockwell,aba,fpo}` paths 301 to
-    `/project/archive#<slug>` (.htaccess), for when this site becomes
-    micahburger.com.
+    `/project/archive#<slug>` (.htaccess), so links to the old WordPress
+    pages land on that project.
   - Testing note: a hidden Browser pane renders no frames, so smooth
     scroll, the reveal and anything waiting on requestAnimationFrame stall
     there. Show the pane, or force frames with screenshots.
