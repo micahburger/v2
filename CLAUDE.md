@@ -372,6 +372,14 @@ One system for how things move, in `app/src/styles/global.css`:
 - Old WordPress addresses (`/work`, `/featured-illustrations`,
   `/project/lattice`, `/footer/*`, `wp-*`) answer 410 Gone, showing the
   homepage; the five archived studies 301 to their Archive anchor.
+- **Analytics is Umami Cloud** (2026-11-13, Micah's account, no cookies, so
+  no consent banner). The tag lives in `app/index.html` and, as copies, in
+  the applicant experience's three plain HTML pages; change one, change
+  all four. It counts micahburger.com only (`data-domains`) and drops
+  query strings (`data-exclude-search`, because the lab rewrites the
+  address on every load). Umami discards headless browsers as bots, and
+  Micah's own Chrome blocks the script, so neither shows up in the
+  dashboard; test with a normal browser window that isn't his.
 - Weights: only Poppins 400/500, Satoshi 700 (the name eyebrow, from Fontshare)
   and Plex Mono 400 (lab panel) are loaded. Another weight gets synthesised.
 - Logos in the hover card must have transparent backgrounds: the black is
