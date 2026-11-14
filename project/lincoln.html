@@ -81,6 +81,25 @@
       rel="stylesheet"
     />
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap" rel="stylesheet" />
+    <!-- Visitor counts: Umami Cloud (Micah's account, 2026-11-13), picked
+         over Google Analytics because it sets no cookies, so the site needs
+         no consent banner. Every page that comes from this file gets it:
+         the homepage, each case study's built copy and the Archive. The
+         applicant experience page and its screens/ and styleguide/ pages
+         are plain HTML with their own copy of this tag; change one, change
+         all four.
+         data-domains counts micahburger.com only, so local previews and the
+         dev server never add visits. data-exclude-search drops the query
+         string: the lab writes ?palette=…&shift=… into the address on every
+         load, which would otherwise split each page into a dozen entries
+         and could count the rewrite as a second view. -->
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="1c6a645b-c4a8-47e8-8664-84b27a431215"
+      data-domains="micahburger.com"
+      data-exclude-search="true"
+    ></script>
     <script type="module" blocking="render" crossorigin src="/assets/index-D1xJPkwt.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-5jgtW_SS.css">
   </head>
