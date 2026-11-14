@@ -2,42 +2,35 @@ import { useEffect, useRef, useState } from "react";
 import { jobs, type Job } from "../data/site";
 import { useReducedMotion, useSeen } from "../hooks";
 
-type Variant = "logo" | "timeline" | "resume";
-
 /**
- * Work history in the live site's layout: dates and location in the left
- * half, company (a link, in capitals) over the role in the right half. In
- * both takes the whole row is the link to the company's site, opening in a
- * new tab. The hover ideas layered on top:
- *  - LOGO: the company's logo, in black on a white card, floats beside the
- *    pointer while it's over that row. (Micah's ask.)
- *  - TIMELINE: a first-job-to-now ruler above the list where every job is
- *    a span, all one colour. Hovering a row raises its span in the text
- *    colour and lightens the row; hovering a span does the same.
- *  - RESUME: the 2026 folio's resume rows brought over (Micah, 2026-11-07),
- *    a first step toward the two sites feeling like one family. A rounded
- *    logo tile beside role and company, dates on the right, with
- *    the section title pulled into the left half the way the folio sets
- *    "Work history" in a column of its own. Set in this page's Poppins, not
- *    the folio's Proxima Nova, so it sits in the page rather than pasted on.
- *    Hovering grows the tile by the shared card grow token.
+ * Work history as the 2026 folio's resume rows (Micah, 2026-11-07), a first
+ * step toward the two sites feeling like one family. A rounded logo tile
+ * beside role and company, dates on the right, with the section title
+ * pulled into the left half the way the folio sets "Work history" in a
+ * column of its own. Set in this page's Poppins, not the folio's Proxima
+ * Nova, so it sits in the page rather than pasted on. Hovering grows the
+ * tile by the shared card grow token. The whole row is the link to the
+ * company's site, opening in a new tab.
  *
- * Fill (the row flooding with a brand colour) and Focus (the other rows
- * stepping back while a tenure bar drew out) were tried and cut from the
- * lab on 2026-11-07.
+ * This was one of three takes in the lab. Resume won and the History row
+ * left the lab on 2026-11-13, taking the other two with it: Logo (the
+ * live site's two-column rows, with the company's logo on a white card
+ * trailing the pointer) and Timeline (a first-job-to-now ruler of tenure
+ * bars above those rows). Fill and Focus were cut earlier, on 2026-11-07.
+ * The jobs in data/site.ts still carry `logo`, `start` and `end` from
+ * those takes; nothing reads them now.
  *
  * Keyboard focus drives the same state as hover.
  */
-export default function WorkHistory({ variant }: { variant: Variant }) {
+export default function WorkHistory() {
   const [hover, setHover] = useState<number | null>(null);
   const listRef = useRef<HTMLOListElement>(null);
   const seen = useSeen(listRef, 0.15);
   const reduced = useReducedMotion();
-  const RowFor = variant === "resume" ? ResumeRow : Row;
 
   // Scrolling moves the rows out from under a still pointer without any
-  // pointerleave, which would leave the hover card floating over whatever
-  // scrolled in. A scroll ends the hover; the next pointer move restarts it.
+  // pointerleave, which would leave a tile grown under whatever scrolled
+  // in. A scroll ends the hover; the next pointer move restarts it.
   useEffect(() => {
     if (hover === null) return;
     const clear = () => setHover(null);
@@ -46,8 +39,7 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
   }, [hover]);
 
   return (
-    <div className={`history history--${variant}`}>
-      {variant === "timeline" && <Timeline hover={hover} setHover={setHover} />}
+    <div className="history history--resume">
       <ol
         ref={listRef}
         className={`history__list ${seen || reduced ? "is-seen" : ""} ${
@@ -56,7 +48,7 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
         onPointerLeave={() => setHover(null)}
       >
         {jobs.map((job, i) => (
-          <RowFor
+          <ResumeRow
             key={job.company}
             job={job}
             index={i}
@@ -66,66 +58,20 @@ export default function WorkHistory({ variant }: { variant: Variant }) {
           />
         ))}
       </ol>
-      {variant === "logo" && <LogoCard job={hover === null ? null : jobs[hover]} />}
     </div>
   );
 }
 
-function Row({
-  job,
-  index,
-  active,
-  onEnter,
-  onLeave,
-}: {
-  job: Job;
-  index: number;
-  active: boolean;
-  onEnter: () => void;
-  onLeave: () => void;
-}) {
-  return (
-    <li
-      className={`job grid ${active ? "is-active" : ""}`}
-      style={{ "--i": index } as React.CSSProperties}
-      onPointerEnter={onEnter}
-      onFocus={onEnter}
-      onBlur={onLeave}
-    >
-      <div className="job__when">
-        <p className="job__dates">{job.dates}</p>
-        <p className="job__where">{job.location}</p>
-      </div>
-      <div className="job__what">
-        <p className="job__company">
-          {job.href ? (
-            // Stretched over the whole row by .job__link::after, so the row
-            // is one big target but still a single link to a screen reader.
-            <a className="job__link" href={job.href} target="_blank" rel="noreferrer">
-              {job.company}
-              <span className="visually-hidden"> (opens in a new tab)</span>
-            </a>
-          ) : (
-            job.company
-          )}
-        </p>
-        <p className="job__role">{job.role}</p>
-      </div>
-    </li>
-  );
-}
-
-/** One job in the Resume take. Three parts, read left to right: the tile,
- *  then what I did (role, large) over where (company and city, small and
- *  quiet), then when, set apart on the right edge. The first try stacked
- *  four lines (company in link colour, role, dates, city) beside the tile;
- *  Micah found it cluttered and unbalanced, a tall ragged block beside a
- *  short square. Two lines centre on the tile, and the dates line up down
- *  the right like a resume's.
+/** One job. Three parts, read left to right: the tile, then what I did
+ *  (role, large) over where (company and city, small and quiet), then
+ *  when, set apart on the right edge. The first try stacked four lines
+ *  (company in link colour, role, dates, city) beside the tile; Micah found
+ *  it cluttered and unbalanced, a tall ragged block beside a short square.
+ *  Two lines centre on the tile, and the dates line up down the right like
+ *  a resume's.
  *
- *  Still the whole row as one link to the company's site, like the other
- *  takes. Carries .job so it shares the stretched link, focus ring and
- *  staggered arrival. */
+ *  The whole row is one link to the company's site. Carries .job for the
+ *  stretched link, focus ring and staggered arrival. */
 function ResumeRow({
   job,
   index,
@@ -151,6 +97,8 @@ function ResumeRow({
       <p className="resume-job__role">{job.role}</p>
       <p className="resume-job__where">
         {job.href ? (
+          // Stretched over the whole row by .job__link::after, so the row
+          // is one big target but still a single link to a screen reader.
           <a className="job__link" href={job.href} target="_blank" rel="noreferrer">
             {job.name}
             <span className="visually-hidden"> (opens in a new tab)</span>
@@ -164,140 +112,5 @@ function ResumeRow({
       </p>
       <p className="resume-job__dates">{job.dates}</p>
     </li>
-  );
-}
-
-/** The card that trails the pointer in LOGO. One element for the whole
- *  list, eased toward the pointer each frame (lerp .18) so it lags like
- *  something with weight instead of being glued to the cursor.
- *
- *  Every logo renders up front and only the current one shows, so moving
- *  between rows never waits on an image request. */
-function LogoCard({ job }: { job: Job | null }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduced = useReducedMotion();
-  const fine = useRef(window.matchMedia("(hover: hover) and (pointer: fine)").matches);
-  // Keep showing the last job while the card fades out, rather than blanking.
-  const [last, setLast] = useState<Job | null>(job);
-  useEffect(() => {
-    if (job) setLast(job);
-  }, [job]);
-
-  useEffect(() => {
-    if (!fine.current) return;
-    const el = ref.current!;
-    const target = { x: 0, y: 0 };
-    const pos = { x: 0, y: 0 };
-    let first = true;
-    let frame = 0;
-    const onMove = (e: PointerEvent) => {
-      target.x = e.clientX + 28;
-      target.y = e.clientY - 120;
-      if (first) {
-        pos.x = target.x;
-        pos.y = target.y;
-        first = false;
-      }
-    };
-    const tick = () => {
-      const k = reduced ? 1 : 0.18;
-      pos.x += (target.x - pos.x) * k;
-      pos.y += (target.y - pos.y) * k;
-      el.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
-      frame = requestAnimationFrame(tick);
-    };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    frame = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      cancelAnimationFrame(frame);
-    };
-  }, [reduced]);
-
-  if (!fine.current) return null;
-  return (
-    <div ref={ref} className={`follow-card ${job ? "is-on" : ""}`} aria-hidden="true">
-      <div className="follow-card__inner follow-card__inner--logo">
-        {jobs.map((j) =>
-          j.logo ? (
-            <img
-              key={j.company}
-              src={j.logo}
-              alt=""
-              className={`follow-card__logo ${j === last ? "is-current" : ""}`}
-            />
-          ) : (
-            <span
-              key={j.company}
-              className={`follow-card__logo follow-card__wordmark ${j === last ? "is-current" : ""}`}
-            >
-              {j.company}
-            </span>
-          ),
-        )}
-      </div>
-    </div>
-  );
-}
-
-/** Year as a decimal, from "YYYY-MM" (null = this month). */
-function toYear(value: string | null) {
-  const [y, m] = value ? value.split("-").map(Number) : [new Date().getFullYear(), new Date().getMonth() + 1];
-  return y + (m - 1) / 12;
-}
-
-// The ruler runs from the first job's start to this month, not from round
-// years: that's what puts Hanson's bar flush with the "Work History" title
-// on the left and RentSpree's flush with the content edge on the right.
-const T0 = Math.min(...jobs.map((j) => toYear(j.start)));
-const T1 = toYear(null);
-
-function at(value: string | null) {
-  return ((toYear(value) - T0) / (T1 - T0)) * 100;
-}
-
-function Timeline({
-  hover,
-  setHover,
-}: {
-  hover: number | null;
-  setHover: (i: number | null) => void;
-}) {
-  // Every four years, from the first even year inside the range. 2012 to
-  // 2024 keeps every label clear of both ends, where a centred label would
-  // otherwise hang past the content edge.
-  const ticks: number[] = [];
-  for (let y = Math.ceil(T0 / 2) * 2; y < T1 - 1; y += 4) ticks.push(y);
-  return (
-    <div className="timeline" aria-hidden="true" onPointerLeave={() => setHover(null)}>
-      <div className="timeline__track">
-        {jobs.map((job, i) => {
-          const left = at(job.start);
-          const width = at(job.end) - left;
-          return (
-            <span
-              key={job.company}
-              className={`timeline__span ${hover === i ? "is-active" : ""}`}
-              style={
-                {
-                  left: `${left}%`,
-                  width: `${width}%`,
-                } as React.CSSProperties
-              }
-              onPointerEnter={() => setHover(i)}
-            >
-              <span className="timeline__label">{job.company}</span>
-            </span>
-          );
-        })}
-      </div>
-      <div className="timeline__ticks">
-        {ticks.map((y) => (
-          <span key={y} style={{ left: `${((y - T0) / (T1 - T0)) * 100}%` }}>
-            {y}
-          </span>
-        ))}
-      </div>
-    </div>
   );
 }

@@ -61,7 +61,7 @@ export default function App() {
           <h2 id="history-title" className="section__label">
             Work History
           </h2>
-          <WorkHistory key={`${lab.history}-${replay}`} variant={lab.history} />
+          <WorkHistory key={replay} />
         </section>
 
         <section className="section section--featured wrap" aria-labelledby="featured-title" data-stage="2">

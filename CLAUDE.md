@@ -67,7 +67,7 @@ from `~/Desktop/ds-assets`; Lattice's from `../prtfolio images`.
 ## The lab
 
 The "Lab" pill (bottom-left; bottom-right on phones) switches takes. The
-choice lives only in the query string, e.g. `/?quilt=flap&history=timeline`;
+choice lives only in the query string, e.g. `/?palette=paper&clients=quilt`;
 a plain link gets the defaults.
 
 | Section | Takes (default first) | File |
@@ -75,11 +75,15 @@ a plain link gets the defaults.
 | Colour | clay, paper, graphite, forest | palette blocks at the top of `global.css` |
 | Shift | dusk, off, saturate, drift | "section shift" in `global.css`, `useSectionStage` in `App.tsx` |
 | Clients | marquee, quilt | `components/ClientQuilt.tsx` |
-| History | resume, timeline, logo | `components/WorkHistory.tsx` |
 
 Settled and out of the lab: the footer is the **sign-off** (three quiet
 columns, then "Ciao." set enormous); Classic, Index and Card were cut on
-2026-11-07, as were the Fill and Focus history takes. The client quilt's
+2026-11-07, as were the Fill and Focus history takes. Work History settled
+on **Resume** on 2026-11-13 and its History row left the lab, taking
+Timeline (a career ruler of tenure bars over the live site's two-column
+rows) and Logo (those rows, with the company's logo on a white card
+trailing the pointer) with it; an old `?history=` link is dropped and gets
+Resume. The client quilt's
 build-in is the **wave**; the quilt is back in the lab against **Marquee**
 (2026-11-07), every logo in one full-bleed row drifting right to left on a
 loop (5s per tile, paused under the pointer and off screen, still under
@@ -111,11 +115,7 @@ The contact sentence's links use `--link-strong` (further from the page
 than `--link`), a faint resting underline, and a 2px underline that draws
 in on hover.
 
-Timeline is one colour: faint bars, and the hovered job's bar in the text
-colour (no per-company brand colours). Hovering a row lightens it to 50%;
-nothing else dims. The ruler runs from the first job's start to this month, so the
-first bar lines up with the section title and the last with the content
-edge. Section titles are 22px (the live site's are 18px).
+Section titles are 22px (the live site's are 18px).
 
 Featured rows settled on **Corner** (2026-11-07): only the project's name
 is a link in the paragraph, underlined with `.u-line` (the contact
@@ -124,7 +124,7 @@ links use it too), and a round arrow sits on the media's bottom-right
 corner. It beat the whole paragraph as a link with an arrow under it
 (three clickable things per row) and an underline-only version.
 
-Defaults (2026-11-07): Clay, Dusk, Marquee, Resume. Each lab list leads
+Defaults (2026-11-07): Clay, Dusk, Marquee. Each lab list leads
 with its default (`readLab` takes the first), and `app/index.html` puts
 `data-palette="clay" data-shift="dusk"` on `<html>` so the first paint is
 already Clay. The
@@ -145,7 +145,7 @@ sites open in a new tab, so the homepage stays open as the hub; case
 studies built here open in place. Corner Bodega is parked in
 `parked` in `data/site.ts`.
 
-"Resume" is the 2026 folio's resume rows (`ResumeLayout.tsx` there),
+Work History ("Resume") is the 2026 folio's resume rows (`ResumeLayout.tsx` there),
 brought over on 2026-11-07 as a first step toward the two sites feeling
 like one family: the folio's rounded logo tiles (copied into
 `public/img/workhistory`), set in Poppins rather than the folio's Proxima
@@ -154,12 +154,11 @@ edge; the first try stacked four lines in the folio's order and Micah
 found it cluttered. The list starts at column 6, sharing the featured
 media's edge. Hanson's tile is its "h." mark from hansoninc.com and Tip
 or Skip's (a split coin) was made up; both are white on black SVGs to
-match Hudson Rouge and Code & Theory. With Resume picked, Featured opens
-with the same hairline as Work History (`:has()` on the section).
-
-"Logo" (Micah's ask): hovering a job floats that company's logo, flattened
-to black by CSS, on a white card beside the pointer. Every row links to the
-company's site in a new tab.
+match Hudson Rouge and Code & Theory. Featured opens with the same
+hairline as Work History (`:has()` on the section). On phones the three
+small lines sit 12px apart: that's what shipped (an old shared `.job` rule
+overrode the 2px the Resume rule asked for) and it was kept as is when the
+other takes went. Every row links to the company's site in a new tab.
 
 Palettes are sets of CSS custom properties under `:root[data-palette=…]`;
 `main.tsx` sets the attribute before first render so a palette link doesn't

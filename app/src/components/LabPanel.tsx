@@ -5,7 +5,6 @@ const TITLES: Record<LabKey, string> = {
   palette: "Colour",
   shift: "Shift",
   clients: "Clients",
-  history: "History",
   outcomes: "Outcomes",
 };
 

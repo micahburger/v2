@@ -396,7 +396,7 @@ button {
 }
 
 /* 22px, up from the live site's 18px, so each section announces itself;
-   with the timeline under "Work History" an 18px title read as a caption. */
+   over the work history's big rows an 18px title read as a caption. */
 .section__label {
   margin-bottom: 20px;
   font-size: 22px;
@@ -421,10 +421,11 @@ button {
   padding-top: 90px;
 }
 
-/* With the Resume history, the list ends in open space on the left and a
-   ragged column on the right, so Featured gets the same hairline the
-   history section opens with (Micah, 2026-11-07): same rule, same 40px
-   above and below. The other takes end on full-width rows and do without. */
+/* The work history ends in open space on the left and a ragged column on
+   the right, so Featured gets the same hairline the history section opens
+   with (Micah, 2026-11-07): same rule, same 40px above and below. (The
+   history's other takes, gone since 2026-11-13, ended on full-width rows
+   and did without.) */
 .section:has(.history--resume) + .section--featured {
   margin-top: 40px;
   padding-top: 0;
@@ -625,37 +626,6 @@ button {
   transition: opacity 0.25s ease, color 0.2s ease;
 }
 
-.job__when {
-  grid-column: 1 / span 6;
-}
-
-.job__what {
-  grid-column: 7 / span 6;
-}
-
-.job__dates {
-  font-size: 18px;
-  line-height: 27px;
-}
-
-.job__where {
-  margin-top: 10px;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.job__company {
-  font-size: 14px;
-  line-height: 20px;
-}
-
-.job__role {
-  margin-top: 20px;
-  font-size: 25px;
-  line-height: 24px;
-  transition: transform 0.32s var(--ease-enter), color 0.2s ease;
-}
-
 /* The company link covers the whole row (.job is the positioned parent),
    so anywhere on the row opens the company's site. */
 .job__link::after {
@@ -684,14 +654,13 @@ button {
   white-space: nowrap;
 }
 
-/* Arrival for Timeline: rows rise in, staggered. Logo
-   matches the live page, which doesn't animate them. */
-.history:not(.history--logo) .job {
+/* Arrival: rows rise in, staggered. */
+.history .job {
   opacity: 0;
   transform: translateY(12px);
 }
 
-.history:not(.history--logo) .history__list.is-seen .job {
+.history .history__list.is-seen .job {
   opacity: 1;
   transform: none;
   transition:
@@ -700,153 +669,11 @@ button {
     color 0.2s ease;
 }
 
-.follow-card {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 30;
-  pointer-events: none;
-}
-
-.follow-card__inner {
-  border-radius: 16px;
-  opacity: 0;
-  scale: 0.92;
-  transition: opacity 0.18s var(--ease-exit), scale 0.18s var(--ease-exit);
-}
-
-.follow-card.is-on .follow-card__inner {
-  opacity: 1;
-  scale: 1;
-  transition: opacity 0.25s var(--ease-enter), scale 0.4s var(--ease-enter);
-}
-
-/* LOGO: a white card with the company's logo flattened to black. Every
-   logo sits in the card at once, stacked; only .is-current shows. */
-.follow-card__inner--logo {
-  position: relative;
-  width: 240px;
-  height: 136px;
-  padding: 0;
-  background: #ffffff;
-  box-shadow: 0 18px 50px rgba(68, 55, 54, 0.18);
-}
-
-.follow-card__logo {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  /* A fixed box rather than max-sizes: the files' own sizes run from 108px
-     to 1024px wide, and contain scales each one to fill the same box. Tall
-     enough for Hudson Rouge's stacked script; the wide wordmarks hit the
-     width first, so the height doesn't blow them up. */
-  width: 180px;
-  height: 76px;
-  object-fit: contain;
-  /* Official logo files come in brand colours; brightness(0) takes any
-     transparent logo to pure black, so one rule covers every file. */
-  filter: brightness(0);
-  opacity: 0;
-  transition: opacity 0.15s ease;
-}
-
-.follow-card__logo.is-current {
-  opacity: 1;
-}
-
-/* Companies with no logo file: the name, set like a wordmark. */
-.follow-card__wordmark {
-  display: grid;
-  place-items: center;
-  max-width: none;
-  max-height: none;
-  padding: 0 16px;
-  color: #000000;
-  font-weight: 500;
-  font-size: 15px;
-  letter-spacing: 0.06em;
-  text-align: center;
-}
-
-/* TIMELINE: a ruler of the whole career above the rows. One colour only
-   (Micah, 2026-11-07): resting bars are the faint --dot, the hovered job's
-   bar is the page's text colour. No per-company brand colours. */
-.timeline {
-  margin-bottom: 24px;
-  user-select: none;
-}
-
-/* Tall enough for a hovered span (34px) plus its label above it; the
-   resting bars sit on the bottom edge. */
-.timeline__track {
-  position: relative;
-  height: 54px;
-}
-
-.timeline__span {
-  position: absolute;
-  bottom: 0;
-  height: 10px;
-  /* A paper-coloured edge keeps back-to-back jobs readable as two. On the
-     right, so the first bar's left edge lines up with the title above. */
-  border-right: 2px solid var(--page);
-  border-radius: 4px;
-  background: var(--dot);
-  transition:
-    height 0.35s var(--ease-enter),
-    background-color 0.25s ease,
-    opacity 0.25s ease;
-}
-
-.timeline__span.is-active {
-  height: 34px;
-  background: var(--ink);
-}
-
-.timeline__label {
-  position: absolute;
-  left: 0;
-  bottom: calc(100% + 6px);
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.15s ease, transform 0.3s var(--ease-enter);
-}
-
-.timeline__span.is-active .timeline__label {
-  opacity: 1;
-  transform: none;
-}
-
-/* Year labels only: no rule under the bars, which read as a section
-   divider and made the timeline look like it belonged to the next thing. */
-.timeline__ticks {
-  position: relative;
-  height: 22px;
-  margin-top: 6px;
-}
-
-.timeline__ticks span {
-  position: absolute;
-  top: 6px;
-  font-size: 12px;
-  opacity: 0.7;
-  translate: -50% 0;
-}
-
-/* The hovered row lightens (its text eases back toward the page) while
-   the rest stay as they are: a quiet "you're here" rather than a colour.
-   Spelled out through .history__list.is-seen so it outranks the arrival
-   rule above, which also sets the rows' opacity. */
-.history--timeline .history__list.is-seen .job.is-active {
-  opacity: 0.5;
-}
-
-/* RESUME: the 2026 folio's resume rows (its .work-history-* rules), on
-   this page's grid and type. The folio puts "Work history" in a column of
-   its own with the jobs beside it; here that's the title on the left and
-   the list on the right. :has() so App's section markup stays the same for every take. */
+/* The 2026 folio's resume rows (its .work-history-* rules), on this
+   page's grid and type. The folio puts "Work history" in a column of its
+   own with the jobs beside it; here that's the title on the left and the
+   list on the right. :has() is a leftover from when the section's markup
+   had to serve every take; it still works, so it stays. */
 .section:has(.history--resume) {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -949,7 +776,11 @@ button {
   .history--resume {
     grid-column: 1 / -1;
   }
-  /* No room for a dates column on a phone: dates join the small lines. */
+  /* No room for a dates column on a phone: dates join the small lines.
+     12px between them: a later phone rule for the old two-column rows set
+     .job's row-gap to 12px and overrode the 2px written here, and 12px is
+     what shipped and was signed off. When those rows went (2026-11-13) the
+     number moved here so nothing on the page shifted. */
   .resume-job {
     grid-template-columns: 56px minmax(0, 1fr);
     grid-template-areas:
@@ -957,7 +788,7 @@ button {
       "tile where"
       "tile dates";
     column-gap: 18px;
-    row-gap: 2px;
+    row-gap: 12px;
     padding: 16px 0;
   }
   .history--resume .history__list {
@@ -2194,8 +2025,6 @@ p.cs-body {
     margin-bottom: 20px;
     font-size: 16px;
   }
-  .job__when,
-  .job__what,
   .featured__text,
   .featured__side {
     grid-column: 1;
@@ -2203,14 +2032,6 @@ p.cs-body {
   .hero__statement {
     font-size: 32px;
     line-height: 1.12;
-  }
-  .job {
-    row-gap: 12px;
-  }
-  .job__role {
-    margin-top: 8px;
-    font-size: 22px;
-    line-height: 26px;
   }
   .featured {
     gap: 64px;
